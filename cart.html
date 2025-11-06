@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - Lanka-Mart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1 class="logo">Lanka-Mart</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html" class="active">Cart</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="container">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div id="cartTotal"></div>
+    <button id="clearCart" class="btn">Clear Cart</button>
+  </section>
+
+  <footer>
+    <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+  </footer>
+
+  <script>
+    const cartDiv = document.getElementById('cartItems');
+    const totalDiv = document.getElementById('cartTotal');
+    const clearBtn = document.getElementById('clearCart');
+
+    function displayCart() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cartDiv.innerHTML = '';
+      let total = 0;
+      if (cart.length === 0) {
+        cartDiv.innerHTML = '<p>Your cart is empty.</p>';
+        totalDiv.innerHTML = '';
+        return;
+      }
+
+      cart.forEach(item => {
+        total += item.price * item.qty;
+        cartDiv.innerHTML += `
+          <div class=\"cart-item\">
+            <strong>${item.name}</strong> - LKR ${item.price} × ${item.qty}
+            <button onclick=\"removeItem(${item.id})\">Remove</button>
+          </div>
+        `;
+      });
+
+      totalDiv.innerHTML = `<h3>Total: LKR ${total}</h3>`;
+    }
+
+    function removeItem(id) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart = cart.filter(i => i.id !== id);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      displayCart();
+    }
+
+    clearBtn.onclick = () => {
+      localStorage.removeItem('cart');
+      displayCart();
+    };
+
+    displayCart();
+  </script>
+</body>
+</html>

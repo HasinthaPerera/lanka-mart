@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Lanka-Mart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1 class="logo">Lanka-Mart</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">Cart</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="container contact">
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+      <label>Name:</label>
+      <input type="text" required>
+
+      <label>Email:</label>
+      <input type="email" required>
+
+      <label>Message:</label>
+      <textarea rows="5" required></textarea>
+
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+  </footer>
+
+  <script>
+    document.getElementById('contactForm').onsubmit = (e) => {
+      e.preventDefault();
+      alert('Thank you! Your message has been sent.');
+      e.target.reset();
+    };
+  </script>
+</body>
+</html>
