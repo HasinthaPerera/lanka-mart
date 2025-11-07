@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products - Lanka-Mart</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Lanka-Mart | Products</title>
+  <link rel="stylesheet" href="product.css">
 </head>
 <body>
 
@@ -20,72 +21,49 @@
     </div>
   </header>
 
-  <section class="container products-page">
-    <h2>All Products</h2>
+  <section class="products-section">
+    <h2>Our Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200x150?text=Apples" alt="Apples">
+        <h3>Apples (1kg)</h3>
+        <p>LKR 320</p>
+        <button>Add to Cart</button>
+      </div>
 
-    <div class="filter">
-      <label for="category">Filter by Category:</label>
-      <select id="category">
-        <option value="all">All</option>
-        <option value="Fruits">Fruits</option>
-        <option value="Vegetables">Vegetables</option>
-        <option value="Textiles">Textiles</option>
-        <option value="Grocery">Grocery</option>
-      </select>
-    </div>
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200x150?text=Carrots" alt="Carrots">
+        <h3>Carrots (1kg)</h3>
+        <p>LKR 200</p>
+        <button>Add to Cart</button>
+      </div>
 
-    <div class="products" id="productList">
-      <!-- products dynamically inserted by JS -->
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200x150?text=Onions" alt="Onions">
+        <h3>Onions (1kg)</h3>
+        <p>LKR 180</p>
+        <button>Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200x150?text=Tea+Pack" alt="Tea Pack">
+        <h3>Ceylon Tea (250g)</h3>
+        <p>LKR 850</p>
+        <button>Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200x150?text=Textile" alt="Textile">
+        <h3>Cotton Saree</h3>
+        <p>LKR 2500</p>
+        <button>Add to Cart</button>
+      </div>
     </div>
   </section>
 
   <footer>
-    <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+    <p>© 2025 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
 
-  <script>
-    const products = [
-      {id: 1, name: 'Bananas (1kg)', price: 250, category: 'Fruits', img: 'https://via.placeholder.com/200x150?text=Bananas'},
-      {id: 2, name: 'Tomatoes (1kg)', price: 180, category: 'Vegetables', img: 'https://via.placeholder.com/200x150?text=Tomatoes'},
-      {id: 3, name: 'Cotton Shirt', price: 1200, category: 'Textiles', img: 'https://via.placeholder.com/200x150?text=Shirt'},
-      {id: 4, name: 'Rice (5kg)', price: 1200, category: 'Grocery', img: 'https://via.placeholder.com/200x150?text=Rice'},
-      {id: 5, name: 'Apples (1kg)', price: 400, category: 'Fruits', img: 'https://via.placeholder.com/200x150?text=Apples'},
-    ];
-
-    const productList = document.getElementById('productList');
-    const categorySelect = document.getElementById('category');
-
-    function displayProducts(filter) {
-      productList.innerHTML = '';
-      const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-      filtered.forEach(p => {
-        const div = document.createElement('div');
-        div.classList.add('product');
-        div.innerHTML = `
-          <img src=\"${p.img}\" alt=\"${p.name}\">
-          <h3>${p.name}</h3>
-          <p>LKR ${p.price}</p>
-          <button onclick=\"addToCart(${p.id})\">Add to Cart</button>
-        `;
-        productList.appendChild(div);
-      });
-    }
-
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const existing = cart.find(item => item.id === id);
-      if (existing) existing.qty++;
-      else cart.push({...product, qty: 1});
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(product.name + ' added to cart!');
-    }
-
-    categorySelect.addEventListener('change', (e) => {
-      displayProducts(e.target.value);
-    });
-
-    displayProducts('all');
-  </script>
 </body>
 </html>

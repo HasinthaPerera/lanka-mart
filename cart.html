@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cart - Lanka-Mart</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Lanka-Mart | Cart</title>
+  <link rel="stylesheet" href="cart.css">
 </head>
 <body>
 
@@ -20,58 +20,42 @@
     </div>
   </header>
 
-  <section class="container">
-    <h2>Your Cart</h2>
-    <div id="cartItems"></div>
-    <div id="cartTotal"></div>
-    <button id="clearCart" class="btn">Clear Cart</button>
+  <section class="cart-section">
+    <h2>Your Shopping Cart</h2>
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bananas (1kg)</td>
+          <td>2</td>
+          <td>LKR 250</td>
+          <td>LKR 500</td>
+        </tr>
+        <tr>
+          <td>Cotton Shirt</td>
+          <td>1</td>
+          <td>LKR 1200</td>
+          <td>LKR 1200</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cart-summary">
+      <p><strong>Subtotal:</strong> LKR 1700</p>
+      <button>Proceed to Checkout</button>
+    </div>
   </section>
 
   <footer>
-    <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+    <p>© 2025 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
 
-  <script>
-    const cartDiv = document.getElementById('cartItems');
-    const totalDiv = document.getElementById('cartTotal');
-    const clearBtn = document.getElementById('clearCart');
-
-    function displayCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cartDiv.innerHTML = '';
-      let total = 0;
-      if (cart.length === 0) {
-        cartDiv.innerHTML = '<p>Your cart is empty.</p>';
-        totalDiv.innerHTML = '';
-        return;
-      }
-
-      cart.forEach(item => {
-        total += item.price * item.qty;
-        cartDiv.innerHTML += `
-          <div class=\"cart-item\">
-            <strong>${item.name}</strong> - LKR ${item.price} × ${item.qty}
-            <button onclick=\"removeItem(${item.id})\">Remove</button>
-          </div>
-        `;
-      });
-
-      totalDiv.innerHTML = `<h3>Total: LKR ${total}</h3>`;
-    }
-
-    function removeItem(id) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart = cart.filter(i => i.id !== id);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      displayCart();
-    }
-
-    clearBtn.onclick = () => {
-      localStorage.removeItem('cart');
-      displayCart();
-    };
-
-    displayCart();
-  </script>
 </body>
 </html>
