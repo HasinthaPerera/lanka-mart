@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,40 +22,40 @@
 
   <section class="products-section">
     <h2>Our Products</h2>
-    <div class="product-grid">
-      <div class="product-card">
+    <div class="product-grid" id="product-list">
+      <div class="product-card" data-name="Apples (1kg)" data-price="320">
         <img src="Images/apple.webp" alt="Apples">
         <h3>Apples (1kg)</h3>
         <p>LKR 300</p>
-        <button>Add to Cart</button>
+        <button onclick="addToCart(this)">Add to Cart</button>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-name="Carrots (1kg)" data-price="200">
         <img src="Images/carrot.webp" alt="Carrots">
         <h3>Carrots (1kg)</h3>
         <p>LKR 140</p>
-        <button>Add to Cart</button>
+        <button onclick="addToCart(this)">Add to Cart</button>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-name="Onions (1kg)" data-price="180">
         <img src="Images/onion.webp" alt="Onions">
         <h3>Onions (1kg)</h3>
         <p>LKR 180</p>
-        <button>Add to Cart</button>
+        <button onclick="addToCart(this)">Add to Cart</button>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-name="Ceylon Tea (250g)" data-price="850">
         <img src="Images/tea powder.webp" alt="Tea Pack">
-        <h3>Tea (1kg)</h3>
+        <h3>Tea Powder (1kg)</h3>
         <p>LKR 900</p>
-        <button>Add to Cart</button>
+        <button onclick="addToCart(this)">Add to Cart</button>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-name="Cotton Saree" data-price="2500">
         <img src="Images/cotton saree.webp" alt="Textile">
         <h3>Cotton Saree</h3>
         <p>LKR 1500</p>
-        <button>Add to Cart</button>
+        <button onclick="addToCart(this)">Add to Cart</button>
       </div>
     </div>
   </section>
@@ -64,6 +63,30 @@
   <footer>
     <p>© 2025 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
+
+  <script>
+    function addToCart(button) {
+      const card = button.parentElement;
+      const name = card.getAttribute('data-name');
+      const price = parseFloat(card.getAttribute('data-price'));
+
+     
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+     
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ name, price, quantity: 1 });
+      }
+
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      alert(`${name} added to cart!`);
+    }
+  </script>
 
 </body>
 </html>
