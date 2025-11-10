@@ -1,14 +1,14 @@
-/* --- Global Styles --- */
+
+
 :root {
-  --primary-color: #2a9d8f;
-  --secondary-color: #e9c46a;
-  --dark-color: #264653;
-  --light-color: #f4a261;
-  --bg-color: #fdfdfd;
+  --primary-color: #007a33;
+  --secondary-color: #f2e863;
+  --dark-color: #1a1a1a;    
+  --light-color: #a7c957;   
+  --bg-color: #f8f9f7;    
   --text-color: #333;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-
 * {
   margin: 0;
   padding: 0;
@@ -53,7 +53,7 @@ section {
   padding: 4rem 0;
 }
 
-/* --- Buttons --- */
+
 .btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
@@ -69,7 +69,7 @@ section {
   transform: translateY(-2px);
 }
 
-/* Hero button */
+
 .hero .btn {
   background-color: var(--secondary-color);
   color: var(--dark-color);
@@ -80,7 +80,7 @@ section {
   background-color: #e2b958;
 }
 
-/* Primary card button */
+
 .btn-primary {
   background-color: var(--primary-color);
   color: #fff;
@@ -92,7 +92,7 @@ section {
   background-color: #248a7f;
 }
 
-/* --- Header & Navigation --- */
+
 header {
   background-color: #fff;
   box-shadow: var(--shadow);
@@ -132,7 +132,7 @@ header nav ul li a:hover {
   color: var(--light-color);
 }
 
-/* --- Hero Section --- */
+
 .hero {
   background-color: var(--primary-color);
   color: #fff;
@@ -150,7 +150,7 @@ header nav ul li a:hover {
   margin-bottom: 2rem;
 }
 
-/* --- Featured Products --- */
+
 .featured {
   background-color: #fafafa;
 }
@@ -187,7 +187,7 @@ header nav ul li a:hover {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Makes the info section fill remaining space */
+  flex-grow: 1; 
 }
 
 .product-info h3 {
@@ -200,10 +200,10 @@ header nav ul li a:hover {
   font-weight: bold;
   color: var(--primary-color);
   margin-bottom: 1rem;
-  margin-top: auto; /* Pushes price and button to the bottom */
+  margin-top: auto;
 }
 
-/* --- Why Choose Us Section --- */
+
 .why-choose-us {
   text-align: center;
 }
@@ -220,10 +220,10 @@ header nav ul li a:hover {
 .why-choose-us ul li {
   font-size: 1.1rem;
   font-weight: 500;
-  flex-basis: 250px; /* Each item will take at least 250px */
+  flex-basis: 250px; 
 }
 
-/* --- Footer --- */
+
 footer {
   background-color: var(--dark-color);
   color: #fff;
@@ -232,7 +232,7 @@ footer {
   margin-top: 2rem;
 }
 
-/* --- Responsive (Mobile) --- */
+
 @media (max-width: 768px) {
   header .container {
     flex-direction: column;
