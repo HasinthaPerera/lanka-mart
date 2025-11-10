@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,47 +12,85 @@
     <div class="container">
       <h1 class="logo">Lanka-Mart</h1>
       <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="contact.html">Contact</a>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
       </nav>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="container">
-      <h2>Fresh fruits, vegetables & textiles — all in one place!</h2>
-      <p>Buy directly from local sellers and enjoy fresh, quality products.</p>
-      <a href="products.html" class="btn">Shop Now</a>
-    </div>
-  </section>
-
-  <section class="featured">
-    <div class="container">
-      <h2>Featured Products</h2>
-      <div class="products">
-        <div class="product">
-          <img src="Images/banana.webp" alt="Bananas">
-          <h3>Bananas (1kg)</h3>
-          <p>LKR 100</p>
-        </div>
-        <div class="product">
-          <img src="Images/tomatoe.webp" alt="Tomatoes">
-          <h3>Tomatoes (1kg)</h3>
-          <p>LKR 150</p>
-        </div>
-        <div class="product">
-          <img src="Images/cotton shirt.webp" alt="Cotton Shirt">
-          <h3>Cotton Shirt</h3>
-          <p>LKR 1000</p>
-        </div>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h2>Fresh fruits, vegetables & textiles — all in one place!</h2>
+        <p>Buy directly from local sellers and enjoy fresh, quality products.</p>
+        <a href="products.html" class="btn">Shop Now</a>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="featured">
+      <div class="container">
+        <h2>Featured Products</h2>
+        <ul class="product-list">
+          
+          <li class="product-item">
+            <article>
+              <img src="Images/banana.webp" alt="A bunch of ripe bananas">
+              <div class="product-info">
+                <h3>Bananas (1kg)</h3>
+                <p class="price">LKR 100</p>
+                <button class="btn btn-primary">Add to Cart</button>
+              </div>
+            </article>
+          </li>
+          
+          <li class="product-item">
+            <article>
+              <img src="Images/tomatoe.webp" alt="Fresh red tomatoes">
+              <div class="product-info">
+                <h3>Tomatoes (1kg)</h3>
+                <p class="price">LKR 150</p>
+                <button class="btn btn-primary">Add to Cart</button>
+              </div>
+            </article>
+          </li>
+          
+          <li class="product-item">
+            <article>
+              <img src="Images/cotton shirt.webp" alt="A folded blue cotton shirt">
+              <div class="product-info">
+                <h3>Cotton Shirt</h3>
+                <p class="price">LKR 1000</p>
+                <button class="btn btn-primary">Add to Cart</button>
+              </div>
+            </article>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <section class="why-choose-us">
+      <div class="container">
+        <h2>Why Shop With Us?</h2>
+        <ul>
+          <li>🌱 Directly from local farms & artisans</li>
+          <li>🚚 Fast, reliable delivery across the island</li>
+          <li>💯 Quality and freshness guaranteed</li>
+          <li>🤝 Supporting local communities</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
 
   <footer>
-    <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+    <div class="container">
+      <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+    </div>
   </footer>
 
 </body>
