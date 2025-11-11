@@ -23,12 +23,13 @@
   <section class="products-section">
     <h2>Our Products</h2>
 
-    <!-- 🔍 Search Bar -->
+  
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Search for products...">
     </div>
 
     <div class="product-grid" id="product-list">
+     
       <div class="product-card" data-name="Apples (1kg)" data-price="300">
         <img src="Images/apple.webp" alt="Apples">
         <h3>Apples (1kg)</h3>
@@ -42,7 +43,6 @@
         <p>LKR 140</p>
         <button onclick="addToCart(this)">Add to Cart</button>
       </div>
-
       <div class="product-card" data-name="Onions (1kg)" data-price="180">
         <img src="Images/onion.webp" alt="Onions">
         <h3>Onions (1kg)</h3>
@@ -105,6 +105,15 @@
         <p>LKR 1000</p>
         <button onclick="addToCart(this)">Add to Cart</button>
       </div>
+    
+    
+      <div class="product-card" data-name="potatoes" data-price="160">
+        <img src="Images/potatoes.webp" alt="potatoes">
+        <h3>potatoes(Lanka)</h3>
+        <p>LKR 160</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+    
     </div>
   </section>
 
@@ -113,7 +122,7 @@
   </footer>
 
   <script>
-    // 🛒 Add to Cart Logic
+    
     function addToCart(button) {
       const card = button.parentElement;
       const name = card.getAttribute('data-name');
@@ -131,16 +140,28 @@
       alert(`${name} added to cart!`);
     }
 
-    // 🔍 Product Search Logic
+   
     const searchInput = document.getElementById('searchInput');
+    const productGrid = document.getElementById('product-list');
+
     searchInput.addEventListener('keyup', function() {
       const filter = searchInput.value.toLowerCase();
       const products = document.querySelectorAll('.product-card');
 
+      let anyVisible = false;
       products.forEach(card => {
         const name = card.getAttribute('data-name').toLowerCase();
-        card.style.display = name.includes(filter) ? 'block' : 'none';
+        const isVisible = name.includes(filter);
+        card.style.display = isVisible ? 'block' : 'none';
+        if (isVisible) anyVisible = true;
       });
+
+    
+      if (filter && anyVisible) {
+        productGrid.classList.add('compact-view');
+      } else {
+        productGrid.classList.remove('compact-view');
+      }
     });
   </script>
 
