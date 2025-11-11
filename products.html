@@ -22,6 +22,12 @@
 
   <section class="products-section">
     <h2>Our Products</h2>
+
+    <!-- 🔍 Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search for products...">
+    </div>
+
     <div class="product-grid" id="product-list">
       <div class="product-card" data-name="Apples (1kg)" data-price="300">
         <img src="Images/apple.webp" alt="Apples">
@@ -57,43 +63,48 @@
         <p>LKR 1500</p>
         <button onclick="addToCart(this)">Add to Cart</button>
       </div>
-       <div class="product-card" data-name="White Rice" data-price="185">
+
+      <div class="product-card" data-name="White Rice" data-price="185">
         <img src="Images/white Rice.webp" alt="Rice">
-        <h3>White Rice(1 kg)</h3>
+        <h3>White Rice (1kg)</h3>
         <p>LKR 185</p>
         <button onclick="addToCart(this)">Add to Cart</button>
-       </div>
-         <div class="product-card" data-name="Red Rice" data-price="180">
+      </div>
+
+      <div class="product-card" data-name="Red Rice" data-price="180">
         <img src="Images/Red rice.webp" alt="Rice">
-        <h3>Red Rice(1kg)</h3>
+        <h3>Red Rice (1kg)</h3>
         <p>LKR 180</p>
         <button onclick="addToCart(this)">Add to Cart</button>
-         </div>
+      </div>
 
-          <div class="product-card" data-name="Coconuts" data-price="150">
+      <div class="product-card" data-name="Coconuts" data-price="150">
         <img src="Images/coconuts.webp" alt="Coconuts">
-        <h3>Cocnuts</h3>
+        <h3>Coconuts</h3>
         <p>LKR 150</p>
         <button onclick="addToCart(this)">Add to Cart</button>
       </div>
- <div class="product-card" data-name="Banana" data-price="100">
+
+      <div class="product-card" data-name="Banana" data-price="100">
         <img src="Images/banana.webp" alt="Banana">
-        <h3>Banana(1kg)</h3>
+        <h3>Banana (1kg)</h3>
         <p>LKR 100</p>
         <button onclick="addToCart(this)">Add to Cart</button>
- </div>
+      </div>
+
       <div class="product-card" data-name="Tomatoes" data-price="150">
         <img src="Images/tomatoe.webp" alt="Tomatoes">
-        <h3>Tomatoes(1kg)</h3>
+        <h3>Tomatoes (1kg)</h3>
         <p>LKR 150</p>
         <button onclick="addToCart(this)">Add to Cart</button>
-      </div> 
-       <div class="product-card" data-name="Cotton Shirt" data-price="1000">
+      </div>
+
+      <div class="product-card" data-name="Cotton Shirt" data-price="1000">
         <img src="Images/cotton shirt.webp" alt="Textile">
         <h3>Cotton Shirt</h3>
         <p>LKR 1000</p>
         <button onclick="addToCart(this)">Add to Cart</button>
-      
+      </div>
     </div>
   </section>
 
@@ -102,15 +113,13 @@
   </footer>
 
   <script>
+    // 🛒 Add to Cart Logic
     function addToCart(button) {
       const card = button.parentElement;
       const name = card.getAttribute('data-name');
       const price = parseFloat(card.getAttribute('data-price'));
 
-     
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-     
       const existing = cart.find(item => item.name === name);
       if (existing) {
         existing.quantity += 1;
@@ -118,11 +127,21 @@
         cart.push({ name, price, quantity: 1 });
       }
 
-      
       localStorage.setItem('cart', JSON.stringify(cart));
-
       alert(`${name} added to cart!`);
     }
+
+    // 🔍 Product Search Logic
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('keyup', function() {
+      const filter = searchInput.value.toLowerCase();
+      const products = document.querySelectorAll('.product-card');
+
+      products.forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        card.style.display = name.includes(filter) ? 'block' : 'none';
+      });
+    });
   </script>
 
 </body>
