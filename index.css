@@ -1,13 +1,16 @@
-
+/* ===== COLOR THEME ===== */
 :root {
-  --primary-color: #007a33;
-  --secondary-color: #f2e863;
-  --dark-color: #1a1a1a;    
-  --light-color: #a7c957;   
-  --bg-color: #007a33;    
+  --primary-color: #007a33;     /* Lanka-Mart green */
+  --secondary-color: #f4c542;   /* Warm yellow accent */
+  --accent-color: #e85c3b;      /* Orange highlight */
+  --dark-color: #0b3d0b;        
+  --light-color: #c7f0b1;       /* Soft green tint for backgrounds */
+  --bg-color: #f9fff5;          /* Very light green body background */
   --text-color: #333;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/* ===== RESET ===== */
 * {
   margin: 0;
   padding: 0;
@@ -15,10 +18,11 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-  background-color: #f8f9f7;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
   color: var(--text-color);
+  line-height: 1.6;
+  scroll-behavior: smooth;
 }
 
 .container {
@@ -32,70 +36,11 @@ img {
   display: block;
 }
 
-a {
-  text-decoration: none;
-  color: var(--primary-color);
-}
-
-h1, h2, h3 {
-  margin-bottom: 0.75rem;
-  color: var(--dark-color);
-}
-
-h2 {
-  font-size: 2.2rem;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-section {
-  padding: 4rem 0;
-}
-
-
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-
-.hero .btn {
-  background-color: var(--secondary-color);
-  color: var(--dark-color);
-  font-size: 1.1rem;
-}
-
-.hero .btn:hover {
-  background-color: #e2b958;
-}
-
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: #fff;
-  width: 100%;
-  text-align: center;
-}
-
-.btn-primary:hover {
-  background-color: #248a7f;
-}
-
-
+/* ===== HEADER ===== */
 header {
-  background-color: #fff;
+  background: linear-gradient(90deg, #007a33, #00994c); /* Deep green gradient */
   box-shadow: var(--shadow);
-  padding: 1.5rem 0;
+  padding: 1.2rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -108,9 +53,10 @@ header .container {
 }
 
 .logo {
-  font-size: 1.8rem;
-  color: var(--dark-color);
-  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 1px;
 }
 
 header nav ul {
@@ -123,35 +69,62 @@ header nav ul li {
 }
 
 header nav ul li a {
-  font-weight: bold;
+  font-weight: 600;
+  color: #ffffff;
   transition: color 0.3s ease;
 }
 
 header nav ul li a:hover {
-  color: var(--light-color);
+  color: var(--secondary-color);
 }
 
-
+/* ===== HERO SECTION ===== */
+/* ===== HERO SECTION ===== */
 .hero {
-  background-color: var(--primary-color);
-  color: #fff;
+  background: linear-gradient(135deg, #e8f8ef, #c2f0d3); /* soft light green gradient */
+  color: #064b25; /* dark green text for readability */
   text-align: center;
-  padding: 6rem 0;
+  padding: 6rem 1rem;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .hero h2 {
-  color: #fff;
   font-size: 2.8rem;
+  color: #045c2a; /* deep green heading */
 }
 
 .hero p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+  color: #064b25;
+}
+
+.hero .btn {
+  background-color: #007a33; /* same as header green */
+  color: #fff;
+  padding: 0.8rem 1.8rem;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.hero .btn:hover {
+  background-color: #00994c;
+  transform: translateY(-2px);
 }
 
 
+
+/* ===== FEATURED PRODUCTS ===== */
 .featured {
-  background-color: #fafafa;
+  background-color: #ffffff;
+  padding: 5rem 0;
+}
+
+.featured h2 {
+  color: var(--dark-color);
 }
 
 .product-list {
@@ -163,22 +136,20 @@ header nav ul li a:hover {
 
 .product-item {
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: var(--shadow);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 .product-item img {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
 }
 
@@ -186,52 +157,85 @@ header nav ul li a:hover {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; 
 }
 
 .product-info h3 {
   font-size: 1.3rem;
-  margin: 0 0 0.5rem 0;
+  color: var(--dark-color);
 }
 
 .product-info .price {
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--primary-color);
-  margin-bottom: 1rem;
-  margin-top: auto;
+  margin: 1rem 0;
 }
 
-
-.why-choose-us {
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 25px;
+  padding: 0.7rem;
   text-align: center;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #00b257;
+}
+
+/* ===== WHY CHOOSE US ===== */
+.why-choose-us {
+  background-color: var(--light-color);
+  text-align: center;
+  padding: 4rem 1rem;
+  border-top: 4px solid var(--primary-color);
+}
+
+.why-choose-us h2 {
+  color: var(--dark-color);
 }
 
 .why-choose-us ul {
   list-style: none;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 2rem;
   margin-top: 2rem;
 }
 
 .why-choose-us ul li {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
   font-size: 1.1rem;
   font-weight: 500;
-  flex-basis: 250px; 
+  width: 250px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+.why-choose-us ul li:hover {
+  transform: scale(1.05);
+  background-color: #fafff9;
+}
 
+/* ===== FOOTER ===== */
 footer {
-  background-color: var(--dark-color);
+  background-color: var(--primary-color);
   color: #fff;
   text-align: center;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   margin-top: 2rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
-
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   header .container {
     flex-direction: column;
@@ -241,7 +245,7 @@ footer {
   .hero h2 {
     font-size: 2.2rem;
   }
-  
+
   .why-choose-us ul {
     flex-direction: column;
     align-items: center;
