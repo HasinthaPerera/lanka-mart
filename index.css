@@ -1,16 +1,33 @@
-/* ===== COLOR THEME ===== */
+
+/* ===== GLOBAL FADE-IN ANIMATION ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  animation: fadeIn 0.9s ease forwards;
+}
+
+
 :root {
-  --primary-color: #007a33;     /* Lanka-Mart green */
-  --secondary-color: #f4c542;   /* Warm yellow accent */
-  --accent-color: #e85c3b;      /* Orange highlight */
+  --primary-color: #007a33;     
+  --secondary-color: #f4c542;   
+  --accent-color: #e85c3b;      
   --dark-color: #0b3d0b;        
-  --light-color: #c7f0b1;       /* Soft green tint for backgrounds */
-  --bg-color: #f9fff5;          /* Very light green body background */
+  --light-color: #c7f0b1;       
+  --bg-color: #f9fff5;          
   --text-color: #333;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== RESET ===== */
+
 * {
   margin: 0;
   padding: 0;
@@ -36,9 +53,9 @@ img {
   display: block;
 }
 
-/* ===== HEADER ===== */
+
 header {
-  background: linear-gradient(90deg, #007a33, #00994c); /* Deep green gradient */
+  background: linear-gradient(90deg, #007a33, #00994c); 
   box-shadow: var(--shadow);
   padding: 1.2rem 0;
   position: sticky;
@@ -78,11 +95,9 @@ header nav ul li a:hover {
   color: var(--secondary-color);
 }
 
-/* ===== HERO SECTION ===== */
-/* ===== HERO SECTION ===== */
 .hero {
-  background: linear-gradient(135deg, #e8f8ef, #c2f0d3); /* soft light green gradient */
-  color: #064b25; /* dark green text for readability */
+  background: linear-gradient(135deg, #e8f8ef, #c2f0d3);
+  color: #064b25; 
   text-align: center;
   padding: 6rem 1rem;
   border-bottom-left-radius: 40px;
@@ -92,7 +107,7 @@ header nav ul li a:hover {
 
 .hero h2 {
   font-size: 2.8rem;
-  color: #045c2a; /* deep green heading */
+  color: #045c2a; 
 }
 
 .hero p {
@@ -102,7 +117,7 @@ header nav ul li a:hover {
 }
 
 .hero .btn {
-  background-color: #007a33; /* same as header green */
+  background-color: #007a33; 
   color: #fff;
   padding: 0.8rem 1.8rem;
   font-weight: bold;
@@ -117,7 +132,7 @@ header nav ul li a:hover {
 
 
 
-/* ===== FEATURED PRODUCTS ===== */
+
 .featured {
   background-color: #ffffff;
   padding: 5rem 0;
@@ -187,7 +202,7 @@ header nav ul li a:hover {
   background-color: #00b257;
 }
 
-/* ===== WHY CHOOSE US ===== */
+
 .why-choose-us {
   background-color: var(--light-color);
   text-align: center;
@@ -224,7 +239,7 @@ header nav ul li a:hover {
   background-color: #fafff9;
 }
 
-/* ===== FOOTER ===== */
+
 footer {
   background-color: var(--primary-color);
   color: #fff;
@@ -235,7 +250,7 @@ footer {
   letter-spacing: 0.5px;
 }
 
-/* ===== RESPONSIVE ===== */
+
 @media (max-width: 768px) {
   header .container {
     flex-direction: column;
