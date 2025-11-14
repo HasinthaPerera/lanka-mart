@@ -281,3 +281,34 @@ footer {
   animation: float 2s ease-in-out infinite;
 }
 
+
+
+.product-carousel {
+  position: relative;
+  
+  min-height: 420px; 
+}
+
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  list-style: none;
+
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.5s ease-in-out, visibility 1.6s;
+}
+
+
+.product-list.active-slide {
+  opacity: 1; 
+  visibility: visible;
+  position: relative; 
+}

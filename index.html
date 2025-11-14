@@ -32,46 +32,116 @@
     </section>
 
     <section class="featured">
-      <div class="container">
-        <h2>Featured Products</h2>
-        <ul class="product-list">
-          
-          <li class="product-item">
-            <article>
-              <img src="Images/banana.webp" alt="A bunch of ripe bananas">
-              <div class="product-info">
-                <h3>Bananas (1kg)</h3>
-                <p class="price">LKR 100</p>
-                
-              </div>
-            </article>
-          </li>
-          
-          <li class="product-item">
-            <article>
-              <img src="Images/tomatoe.webp" alt="Fresh red tomatoes">
-              <div class="product-info">
-                <h3>Tomatoes (1kg)</h3>
-                <p class="price">LKR 150</p>
-                
-              </div>
-            </article>
-          </li>
-          
-          <li class="product-item">
-            <article>
-              <img src="Images/cotton shirt.webp" alt="A folded blue cotton shirt">
-              <div class="product-info">
-                <h3>Cotton Shirt</h3>
-                <p class="price">LKR 1000</p>
-                
-              </div>
-            </article>
-          </li>
+  <div class="container">
+    <h2>Featured Products</h2>
+    
+    <div class="product-carousel">
 
-        </ul>
-      </div>
-    </section>
+      <ul class="product-list active-slide">
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/banana.webp" alt="A bunch of ripe bananas">
+            <div class="product-info">
+              <h3>Bananas (1kg)</h3>
+              <p class="price">LKR 100</p>
+            </div>
+          </article>
+        </li>
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/apple.webp" alt="Fresh red apples">
+            <div class="product-info">
+              <h3>Apple (1kg)</h3>
+              <p class="price">LKR 300</p>
+            </div>
+          </article>
+        </li>
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/pineapple.webp" alt="A fresh whole pineapple">
+            <div class="product-info">
+              <h3>Pineapple(1kg)</h3>
+              <p class="price">LKR 260</p>
+            </div>
+          </article>
+        </li>
+
+      </ul>
+
+      <ul class="product-list">
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/white Rice.webp" alt="White Rice">
+            <div class="product-info">
+              <h3>White Rice (1kg)</h3>
+              <p class="price">LKR 185</p>
+            </div>
+          </article>
+        </li>
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/Red rice.webp" alt="Red rice">
+            <div class="product-info">
+              <h3>Keeri Red Rice (1kg)</h3>
+              <p class="price">LKR 180</p>
+            </div>
+          </article>
+        </li>
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/tea powder.webp" alt="Fresh and tastety Teapowder">
+            <div class="product-info">
+              <h3>Tea Powder(1kg)</h3>
+              <p class="price">LKR 900</p>
+            </div>
+          </article>
+        </li>
+
+      </ul>
+
+<ul class="product-list">
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/onion.webp" alt="Onions">
+            <div class="product-info">
+              <h3>Onions (1kg)</h3>
+              <p class="price">LKR 180</p>
+            </div>
+          </article>
+        </li>
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/potatoes.webp" alt="Potatoes">
+            <div class="product-info">
+              <h3>Potatoes (1kg)</h3>
+              <p class="price">LKR 160</p>
+            </div>
+          </article>
+        </li>
+        
+        <li class="product-item">
+          <article>
+            <img src="Images/coconuts.webp" alt="Coconuts">
+            <div class="product-info">
+              <h3>Coconuts</h3>
+              <p class="price">LKR 150</p>
+            </div>
+          </article>
+        </li>
+
+      </ul>
+
+
+    </div> </div>
+</section>
 
     <section class="why-choose-us">
       <div class="container">
@@ -92,6 +162,41 @@
       <p>© 2025 Lanka-Mart | Freshness Delivered</p>
     </div>
   </footer>
+
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      const slides = document.querySelectorAll('.product-carousel .product-list');
+      let currentSlide = 0;
+  
+      function showSlide(index) {
+      
+        slides.forEach((slide) => {
+          slide.classList.remove('active-slide');
+        });
+  
+      
+        slides[index].classList.add('active-slide');
+      }
+  
+      function nextSlide() {
+      
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+      }
+  
+      
+      setInterval(nextSlide, 2500);
+  
+      
+      showSlide(0);
+    });
+  </script>
+
+</body>
+</html>
 
 </body>
 </html>
