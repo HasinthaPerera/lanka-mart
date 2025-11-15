@@ -142,7 +142,26 @@ header nav ul li a:hover {
   color: var(--dark-color);
 }
 
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 25px;
+  padding: 0.7rem;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  
+  
+  display: block;         
+  text-decoration: none;  
+  margin-top: 10px;       
+}
 
+.btn-primary:hover {
+  background-color: #00b257;
+}
 
 .product-list {
   display: grid;
