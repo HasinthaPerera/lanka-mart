@@ -23,15 +23,8 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="container">
-        <h2>Fresh fruits, vegetables & textiles — all in one place!</h2>
-        <p>Buy directly from local sellers and enjoy fresh, quality products.</p>
-        <a href="products.html" class="btn">Shop Now</a>
-      </div>
-    </section>
-
-    <section class="featured">
+   
+<section class="featured">
   <div class="container">
     <h2>Featured Products</h2>
     
@@ -41,7 +34,9 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/banana.webp" alt="A bunch of ripe bananas">
+            <a href="products.html">
+              <img src="Images/banana.webp" alt="A bunch of ripe bananas">
+            </a>
             <div class="product-info">
               <h3>Bananas (1kg)</h3>
               <p class="price">LKR 100</p>
@@ -51,7 +46,9 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/apple.webp" alt="Fresh red apples">
+            <a href="products.html">
+              <img src="Images/apple.webp" alt="Fresh red apples">
+            </a>
             <div class="product-info">
               <h3>Apple (1kg)</h3>
               <p class="price">LKR 300</p>
@@ -61,7 +58,9 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/pineapple.webp" alt="A fresh whole pineapple">
+            <a href="products.html">
+              <img src="Images/pineapple.webp" alt="A fresh whole pineapple">
+            </a>
             <div class="product-info">
               <h3>Pineapple(1kg)</h3>
               <p class="price">LKR 260</p>
@@ -75,19 +74,24 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/white Rice.webp" alt="White Rice">
+            <a href="products.html">
+              <img src="Images/white Rice.webp" alt="White Rice">
+            </a>
             <div class="product-info">
               <h3>White Rice (1kg)</h3>
               <p class="price">LKR 185</p>
+              <button onclick="addToCart(this)">Add to Cart</button>
             </div>
           </article>
         </li>
         
         <li class="product-item">
           <article>
-            <img src="Images/Red rice.webp" alt="Red rice">
+            <a href="products.html">
+              <img src="Images/Red rice.webp" alt="Red rice">
+            </a>
             <div class="product-info">
-              <h3>Keeri Red Rice (1kg)</h3>
+              <h3> Red Rice (1kg)</h3>
               <p class="price">LKR 180</p>
             </div>
           </article>
@@ -95,7 +99,9 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/tea powder.webp" alt="Fresh and tastety Teapowder">
+            <a href="products.html">
+              <img src="Images/tea powder.webp" alt="Fresh and tastety Teapowder">
+            </a>
             <div class="product-info">
               <h3>Tea Powder(1kg)</h3>
               <p class="price">LKR 900</p>
@@ -105,11 +111,13 @@
 
       </ul>
 
-<ul class="product-list">
+      <ul class="product-list">
         
         <li class="product-item">
           <article>
-            <img src="Images/onion.webp" alt="Onions">
+            <a href="products.html">
+              <img src="Images/onion.webp" alt="Onions">
+            </a>
             <div class="product-info">
               <h3>Onions (1kg)</h3>
               <p class="price">LKR 180</p>
@@ -119,7 +127,9 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/potatoes.webp" alt="Potatoes">
+            <a href="products.html">
+              <img src="Images/potatoes.webp" alt="Potatoes">
+            </a>
             <div class="product-info">
               <h3>Potatoes (1kg)</h3>
               <p class="price">LKR 160</p>
@@ -129,7 +139,9 @@
         
         <li class="product-item">
           <article>
-            <img src="Images/coconuts.webp" alt="Coconuts">
+            <a href="products.html">
+              <img src="Images/coconuts.webp" alt="Coconuts">
+            </a>
             <div class="product-info">
               <h3>Coconuts</h3>
               <p class="price">LKR 150</p>
@@ -139,9 +151,10 @@
 
       </ul>
 
-
-    </div> </div>
+    </div> 
+  </div>
 </section>
+
 
     <section class="why-choose-us">
       <div class="container">
@@ -188,7 +201,7 @@
       }
   
       
-      setInterval(nextSlide, 2500);
+      setInterval(nextSlide, 3000);
   
       
       showSlide(0);
