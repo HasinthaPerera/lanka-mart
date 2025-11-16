@@ -20,36 +20,41 @@
     </div>
   </header>
 
-  <section class="contact-section">
+  <main class="contact-section">
     <h2>Contact Us</h2>
     <p>We’d love to hear from you! Reach out to us with any questions, feedback, or inquiries.</p>
 
     <div class="contact-container">
-      <form class="contact-form">
+      <form class="contact-form" id="contact-form" action="/submit-message" method="POST">
+        <h3>Send a Message</h3>
         <label for="name">Full Name</label>
         <input type="text" id="name" placeholder="Enter your name" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter your email" required>
+        <input type="email" id="email" placeholder="example@domain.com" required>
 
         <label for="message">Message</label>
         <textarea id="message" rows="5" placeholder="Write your message..." required></textarea>
 
+        <div id="form-status"></div>
+
         <button type="submit">Send Message</button>
       </form>
 
-      <div class="contact-info">
+      <address class="contact-info">
         <h3>Our Details</h3>
-        <p><strong>Email:</strong> support@lankamart.lk</p>
-        <p><strong>Phone:</strong> +94 77 123 4567</p>
-        <p><strong>Address:</strong> Sabaragamuwa, Sri Lanka</p>
-      </div>
+        <p><strong>Email:</strong> <a href="mailto:support@lankamart.lk">support@lankamart.lk</a></p>
+        <p><strong>Phone:</strong> <a href="tel:+94771234567">+94 77 123 4567</a></p>
+        <p><strong>Address:</strong>Belihuloya, Sabaragamuwa Province, Sri Lanka</p>
+      </address>
     </div>
-  </section>
+  </main>
 
   <footer>
     <p>© 2025 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
+
+  <script src="contact.js" defer></script>
 
 </body>
 </html>
