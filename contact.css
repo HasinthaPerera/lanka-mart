@@ -1,21 +1,45 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #f9f9f9;
+
+:root {
+  --primary-color: #007a33;
+  --primary-dark: #006028;
+  --light-gray: #f9f9f9;
+  --text-light: #ffffff;
+  --text-dark: #333;
+  --border-color: #ccc;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --border-radius-sm: 5px;
+  --border-radius-md: 10px;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--light-gray);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+
 header {
-  background: #007a33;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-light);
   padding: 15px 0;
+  box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .container {
   width: 90%;
+  max-width: 1100px;
   margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; 
 }
 
 .logo {
@@ -23,15 +47,23 @@ header {
   font-weight: bold;
 }
 
-nav a {
-  color: white;
-  margin-left: 15px;
-  text-decoration: none;
-  font-weight: 600;
+nav {
+  display: flex;
 }
 
-nav a.active, nav a:hover {
+nav a {
+  color: var(--text-light);
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 5px 0;
+  transition: opacity 0.3s ease;
+}
+
+nav a.active,
+nav a:hover {
   text-decoration: underline;
+  opacity: 0.9;
 }
 
 .contact-section {
@@ -40,8 +72,9 @@ nav a.active, nav a:hover {
 }
 
 .contact-section h2 {
-  color: #007a33;
+  color: var(--primary-color);
   margin-bottom: 10px;
+  font-size: 2.2rem;
 }
 
 .contact-container {
@@ -50,67 +83,120 @@ nav a.active, nav a:hover {
   flex-wrap: wrap;
   margin-top: 30px;
   gap: 40px;
+  align-items: flex-start; 
 }
 
-.contact-form {
-  background: white;
+
+.contact-form,
+.contact-info {
+  background: #fff;
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  width: 320px;
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  width: 100%; 
   text-align: left;
+}
+
+
+@media (min-width: 768px) {
+  .contact-form {
+    flex: 2 1 450px; 
+    max-width: 600px;
+  }
+  .contact-info {
+    flex: 1 1 300px; 
+    max-width: 400px;
+  }
+}
+
+.contact-info h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
 }
 
 .contact-form label {
   font-weight: 600;
   display: block;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .contact-form input,
 .contact-form textarea {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(0, 122, 51, 0.3);
+  outline: none;
 }
 
 .contact-form button {
-  background: #007a33;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-light);
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-sm);
   font-size: 16px;
   font-weight: 600;
-  margin-top: 15px;
+  margin-top: 20px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .contact-form button:hover {
-  background: #006028;
+  background: var(--primary-dark);
+  transform: translateY(-2px);
 }
 
-.contact-info {
-  background: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  width: 280px;
-  text-align: left;
+.contact-form button:focus {
+  outline: 2px solid var(--primary-dark);
+  outline-offset: 2px;
 }
-
-.contact-info h3 {
-  color: #007a33;
-  margin-bottom: 10px;
-}
-
 footer {
-  background: #007a33;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-light);
   text-align: center;
-  padding: 10px;
+  padding: 25px 20px;
   margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  nav {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  nav a {
+    margin-left: 0;
+  }
+
+  .contact-section {
+    padding: 30px 15px;
+  }
+
+  .contact-section h2 {
+    font-size: 1.8rem;
+  }
 }
