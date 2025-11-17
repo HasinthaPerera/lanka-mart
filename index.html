@@ -4,62 +4,112 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lanka-Mart - Fresh Market Online</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
 
   <header>
     <div class="container">
-      <h1 class="logo">Lanka-Mart</h1>
+      <div class="logo-wrapper">
+        <h1 class="logo">Lanka<span class="highlight">-Mart</span></h1>
+      </div>
       <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
           <li><a href="products.html">Products</a></li>
           <li><a href="cart.html">Cart</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
+        <div class="hamburger">
+          <i class="fas fa-bars"></i>
+        </div>
       </nav>
     </div>
   </header>
 
   <main>
-   
-<section class="featured">
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <h2>Freshness Delivered <br> To Your Doorstep</h2>
+        <p>Experience the taste of premium, locally sourced Sri Lankan produce.</p>
+        <div class="hero-buttons">
+          <a href="products.html" class="btn btn-primary">Shop Now <i class="fas fa-shopping-basket"></i></a>
+          <a href="contact.html" class="btn btn-outline">Contact Us</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories">
       <div class="container">
-        <h2>Featured Products</h2>
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="category-grid">
+          <a href="products.html" class="category-card">
+            <div class="icon-box"><i class="fas fa-carrot"></i></div>
+            <h3>Vegetables</h3>
+          </a>
+          <a href="products.html" class="category-card">
+            <div class="icon-box"><i class="fas fa-apple-alt"></i></div>
+            <h3>Fruits</h3>
+          </a>
+          <a href="products.html" class="category-card">
+            <div class="icon-box"><i class="fas fa-seedling"></i></div>
+            <h3>Spices</h3>
+          </a>
+          <a href="products.html" class="category-card">
+            <div class="icon-box"><i class="fas fa-bowl-rice"></i></div>
+            <h3>Rice & Grains</h3>
+          </a>
+        </div>
+      </div>
+    </section>
 
+    <section class="featured">
+      <div class="container">
+        <h2 class="section-title">Featured Products</h2>
+        
         <div class="product-carousel">
-
           <ul class="product-list active-slide">
             <li class="product-item">
               <article>
-                <a href="products.html"><img src="Images/banana.webp" alt="A bunch of ripe bananas"></a>
+                <div class="img-wrapper">
+                  <img src="Images/banana.webp" alt="Banana">
+                  <span class="badge">Fresh</span>
+                </div>
                 <div class="product-info">
                   <h3>Bananas (1kg)</h3>
                   <p class="price">LKR 100</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
+                  <a href="products.html" class="btn-cart">View Product</a>
                 </div>
               </article>
             </li>
-
             <li class="product-item">
               <article>
-                <a href="products.html"><img src="Images/apple.webp" alt="Fresh red apples"></a>
+                <div class="img-wrapper">
+                  <img src="Images/apple.webp" alt="Apple">
+                </div>
                 <div class="product-info">
                   <h3>Apple (1kg)</h3>
                   <p class="price">LKR 300</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
+                  <a href="products.html" class="btn-cart">View Product</a>
                 </div>
               </article>
             </li>
-
             <li class="product-item">
               <article>
-                <a href="products.html"><img src="Images/pineapple.webp" alt="A fresh whole pineapple"></a>
+                <div class="img-wrapper">
+                  <img src="Images/pineapple.webp" alt="Pineapple">
+                  <span class="badge">Sweet</span>
+                </div>
                 <div class="product-info">
-                  <h3>Pineapple(1kg)</h3>
+                  <h3>Pineapple (1kg)</h3>
                   <p class="price">LKR 260</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
+                  <a href="products.html" class="btn-cart">View Product</a>
                 </div>
               </article>
             </li>
@@ -68,87 +118,64 @@
           <ul class="product-list">
             <li class="product-item">
               <article>
-                <a href="products.html"><img src="Images/white Rice.webp" alt="White Rice"></a>
+                <div class="img-wrapper"><img src="Images/white Rice.webp" alt="White Rice"></div>
                 <div class="product-info">
                   <h3>White Rice (1kg)</h3>
                   <p class="price">LKR 185</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
+                  <a href="products.html" class="btn-cart">View Product</a>
                 </div>
               </article>
             </li>
-
             <li class="product-item">
               <article>
-                <a href="products.html"><img src="Images/Red rice.webp" alt="Red rice"></a>
+                <div class="img-wrapper"><img src="Images/Red rice.webp" alt="Red Rice"></div>
                 <div class="product-info">
                   <h3>Red Rice (1kg)</h3>
                   <p class="price">LKR 180</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
+                  <a href="products.html" class="btn-cart">View Product</a>
                 </div>
               </article>
             </li>
-
             <li class="product-item">
               <article>
-                <a href="products.html"><img src="Images/tea powder.webp" alt="Fresh and tastety Teapowder"></a>
+                <div class="img-wrapper"><img src="Images/tea powder.webp" alt="Tea"></div>
                 <div class="product-info">
-                  <h3>Tea Powder(1kg)</h3>
+                  <h3>Tea Powder (1kg)</h3>
                   <p class="price">LKR 900</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
+                  <a href="products.html" class="btn-cart">View Product</a>
                 </div>
               </article>
             </li>
           </ul>
-
-          <ul class="product-list">
-            <li class="product-item">
-              <article>
-                <a href="products.html"><img src="Images/onion.webp" alt="Onions"></a>
-                <div class="product-info">
-                  <h3>Onions (1kg)</h3>
-                  <p class="price">LKR 180</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
-                </div>
-              </article>
-            </li>
-
-            <li class="product-item">
-              <article>
-                <a href="products.html"><img src="Images/potatoes.webp" alt="Potatoes"></a>
-                <div class="product-info">
-                  <h3>Potatoes (1kg)</h3>
-                  <p class="price">LKR 160</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
-                </div>
-              </article>
-            </li>
-
-            <li class="product-item">
-              <article>
-                <a href="products.html"><img src="Images/coconuts.webp" alt="Coconuts"></a>
-                <div class="product-info">
-                  <h3>Coconuts</h3>
-                  <p class="price">LKR 150</p>
-                  <a href="products.html" class="btn-primary">Order Now</a>
-                </div>
-              </article>
-            </li>
-
-          </ul>
-
         </div> 
       </div>
     </section>
 
     <section class="why-choose-us">
       <div class="container">
-        <h2>Why Shop With Us?</h2>
-        <ul>
-          <li>🌱 Directly from local farms & artisans</li>
-          <li>🚚 Fast, reliable delivery across the island</li>
-          <li>💯 Quality and freshness guaranteed</li>
-          <li>🤝 Supporting local communities</li>
-        </ul>
+        <h2 class="section-title">Why Shop With Us?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <i class="fas fa-tractor"></i>
+            <h3>Farm Fresh</h3>
+            <p>Directly from local farms & artisans.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-truck-fast"></i>
+            <h3>Fast Delivery</h3>
+            <p>Reliable delivery across the island.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-medal"></i>
+            <h3>Quality Guaranteed</h3>
+            <p>Only the best freshness for you.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-users"></i>
+            <h3>Community Support</h3>
+            <p>Supporting local Sri Lankan communities.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -156,44 +183,46 @@
 
   <footer>
     <div class="container">
-      <p>© 2025 Lanka-Mart | Freshness Delivered</p>
+      <div class="footer-content">
+        <p>© 2025 Lanka-Mart. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
     </div>
-  </footer>
-
   </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      
       const slides = document.querySelectorAll('.product-carousel .product-list');
       let currentSlide = 0;
   
       function showSlide(index) {
-      
         slides.forEach((slide) => {
           slide.classList.remove('active-slide');
+          slide.style.opacity = '0';
+          slide.style.pointerEvents = 'none';
         });
-  
-      
+        
         slides[index].classList.add('active-slide');
+        
+        setTimeout(() => {
+            slides[index].style.opacity = '1';
+            slides[index].style.pointerEvents = 'auto';
+        }, 50);
       }
   
       function nextSlide() {
-      
         currentSlide = (currentSlide + 1) % slides.length;
         showSlide(currentSlide);
       }
   
-      
-      setInterval(nextSlide, 3000);
-  
-      
+      setInterval(nextSlide, 4000); 
       showSlide(0);
     });
   </script>
-
-</body>
-</html>
 
 </body>
 </html>
