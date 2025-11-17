@@ -260,3 +260,34 @@ footer {
   }
 }
 
+.button-group {
+  display: flex;
+  gap: 10px; 
+  margin-top: auto; 
+  width: 100%;
+}
+
+
+.product-card button {
+  flex: 1; 
+  padding: 10px 5px; 
+  font-size: 14px;
+}
+
+
+.btn-contact {
+  background-color: #007a33 !important; 
+  color: #f8f8f8 !important; 
+  border: 2px solid var(--primary-color) !important; 
+}
+
+.btn-contact:hover {
+  background-color: (var(--primary-hover)) !important; 
+  transform: translateY(-1px);
+}
+
+
+.product-grid.compact-view .button-group {
+  flex-direction: column; 
+  gap: 5px;
+}

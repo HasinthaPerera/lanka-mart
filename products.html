@@ -34,29 +34,44 @@
         <img src="Images/cotton saree.webp" alt="Textile">
         <h3>Cotton Saree</h3>
         <p>LKR 1500</p>
+         <div class="button-group">
         <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
+        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+    </div>
+ </div> 
+     
      
 <div class="product-card" data-name="Cotton Shirt" data-price="1000">
         <img src="Images/cotton shirt.webp" alt="Textile">
         <h3>Cotton Shirt</h3>
         <p>LKR 1000</p>
+          <div class="button-group">
         <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
+        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+    </div>
+ </div>
+
+      
     
 <div class="product-card" data-name="White Rice" data-price="185">
         <img src="Images/white Rice.webp" alt="Rice">
         <h3>White Rice (1kg)</h3>
         <p>LKR 185</p>
+         <div class="button-group">
         <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
+        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+    </div>
+ </div>
 
  <div class="product-card" data-name="Red Rice" data-price="180">
         <img src="Images/Red rice.webp" alt="Rice">
         <h3>Red Rice (1kg)</h3>
         <p>LKR 180</p>
+           <div class="button-group">
         <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
+        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+    </div>
+ </div>
 
 <div class="product-card" data-name="Tea powder (1kg)" data-price="900">
         <img src="Images/tea powder.webp" alt="Tea Pack">
@@ -220,6 +235,27 @@
       alert(`${name} added to cart!`);
     }
 
+
+
+    function contactSeller(button) {
+      
+      const card = button.closest('.product-card'); 
+      const name = card.getAttribute('data-name');
+      const price = card.getAttribute('data-price');
+
+            const phoneNumber = "94725105791"; 
+
+      
+      const message = `Hello Lanka-Mart! I am interested in buying: ${name} (LKR ${price}). Is it available?`;
+
+      
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+      
+      window.open(whatsappUrl, '_blank');
+    }
+
+ 
    
     const searchInput = document.getElementById('searchInput');
     const productGrid = document.getElementById('product-list');
