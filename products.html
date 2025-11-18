@@ -38,7 +38,7 @@
 
     <div class="product-grid" id="product-list">
      
-      <div class="product-card" data-category="textiles" data-name="Cotton Saree" data-price="1500">
+      <div class="product-card" data-category="textiles" data-name="Cotton Saree" data-price="1500" data-phone="94725105791">
         <img src="Images/cotton saree.webp" alt="Textile">
         <h3>Cotton Saree</h3>
         <p>LKR 1500</p>
@@ -168,7 +168,7 @@
         </div>
       </div>
      
-      <div class="product-card" data-category="vegetables" data-name="Tomatoes" data-price="150">
+      <div class="product-card" data-category="vegetables" data-name="Tomatoes" data-price="150" data-phone="94714736314">
         <img src="Images/tomatoe.webp" alt="Tomatoes">
         <h3>Tomatoes (1kg)</h3>
         <p>LKR 150</p>
@@ -207,7 +207,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
-      <div class="product-card" data-category="fruits" data-name="pineapple" data-price="260">
+      <div class="product-card" data-category="fruits" data-name="pineapple" data-price="260" data-phone="94719488311">
         <img src="Images/pineapple.webp" alt="pineapple">
         <h3>Pineapple (1kg)</h3>
         <p>LKR 260</p>
@@ -298,63 +298,59 @@
       alert(`${name} added to cart!`);
     }
 
-
-
-    function contactSeller(button) {
-      
+function contactSeller(button) {
+      // 1. Get the product card details
       const card = button.closest('.product-card'); 
       const name = card.getAttribute('data-name');
       const price = card.getAttribute('data-price');
-
-            const phoneNumber = "94771708215"; 
-
       
-      const message = `Hello Lanka-Mart! I am interested in buying: ${name} (LKR ${price}). Is it available?`;
-
+      // 2. Get the specific phone number from the HTML
+      const specificNumber = card.getAttribute('data-phone');
       
+      // 3. Set a Default Admin Number (in case you forget to add data-phone to a card)
+      const defaultNumber = "94771708215"; 
+
+      // Logic: If specificNumber exists, use it. Otherwise, use defaultNumber.
+      const phoneNumber = specificNumber ? specificNumber : defaultNumber;
+
+      // 4. Create the message
+      const message = `Hello! I saw this on Lanka-Mart. I am interested in buying: ${name} (LKR ${price}). Is it available?`;
+
+      // 5. Open WhatsApp
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-      
       window.open(whatsappUrl, '_blank');
     }
 
-    // --- Category Filter Function ---
+   
+    
     function filterSelection(category) {
       const cards = document.querySelectorAll('.product-card');
       const buttons = document.querySelectorAll('.cat-btn');
       const searchInput = document.getElementById('searchInput');
 
-      // 1. Clear the search bar when a category is clicked (optional, for better UX)
+    
       searchInput.value = '';
 
-      // 2. Show/Hide cards based on category
+    
       cards.forEach(card => {
-        // Get the category value from the HTML
+    
         const cardCategory = card.getAttribute('data-category');
         
         if (category === 'all') {
-          card.style.display = 'flex'; // Show all
+          card.style.display = 'flex'; 
         } else {
           if (cardCategory === category) {
-            card.style.display = 'flex'; // Show match
+            card.style.display = 'flex';
           } else {
-            card.style.display = 'none'; // Hide non-match
+            card.style.display = 'none'; 
           }
         }
       });
 
-      // 3. Update Active Button Style
-      // This enables the visual "highlight" on the clicked button
       buttons.forEach(btn => {
-        // We check if the button's text content matches the category roughly, 
-        // or we just rely on the event.target approach below.
         btn.classList.remove('active');
       });
-      
-      // Add active class to the clicked button (we need to pass the event or handle logic)
-      // Simpler way: Loop through buttons and check onclick attribute, or use event listener.
-      // Let's fix the button highlighting logic simply:
-      const clickedBtn = event.target;
+            const clickedBtn = event.target;
       clickedBtn.classList.add('active');
     }
 
