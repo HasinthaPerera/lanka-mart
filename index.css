@@ -72,7 +72,7 @@ header .container {
 
 .hero {
     
-    background: linear-gradient(rgba(0, 50, 20, 0.7), rgba(0, 50, 20, 0.7)), url('Images/hero-bg.jpg'); 
+    background: linear-gradient(#08A045, rgba(0, 50, 20, 0.7)), url('Images/hero-bg.jpg'); 
     background-size: cover;
     background-position: center;
     color: var(--white);

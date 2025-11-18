@@ -23,206 +23,257 @@
   <section class="products-section">
     <h2>Our Products</h2>
 
-  
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Search for products...">
     </div>
 
+    <div class="category-container">
+      <button class="cat-btn active" onclick="filterSelection('all')">All</button>
+      <button class="cat-btn" onclick="filterSelection('vegetables')">Vegetables</button>
+      <button class="cat-btn" onclick="filterSelection('fruits')">Fruits</button>
+      <button class="cat-btn" onclick="filterSelection('spices')">Spices</button>
+      <button class="cat-btn" onclick="filterSelection('rice')">Rice & Grains</button>
+      <button class="cat-btn" onclick="filterSelection('textiles')">Textiles</button>
+    </div>
+
     <div class="product-grid" id="product-list">
      
-      <div class="product-card" data-name="Cotton Saree" data-price="1500">
+      <div class="product-card" data-category="textiles" data-name="Cotton Saree" data-price="1500">
         <img src="Images/cotton saree.webp" alt="Textile">
         <h3>Cotton Saree</h3>
         <p>LKR 1500</p>
-         <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div> 
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div> 
      
-     
-<div class="product-card" data-name="Cotton Shirt" data-price="1000">
+      <div class="product-card" data-category="textiles" data-name="Cotton Shirt" data-price="1000">
         <img src="Images/cotton shirt.webp" alt="Textile">
         <h3>Cotton Shirt</h3>
         <p>LKR 1000</p>
-          <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
 
-      
-    
-<div class="product-card" data-name="White Rice" data-price="185">
+      <div class="product-card" data-category="rice" data-name="White Rice" data-price="185">
         <img src="Images/white Rice.webp" alt="Rice">
         <h3>White Rice (1kg)</h3>
         <p>LKR 185</p>
-         <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
 
- <div class="product-card" data-name="Red Rice" data-price="180">
+      <div class="product-card" data-category="rice" data-name="Red Rice" data-price="180">
         <img src="Images/Red rice.webp" alt="Rice">
         <h3>Red Rice (1kg)</h3>
         <p>LKR 180</p>
-           <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
 
-<div class="product-card" data-name="Tea powder (1kg)" data-price="900">
+      <div class="product-card" data-category="spices" data-name="Tea powder (1kg)" data-price="900">
         <img src="Images/tea powder.webp" alt="Tea Pack">
         <h3>Tea Powder (1kg)</h3>
         <p>LKR 900</p>
-         <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
-
- <div class="product-card" data-name="Coconuts" data-price="150">
-        <img src="Images/coconuts.webp" alt="Coconuts">
-        <h3>Coconuts</h3>
-        <p>LKR 150</p>
-         <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
-
-<div class="product-card" data-name="Onions (1kg)" data-price="180">
-        <img src="Images/onion.webp" alt="Onions">
-        <h3>Onions (1kg)</h3>
-        <p>LKR 180</p>
-         <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
-
-<div class="product-card" data-name="potatoes" data-price="160">
-        <img src="Images/potatoes.webp" alt="potatoes">
-        <h3>potatoes(Lanka)</h3>
-        <p>LKR 160</p>
-         <div class="button-group">
-        <button onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
- </div>
-
-       <div class="product-card" data-name="Carrots (1kg)" data-price="140">
-        <img src="Images/carrot.webp" alt="Carrots">
-        <h3>Carrots (1kg)</h3>
-        <p>LKR 140</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     
-
-<div class="product-card" data-name="Tomatoes" data-price="150">
-        <img src="Images/tomatoe.webp" alt="Tomatoes">
-        <h3>Tomatoes (1kg)</h3>
-        <p>LKR 150</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
       </div>
 
-      
- <div class="product-card" data-name="Apples (1kg)" data-price="300">
-        <img src="Images/apple.webp" alt="Apples">
-        <h3>Apples (1kg)</h3>
-        <p>LKR 300</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-
-      <div class="product-card" data-name="Banana" data-price="100">
-        <img src="Images/banana.webp" alt="Banana">
-        <h3>Banana (1kg)</h3>
-        <p>LKR 100</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-
-      <div class="product-card" data-name="papaw" data-price="150">
-        <img src="Images/papaw.webp" alt="papaw">
-        <h3>Papaw(1kg)</h3>
-        <p>LKR 150</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="pineapple" data-price="260">
-        <img src="Images/pineapple.webp" alt="pineapple">
-        <h3>pineapple(1kg)</h3>
-        <p>LKR 260</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="mango" data-price="130">
-        <img src="Images/mango.webp" alt="mango">
-        <h3>Mango(1kg)</h3>
-        <p>LKR 130</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="dragonfruit" data-price="200">
-        <img src="Images/dragonfruit.webp" alt="dragonfruit">
-        <h3>Dragonfruit(1kg)</h3>
-        <p>LKR 200</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="avacardo" data-price="120">
-        <img src="Images/avacardo.webp" alt="avacardo">
-        <h3>Avacardo(1kg)</h3>
-        <p>LKR 120</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="anona" data-price="230">
-        <img src="Images/anona.webp" alt="anona">
-        <h3>Anona(1kg)</h3>
-        <p>LKR 230</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="grapes" data-price="350">
-        <img src="Images/grapes.webp" alt="grapes">
-        <h3>Grapes(1kg)</h3>
-        <p>LKR 350</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-     <div class="product-card" data-name="orange" data-price="130">
-        <img src="Images/orange.webp" alt="orange">
-        <h3>Orange(1kg)</h3>
-        <p>LKR 130</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
-      </div>
-    
- <div class="product-card" data-name="chilli powder (250g)" data-price="240">
+      <div class="product-card" data-category="spices" data-name="chilli powder (250g)" data-price="240">
         <img src="Images/chilli powder.webp" alt="chilli powder">
         <h3>Chilli Powder (250g)</h3>
         <p>LKR 240</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
       </div>
      
-<div class="product-card" data-name="pepper powder (250g)" data-price="300">
+      <div class="product-card" data-category="spices" data-name="pepper powder (250g)" data-price="300">
         <img src="Images/pepper powder.webp " alt="pepper powder">
         <h3>Pepper Powder (250g)</h3>
         <p>LKR 300</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
       </div>
  
-      <div class="product-card" data-name="turmeric powder (250g)" data-price="220">
+      <div class="product-card" data-category="spices" data-name="turmeric powder (250g)" data-price="220">
         <img src="Images/tumeric powder.webp " alt="turmeric powder">
         <h3>Turmeric Powder (250g)</h3>
         <p>LKR 220</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
       </div>
  
-<div class="product-card" data-name="curry powder (250g)" data-price="210">
+      <div class="product-card" data-category="spices" data-name="curry powder (250g)" data-price="210">
         <img src="Images/curry powder.webp" alt="curry powder">
         <h3>Curry Powder (250g)</h3>
         <p>LKR 210</p>
-        <button onclick="addToCart(this)">Add to Cart</button>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="vegetables" data-name="Coconuts" data-price="150">
+        <img src="Images/coconuts.webp" alt="Coconuts">
+        <h3>Coconuts</h3>
+        <p>LKR 150</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="vegetables" data-name="Onions (1kg)" data-price="180">
+        <img src="Images/onion.webp" alt="Onions">
+        <h3>Onions (1kg)</h3>
+        <p>LKR 180</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="vegetables" data-name="potatoes" data-price="160">
+        <img src="Images/potatoes.webp" alt="potatoes">
+        <h3>Potatoes (Lanka)</h3>
+        <p>LKR 160</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="vegetables" data-name="Carrots (1kg)" data-price="140">
+        <img src="Images/carrot.webp" alt="Carrots">
+        <h3>Carrots (1kg)</h3>
+        <p>LKR 140</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+     
+      <div class="product-card" data-category="vegetables" data-name="Tomatoes" data-price="150">
+        <img src="Images/tomatoe.webp" alt="Tomatoes">
+        <h3>Tomatoes (1kg)</h3>
+        <p>LKR 150</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="fruits" data-name="Apples (1kg)" data-price="300">
+        <img src="Images/apple.webp" alt="Apples">
+        <h3>Apples (1kg)</h3>
+        <p>LKR 300</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="fruits" data-name="Banana" data-price="100">
+        <img src="Images/banana.webp" alt="Banana">
+        <h3>Banana (1kg)</h3>
+        <p>LKR 100</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="fruits" data-name="papaw" data-price="150">
+        <img src="Images/papaw.webp" alt="papaw">
+        <h3>Papaw (1kg)</h3>
+        <p>LKR 150</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="pineapple" data-price="260">
+        <img src="Images/pineapple.webp" alt="pineapple">
+        <h3>Pineapple (1kg)</h3>
+        <p>LKR 260</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="mango" data-price="130">
+        <img src="Images/mango.webp" alt="mango">
+        <h3>Mango (1kg)</h3>
+        <p>LKR 130</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="dragonfruit" data-price="200">
+        <img src="Images/dragonfruit.webp" alt="dragonfruit">
+        <h3>Dragonfruit (1kg)</h3>
+        <p>LKR 200</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="avacardo" data-price="120">
+        <img src="Images/avacardo.webp" alt="avacardo">
+        <h3>Avocado (1kg)</h3>
+        <p>LKR 120</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="anona" data-price="230">
+        <img src="Images/anona.webp" alt="anona">
+        <h3>Anona (1kg)</h3>
+        <p>LKR 230</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="grapes" data-price="350">
+        <img src="Images/grapes.webp" alt="grapes">
+        <h3>Grapes (1kg)</h3>
+        <p>LKR 350</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
+      <div class="product-card" data-category="fruits" data-name="orange" data-price="130">
+        <img src="Images/orange.webp" alt="orange">
+        <h3>Orange (1kg)</h3>
+        <p>LKR 130</p>
+        <div class="button-group">
+            <button onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
       </div>
  
-
     </div>
   </section>
+
 
   <footer>
     <p>© 2025 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
@@ -265,6 +316,46 @@
 
       
       window.open(whatsappUrl, '_blank');
+    }
+
+    // --- Category Filter Function ---
+    function filterSelection(category) {
+      const cards = document.querySelectorAll('.product-card');
+      const buttons = document.querySelectorAll('.cat-btn');
+      const searchInput = document.getElementById('searchInput');
+
+      // 1. Clear the search bar when a category is clicked (optional, for better UX)
+      searchInput.value = '';
+
+      // 2. Show/Hide cards based on category
+      cards.forEach(card => {
+        // Get the category value from the HTML
+        const cardCategory = card.getAttribute('data-category');
+        
+        if (category === 'all') {
+          card.style.display = 'flex'; // Show all
+        } else {
+          if (cardCategory === category) {
+            card.style.display = 'flex'; // Show match
+          } else {
+            card.style.display = 'none'; // Hide non-match
+          }
+        }
+      });
+
+      // 3. Update Active Button Style
+      // This enables the visual "highlight" on the clicked button
+      buttons.forEach(btn => {
+        // We check if the button's text content matches the category roughly, 
+        // or we just rely on the event.target approach below.
+        btn.classList.remove('active');
+      });
+      
+      // Add active class to the clicked button (we need to pass the event or handle logic)
+      // Simpler way: Loop through buttons and check onclick attribute, or use event listener.
+      // Let's fix the button highlighting logic simply:
+      const clickedBtn = event.target;
+      clickedBtn.classList.add('active');
     }
 
  

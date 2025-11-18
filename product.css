@@ -145,7 +145,7 @@ nav a:hover {
 .product-card h3 {
   margin: 6px 0 8px;
   font-size: 16px;
-  color: #222;
+  color: #08A045;
 }
 
 .product-card p {
@@ -290,4 +290,40 @@ footer {
 .product-grid.compact-view .button-group {
   flex-direction: column; 
   gap: 5px;
+}
+
+.category-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.cat-btn {
+  background: #fff;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.cat-btn:hover {
+  background: #e6f4ea; 
+}
+
+
+.cat-btn.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 122, 51, 0.3);
+}
+
+
+.hide {
+  display: none !important;
 }
