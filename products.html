@@ -299,28 +299,30 @@
     }
 
 function contactSeller(button) {
-      // 1. Get the product card details
+      // 1. Get the product details
       const card = button.closest('.product-card'); 
       const name = card.getAttribute('data-name');
       const price = card.getAttribute('data-price');
       
-      // 2. Get the specific phone number from the HTML
-      const specificNumber = card.getAttribute('data-phone');
+      // 2. Get the phone number (Specific seller or default)
       
-      // 3. Set a Default Admin Number (in case you forget to add data-phone to a card)
-      const defaultNumber = "94771708215"; 
-
-      // Logic: If specificNumber exists, use it. Otherwise, use defaultNumber.
+      const specificNumber = card.getAttribute('data-phone');
+      const defaultNumber = "+94771708215"; 
       const phoneNumber = specificNumber ? specificNumber : defaultNumber;
 
-      // 4. Create the message
-      const message = `Hello! I saw this on Lanka-Mart. I am interested in buying: ${name} (LKR ${price}). Is it available?`;
+      // 3. Create the message text
+      const message = `Hello, I am interested in buying: ${name} (LKR ${price}). Is it available?`;
 
-      // 5. Open WhatsApp
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
+      // 4. Check if the user is on an iPhone (iOS requires '&' for the body, Android uses '?')
+      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const separator = isIos ? '&' : '?';
+
+      // 5. Create the SMS link
+            const smsUrl = `sms:${phoneNumber}${separator}body=${encodeURIComponent(message)}`;
+
+      // 6. Open the SMS app
+      window.location.href = smsUrl;
     }
-
    
     
     function filterSelection(category) {
