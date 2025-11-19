@@ -4,57 +4,124 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lanka-Mart | Contact Us</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="contact.css">
 </head>
 <body>
 
   <header>
     <div class="container">
-      <h1 class="logo">Lanka-Mart</h1>
+      <div class="logo-wrapper">
+        <h1 class="logo">Lanka<span>-Mart</span></h1>
+      </div>
       <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="contact.html" class="active">Contact</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Shop</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+          <i class="fas fa-bars"></i>
+        </div>
       </nav>
     </div>
   </header>
 
-  <main class="contact-section">
-    <h2>Contact Us</h2>
-    <p>We’d love to hear from you! Reach out to us with any questions, feedback, or inquiries.</p>
+  <main class="contact-wrapper">
+    <div class="container">
+      <div class="page-header">
+        <h2>Get in Touch</h2>
+        <p>Have questions about our fresh produce? We are here to help.</p>
+      </div>
 
-    <div class="contact-container">
-      <form class="contact-form" id="contact-form" action="/submit-message" method="POST">
-        <h3>Send a Message</h3>
-        <label for="name">Full Name</label>
-        <input type="text" id="name" placeholder="Enter your name" required>
+      <div class="contact-container">
+        <form class="contact-form" id="contact-form">
+          <h3>Send a Message</h3>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+          </div>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="example@domain.com" required>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="example@domain.com" required>
+          </div>
 
-        <label for="message">Message</label>
-        <textarea id="message" rows="5" placeholder="Write your message..." required></textarea>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
+          </div>
 
-        <div id="form-status"></div>
+          <button type="submit" class="btn-submit">Send Message <i class="fas fa-paper-plane"></i></button>
+        </form>
 
-        <button type="submit">Send Message</button>
-      </form>
-
-      <address class="contact-info">
-        <h3>Our Details</h3>
-        <p><strong>Email:</strong> <a href="mailto:support@lankamart.lk">support@lankamart.lk</a></p>
-        <p><strong>Phone:</strong> <a href="tel:+94771234567">+94 77 123 4567</a></p>
-        <p><strong>Address:</strong>Belihuloya, Sabaragamuwa Province, Sri Lanka</p>
-      </address>
+        <div class="contact-info-card">
+          <h3>Contact Details</h3>
+          <ul class="info-list">
+            <li>
+              <i class="fas fa-envelope"></i>
+              <div>
+                <strong>Email</strong>
+                <a href="mailto:support@lankamart.lk">support@lankamart.lk</a>
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-phone-alt"></i>
+              <div>
+                <strong>Phone</strong>
+                <a href="tel:+94771234567">+94 77 123 4567</a>
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <strong>Location</strong>
+                <p>Belihuloya, Sabaragamuwa Province,<br>Sri Lanka</p>
+              </div>
+            </li>
+          </ul>
+          
+          <div class="map-placeholder">
+            <i class="fas fa-map"></i>
+            <p>Find us on Google Maps</p>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
   <footer>
-    <p>© 2025 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
+    <div class="container">
+      <p>© 2025 Lanka-Mart | Freshness & Quality</p>
+    </div>
   </footer>
 
-  <script src="contact.js" defer></script>
+  <script>
+    
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      const icon = hamburger.querySelector('i');
+      if (navLinks.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+
+    
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("Thank you! We have received your message.");
+      this.reset();
+    });
+  </script>
 
 </body>
 </html>

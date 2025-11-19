@@ -393,7 +393,7 @@ footer {
       padding: 2rem 0;
       gap: 1.5rem;
       box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      transform: scaleY(0); /* Hidden by default */
+      transform: scaleY(0); 
       transform-origin: top;
       transition: transform 0.3s ease;
     }
