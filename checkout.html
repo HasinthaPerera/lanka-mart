@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lanka-Mart | Checkout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="checkout.css">
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <div class="logo-wrapper">
+        <h1 class="logo">Lanka<span>-Mart</span></h1>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="cart.html">Back to Cart</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2 class="page-title">Checkout & Payment</h2>
+    
+    <div class="checkout-grid">
+      
+      <div class="form-column">
+        
+        <form id="checkout-form">
+          <div class="box">
+            <h3><i class="fas fa-map-marker-alt"></i> Shipping Details</h3>
+            <div class="input-group">
+              <label>Full Name</label>
+              <input type="text" placeholder="John Doe" required>
+            </div>
+            <div class="input-group">
+              <label>Address</label>
+              <input type="text" placeholder="No. 123, Gall Road, Colombo" required>
+            </div>
+            <div class="input-group">
+              <label>Phone Number</label>
+              <input type="tel" placeholder="077 123 4567" required>
+            </div>
+          </div>
+
+          <div class="box">
+            <h3><i class="fas fa-wallet"></i> Select Payment Method</h3>
+            
+            <div class="payment-options">
+              <label class="payment-card selected" onclick="selectPayment('cod')">
+                <input type="radio" name="payment" value="cod" checked>
+                <div class="card-content">
+                  <i class="fas fa-money-bill-wave"></i>
+                  <span>Cash on Delivery</span>
+                </div>
+              </label>
+
+              <label class="payment-card" onclick="selectPayment('card')">
+                <input type="radio" name="payment" value="card">
+                <div class="card-content">
+                  <i class="fas fa-credit-card"></i>
+                  <span>Card Payment</span>
+                </div>
+              </label>
+            </div>
+
+            <div id="card-details" class="card-inputs hidden">
+              <h4>Enter Card Details</h4>
+              <div class="input-group">
+                <input type="text" placeholder="Card Number (xxxx-xxxx-xxxx-xxxx)">
+              </div>
+              <div class="row">
+                <input type="text" placeholder="MM/YY" style="width: 48%">
+                <input type="text" placeholder="CVC" style="width: 48%">
+              </div>
+            </div>
+
+          </div>
+
+          <button type="submit" class="place-order-btn">Confirm & Place Order</button>
+        </form>
+      </div>
+
+      <div class="summary-column">
+        <div class="box summary-box">
+          <h3>Order Summary</h3>
+          <div id="order-items">
+            </div>
+          <hr>
+          <div class="total-row">
+            <span>Total to Pay:</span>
+            <span id="final-total">LKR 0</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const container = document.getElementById('order-items');
+      let total = 0;
+
+      if(cart.length === 0) {
+        window.location.href = 'cart.html'; 
+      }
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        const div = document.createElement('div');
+        div.className = 'summary-item';
+        div.innerHTML = `
+          <p><strong>${item.name}</strong> x ${item.quantity}</p>
+          <p>LKR ${itemTotal}</p>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('final-total').innerText = "LKR " + total;
+    });
+
+    
+    function selectPayment(method) {
+      
+      document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('selected'));
+      
+      
+      event.currentTarget.classList.add('selected');
+
+      
+      const cardDetails = document.getElementById('card-details');
+      if (method === 'card') {
+        cardDetails.classList.remove('hidden');
+        
+        cardDetails.querySelectorAll('input').forEach(i => i.required = true);
+      } else {
+        cardDetails.classList.add('hidden');
+        cardDetails.querySelectorAll('input').forEach(i => i.required = false);
+      }
+    }
+
+    
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      
+      const btn = document.querySelector('.place-order-btn');
+      const originalText = btn.innerText;
+      btn.innerText = "Processing...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+       
+        alert("Order Placed Successfully! Thank you for shopping with Lanka-Mart.");
+        
+       
+        localStorage.removeItem('cart');
+        
+       
+        window.location.href = 'index.html';
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>
