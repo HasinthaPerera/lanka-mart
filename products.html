@@ -282,11 +282,14 @@
   <script>
     
     function addToCart(button) {
-      const card = button.parentElement;
+      const card = button.closest('.product-card');
+      
       const name = card.getAttribute('data-name');
       const price = parseFloat(card.getAttribute('data-price'));
 
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      
       const existing = cart.find(item => item.name === name);
       if (existing) {
         existing.quantity += 1;
@@ -295,7 +298,9 @@
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`${name} added to cart!`);
+      
+      
+      alert(`${name} has been added to your cart!`);
     }
 
 function contactSeller(button) {
