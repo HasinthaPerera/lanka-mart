@@ -102,14 +102,14 @@
   </div>
 
   <script>
-    // 1. Load Order Summary from LocalStorage
+    
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const container = document.getElementById('order-items');
       let total = 0;
 
       if(cart.length === 0) {
-        window.location.href = 'cart.html'; // Redirect if empty
+        window.location.href = 'cart.html'; 
       }
 
       cart.forEach(item => {
@@ -143,17 +143,17 @@
       }
     }
 
-    // 3. Handle Form Submission & Send to WhatsApp
+    
     document.getElementById('checkout-form').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // --- A. Gather User Info ---
+      
       const name = document.getElementById('order-name').value;
       const address = document.getElementById('order-address').value;
       const phone = document.getElementById('order-phone').value;
       const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
       
-      // --- B. Gather Cart Items ---
+      
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       let cartText = "";
       let total = 0;
@@ -161,12 +161,11 @@
       cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
-        // Create a list like: "- Carrots (x2): LKR 280"
+       
         cartText += `- ${item.name} (x${item.quantity}): LKR ${itemTotal}\n`;
       });
 
-      // --- C. Create WhatsApp Message ---
-      // We use \n for new lines
+     
       let message = `*New Order from Lanka-Mart!* 🛍️\n`;
       message += `----------------------------\n`;
       message += `*Customer Details:*\n`;
@@ -179,21 +178,15 @@
       message += `----------------------------\n`;
       message += `*TOTAL AMOUNT: LKR ${total}*`;
 
-      // --- D. Your Phone Number ---
-      // Format: 94xxxxxxxxx (No + sign)
       const myNumber = "94771708215"; 
 
-      // --- E. Send & Clear ---
-      // Encode the message for URL
       const whatsappUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(message)}`;
       
-      // Open WhatsApp in new tab
+      
       window.open(whatsappUrl, '_blank');
 
-      // Clear the cart
+      
       localStorage.removeItem('cart');
-
-      // Optional: Redirect home after a small delay
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 1000);

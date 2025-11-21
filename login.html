@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lanka-Mart | Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <div class="logo-wrapper">
+        <h1 class="logo">Lanka<span>-Mart</span></h1>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Shop</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="login-wrapper">
+    <div class="form-container">
+      
+      <div class="form-toggle">
+        <button onclick="toggleForm('login')" class="active" id="login-btn">Login</button>
+        <button onclick="toggleForm('register')" id="register-btn">Register</button>
+      </div>
+
+      <form id="login-form" class="form-content active">
+        <h2>Welcome Back! <i class="fas fa-leaf"></i></h2>
+        <p>Sign in to access your orders.</p>
+        
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Email Address" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Password" required>
+        </div>
+
+        <div class="actions">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-submit">Login</button>
+      </form>
+
+      <form id="register-form" class="form-content">
+        <h2>Join the Family <i class="fas fa-seedling"></i></h2>
+        <p>Create an account to start shopping.</p>
+        
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Full Name" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Email Address" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Password" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Create Account</button>
+      </form>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Lanka-Mart | Freshness & Quality</p>
+  </footer>
+
+  <script>
+    
+    function toggleForm(type) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const loginBtn = document.getElementById('login-btn');
+      const registerBtn = document.getElementById('register-btn');
+
+      if (type === 'login') {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
+      } else {
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+        loginBtn.classList.remove('active');
+        registerBtn.classList.add('active');
+      }
+    }
+
+    
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("Login Successful! Redirecting...");
+      window.location.href = "index.html";
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("Account Created! Please Login.");
+      toggleForm('login');
+    });
+  </script>
+
+</body>
+</html>
