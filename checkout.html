@@ -34,15 +34,15 @@
             <h3><i class="fas fa-map-marker-alt"></i> Shipping Details</h3>
             <div class="input-group">
               <label>Full Name</label>
-              <input type="text" placeholder="John Doe" required>
+              <input type="text" id="order-name" placeholder="John Doe" required>
             </div>
             <div class="input-group">
               <label>Address</label>
-              <input type="text" placeholder="No. 123, Gall Road, Colombo" required>
+              <input type="text" id="order-address" placeholder="No. 123, Gall Road, Colombo" required>
             </div>
             <div class="input-group">
               <label>Phone Number</label>
-              <input type="tel" placeholder="077 123 4567" required>
+              <input type="tel" id="order-phone" placeholder="077 123 4567" required>
             </div>
           </div>
 
@@ -76,11 +76,12 @@
                 <input type="text" placeholder="MM/YY" style="width: 48%">
                 <input type="text" placeholder="CVC" style="width: 48%">
               </div>
+              <p style="font-size: 0.8rem; color: red; margin-top: 5px;">* Note: This is a demo. Select 'Cash on Delivery' for WhatsApp orders.</p>
             </div>
 
           </div>
 
-          <button type="submit" class="place-order-btn">Confirm & Place Order</button>
+          <button type="submit" class="place-order-btn">Confirm & Place Order via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </form>
       </div>
 
@@ -101,14 +102,14 @@
   </div>
 
   <script>
-    
+    // 1. Load Order Summary from LocalStorage
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const container = document.getElementById('order-items');
       let total = 0;
 
       if(cart.length === 0) {
-        window.location.href = 'cart.html'; 
+        window.location.href = 'cart.html'; // Redirect if empty
       }
 
       cart.forEach(item => {
@@ -127,19 +128,14 @@
       document.getElementById('final-total').innerText = "LKR " + total;
     });
 
-    
+    // 2. Toggle Payment UI
     function selectPayment(method) {
-      
       document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('selected'));
-      
-      
       event.currentTarget.classList.add('selected');
 
-      
       const cardDetails = document.getElementById('card-details');
       if (method === 'card') {
         cardDetails.classList.remove('hidden');
-        
         cardDetails.querySelectorAll('input').forEach(i => i.required = true);
       } else {
         cardDetails.classList.add('hidden');
@@ -147,26 +143,60 @@
       }
     }
 
-    
+    // 3. Handle Form Submission & Send to WhatsApp
     document.getElementById('checkout-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      
-      
-      const btn = document.querySelector('.place-order-btn');
-      const originalText = btn.innerText;
-      btn.innerText = "Processing...";
-      btn.disabled = true;
 
+      // --- A. Gather User Info ---
+      const name = document.getElementById('order-name').value;
+      const address = document.getElementById('order-address').value;
+      const phone = document.getElementById('order-phone').value;
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      
+      // --- B. Gather Cart Items ---
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let cartText = "";
+      let total = 0;
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        // Create a list like: "- Carrots (x2): LKR 280"
+        cartText += `- ${item.name} (x${item.quantity}): LKR ${itemTotal}\n`;
+      });
+
+      // --- C. Create WhatsApp Message ---
+      // We use \n for new lines
+      let message = `*New Order from Lanka-Mart!* 🛍️\n`;
+      message += `----------------------------\n`;
+      message += `*Customer Details:*\n`;
+      message += `👤 Name: ${name}\n`;
+      message += `📍 Address: ${address}\n`;
+      message += `📞 Phone: ${phone}\n`;
+      message += `💳 Payment: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Card Payment'}\n`;
+      message += `----------------------------\n`;
+      message += `*Order Items:*\n${cartText}`;
+      message += `----------------------------\n`;
+      message += `*TOTAL AMOUNT: LKR ${total}*`;
+
+      // --- D. Your Phone Number ---
+      // Format: 94xxxxxxxxx (No + sign)
+      const myNumber = "94771708215"; 
+
+      // --- E. Send & Clear ---
+      // Encode the message for URL
+      const whatsappUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(message)}`;
+      
+      // Open WhatsApp in new tab
+      window.open(whatsappUrl, '_blank');
+
+      // Clear the cart
+      localStorage.removeItem('cart');
+
+      // Optional: Redirect home after a small delay
       setTimeout(() => {
-       
-        alert("Order Placed Successfully! Thank you for shopping with Lanka-Mart.");
-        
-       
-        localStorage.removeItem('cart');
-        
-       
         window.location.href = 'index.html';
-      }, 2000);
+      }, 1000);
     });
   </script>
 
