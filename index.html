@@ -182,6 +182,41 @@
 
   </main>
 
+  <section class="faq-section">
+  <div class="container">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    
+    <div class="faq-container">
+      <div class="faq-item">
+        <button class="faq-question">
+          Where do you deliver? <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>We currently deliver to Colombo, Gampaha, and Kalutara districts. Orders placed before 10 AM are delivered the same day.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Is the produce organic? <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Yes! We source directly from certified organic farmers in Nuwara Eliya and Bandarawela.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          What payment methods do you accept? <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>We accept Cash on Delivery (COD) and Bank Transfers. Card payments are coming soon!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
   <footer>
     <div class="container">
       <div class="footer-content">
@@ -223,6 +258,22 @@
       setInterval(nextSlide, 4000); 
       showSlide(0);
     });
+
+
+const faqs = document.querySelectorAll(".faq-question");
+
+faqs.forEach(faq => {
+  faq.addEventListener("click", () => {
+    faq.classList.toggle("active");
+    const answer = faq.nextElementSibling;
+    if (faq.classList.contains("active")) {
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    } else {
+      answer.style.maxHeight = 0;
+    }
+  });
+});
+
   </script>
 <a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
   <i class="fab fa-whatsapp"></i>
