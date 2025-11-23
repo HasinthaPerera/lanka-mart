@@ -50,7 +50,7 @@
   <div class="container">
     <div class="about-grid">
       <div class="about-image">
-        <img src="Images/farmer.webp" alt="Our Farmer" onerror="this.src='https://images.unsplash.com/photo-1595855709957-45a8dfa0b52b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
+        <img src="Images/farmer.webp" alt="Our Farmer">
       </div>
       <div class="about-text">
         <h4>Our Story</h4>
@@ -233,10 +233,24 @@
   </div>
 </section>
 
-  <footer>
+<footer>
     <div class="container">
+      
+      <div class="newsletter-wrapper">
+        <div class="newsletter-text">
+          <h3>Subscribe & Get 10% Off</h3>
+          <p>Join our green family for fresh updates, recipes, and exclusive offers.</p>
+        </div>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" placeholder="Enter your email address" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+
+      <div class="footer-divider"></div>
+
       <div class="footer-content">
-        <p>© 2025 Lanka-Mart. All rights reserved.</p>
+        <p>© 2025 Lanka-Mart | Freshness You Can Trust</p>
         <div class="social-links">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
           <a href="#"><i class="fab fa-instagram"></i></a>
@@ -245,6 +259,15 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("Welcome to the family! Your 10% discount code is: FRESH10");
+      this.reset();
+    });
+  </script>  
+
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
