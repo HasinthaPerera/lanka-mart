@@ -81,40 +81,112 @@
     <p>© 2025 Lanka-Mart | Freshness & Quality</p>
   </footer>
 
-  <script>
-    
-    function toggleForm(type) {
-      const loginForm = document.getElementById('login-form');
-      const registerForm = document.getElementById('register-form');
-      const loginBtn = document.getElementById('login-btn');
-      const registerBtn = document.getElementById('register-btn');
+  <script type="module">
+  
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      if (type === 'login') {
-        loginForm.classList.add('active');
-        registerForm.classList.remove('active');
-        loginBtn.classList.add('active');
-        registerBtn.classList.remove('active');
-      } else {
-        loginForm.classList.remove('active');
-        registerForm.classList.add('active');
-        loginBtn.classList.remove('active');
-        registerBtn.classList.add('active');
-      }
+ 
+  const firebaseConfig = {
+  apiKey: "AIzaSyBoiK5TcwCbKpdu2Zr0oTQW4g8w-dAh2Wc",
+  authDomain: "lanka-mart-aa309.firebaseapp.com",
+  projectId: "lanka-mart-aa309",
+  storageBucket: "lanka-mart-aa309.firebasestorage.app",
+  messagingSenderId: "494184090830",
+  appId: "1:494184090830:web:adaf265245a30365c9549f"
+  };
+
+    const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  
+  window.toggleForm = function(type) {
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+
+    if (type === 'login') {
+      loginForm.classList.add('active');
+      registerForm.classList.remove('active');
+      loginBtn.classList.add('active');
+      registerBtn.classList.remove('active');
+    } else {
+      loginForm.classList.remove('active');
+      registerForm.classList.add('active');
+      loginBtn.classList.remove('active');
+      registerBtn.classList.add('active');
     }
+  }
 
+  
+  document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert("Login Successful! Redirecting...");
-      window.location.href = "index.html";
-    });
+    
+    const name = this.querySelector('input[type="text"]').value;
+    const email = this.querySelector('input[type="email"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+    const btn = this.querySelector('button');
 
-    document.getElementById('register-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert("Account Created! Please Login.");
+    try {
+      btn.innerText = "Creating Account...";
+      
+     
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      
+      await setDoc(doc(db, "users", user.uid), {
+        fullName: name,
+        email: email,
+        joinedDate: new Date().toISOString(),
+        role: "customer"
+      });
+
+      alert("Account Created Successfully! Welcome " + name);
       toggleForm('login');
-    });
-  </script>
+
+    } catch (error) {
+      console.error(error);
+      alert("Error: " + error.message);
+    } finally {
+      btn.innerText = "Create Account";
+    }
+  });
+
+ 
+  document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = this.querySelector('input[type="email"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+    const btn = this.querySelector('button');
+
+    try {
+      btn.innerText = "Signing In...";
+      
+      
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      alert("Login Successful!");
+      
+      
+      sessionStorage.setItem('user_id', user.uid);
+      window.location.href = "index.html";
+
+    } catch (error) {
+      console.error(error);
+      alert("Login Failed: " + error.message);
+    } finally {
+      btn.innerText = "Login";
+    }
+  });
+</script>
+
 
 </body>
 </html>
