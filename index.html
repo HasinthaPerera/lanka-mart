@@ -268,52 +268,111 @@
     });
   </script>  
 
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const slides = document.querySelectorAll('.product-carousel .product-list');
-      let currentSlide = 0;
+<script type="module">
   
-      function showSlide(index) {
-        slides.forEach((slide) => {
-          slide.classList.remove('active-slide');
-          slide.style.opacity = '0';
-          slide.style.pointerEvents = 'none';
-        });
-        
-        slides[index].classList.add('active-slide');
-        
-        setTimeout(() => {
-            slides[index].style.opacity = '1';
-            slides[index].style.pointerEvents = 'auto';
-        }, 50);
-      }
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // firebase config
+  const firebaseConfig = {
+     apiKey: "------",
+  authDomain: "---------",
+  projectId: "-----",
+  storageBucket: "-----",
+  messagingSenderId: "------",
+  appId: "-----"
+  };
+
   
-      function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-      }
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
   
-      setInterval(nextSlide, 4000); 
-      showSlide(0);
-    });
-
-
-const faqs = document.querySelectorAll(".faq-question");
-
-faqs.forEach(faq => {
-  faq.addEventListener("click", () => {
-    faq.classList.toggle("active");
-    const answer = faq.nextElementSibling;
-    if (faq.classList.contains("active")) {
-      answer.style.maxHeight = answer.scrollHeight + "px";
+  let currentUser = null;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser = user;
+      console.log("User is logged in:", user.email);
+      
+      
+      const loginLink = document.querySelector('.login-link');
+      if(loginLink) loginLink.innerHTML = '<i class="fas fa-user-check"></i> My Account';
     } else {
-      answer.style.maxHeight = 0;
+      currentUser = null;
     }
   });
-});
 
-  </script>
+  
+  document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const emailInput = this.querySelector('input').value;
+
+    if (currentUser) {
+      
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        
+        await updateDoc(userRef, {
+          newsletterSubscribed: true,
+          hasDiscount: true,
+          discountCode: "FRESH10"
+        });
+
+        alert(`Thanks ${currentUser.email}! The 10% discount (FRESH10) has been saved to your account.`);
+        this.reset();
+
+      } catch (error) {
+        console.error("Error saving discount:", error);
+        alert("Error saving discount. Are you sure you have an account?");
+      }
+    } else {
+      
+      alert("Please LOGIN first to save this 10% discount to your account!");
+      window.location.href = "login.html";
+    }
+  });
+
+ 
+  
+  // Mobile Menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  if(hamburger) {
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  }
+
+  // Carousel
+  const slides = document.querySelectorAll('.product-carousel .product-list');
+  if(slides.length > 0) {
+    let currentSlide = 0;
+    function nextSlide() {
+      slides[currentSlide].classList.remove('active-slide');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active-slide');
+    }
+    setInterval(nextSlide, 5000);
+  }
+
+  // FAQ Accordion
+  const faqs = document.querySelectorAll(".faq-question");
+  faqs.forEach(faq => {
+    faq.addEventListener("click", () => {
+      faq.classList.toggle("active");
+      const answer = faq.nextElementSibling;
+      if (faq.classList.contains("active")) {
+        answer.style.maxHeight = answer.scrollHeight + "px";
+      } else {
+        answer.style.maxHeight = null;
+      }
+    });
+  });
+
+</script>
+ 
 <a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
   <i class="fab fa-whatsapp"></i>
   <span class="tooltip-text">Chat with us!</span>
