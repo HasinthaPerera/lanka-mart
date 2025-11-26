@@ -81,20 +81,20 @@
     <p>© 2025 Lanka-Mart | Freshness & Quality</p>
   </footer>
 
-  <script type="module">
   
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+<script type="module">
+  // Import auth from our shared file
+  import { auth } from './auth.js'; 
+  import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
- 
   import { firebaseConfig } from './config.js';
-  
-    const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+  // Init Firestore locally for this page
+  const app = initializeApp(firebaseConfig); 
   const db = getFirestore(app);
 
-  
+  // --- Toggle Form Logic (Keep existing code) ---
   window.toggleForm = function(type) {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -113,25 +113,18 @@
       registerBtn.classList.add('active');
     }
   }
-
-  
+  // --- REGISTER LOGIC ---
   document.getElementById('register-form').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
-    
     const name = this.querySelector('input[type="text"]').value;
     const email = this.querySelector('input[type="email"]').value;
     const password = this.querySelector('input[type="password"]').value;
-    const btn = this.querySelector('button');
 
     try {
-      btn.innerText = "Creating Account...";
-      
-     
+      // Use the 'auth' we imported
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      
       await setDoc(doc(db, "users", user.uid), {
         fullName: name,
         email: email,
@@ -139,43 +132,26 @@
         role: "customer"
       });
 
-      alert("Account Created Successfully! Welcome " + name);
-      toggleForm('login');
+      alert("Account Created! You are now logged in.");
+      window.location.href = "index.html"; 
 
     } catch (error) {
-      console.error(error);
       alert("Error: " + error.message);
-    } finally {
-      btn.innerText = "Create Account";
     }
   });
 
- 
+  // --- LOGIN LOGIC ---
   document.getElementById('login-form').addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const email = this.querySelector('input[type="email"]').value;
     const password = this.querySelector('input[type="password"]').value;
-    const btn = this.querySelector('button');
 
     try {
-      btn.innerText = "Signing In...";
-      
-      
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
+      await signInWithEmailAndPassword(auth, email, password);
       alert("Login Successful!");
-      
-      
-      sessionStorage.setItem('user_id', user.uid);
-      window.location.href = "index.html";
-
+      window.location.href = "index.html"; 
     } catch (error) {
-      console.error(error);
       alert("Login Failed: " + error.message);
-    } finally {
-      btn.innerText = "Login";
     }
   });
 </script>
