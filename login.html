@@ -83,18 +83,14 @@
 
   
 <script type="module">
-  // Import auth from our shared file
-  import { auth } from './auth.js'; 
-  import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { firebaseConfig } from './config.js';
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  // 1. Import auth AND db from the shared file
+  import { auth, db } from './auth.js'; 
+  
+  // 2. Import specific actions from the SDKs
+  import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // Init Firestore locally for this page
-  const app = initializeApp(firebaseConfig); 
-  const db = getFirestore(app);
-
-  // --- Toggle Form Logic (Keep existing code) ---
+  // --- Toggle Form Logic ---
   window.toggleForm = function(type) {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -113,18 +109,25 @@
       registerBtn.classList.add('active');
     }
   }
+
   // --- REGISTER LOGIC ---
   document.getElementById('register-form').addEventListener('submit', async function(e) {
     e.preventDefault();
+    
+    // Get values from the Register Form
     const name = this.querySelector('input[type="text"]').value;
     const email = this.querySelector('input[type="email"]').value;
     const password = this.querySelector('input[type="password"]').value;
+    const btn = this.querySelector('button');
 
     try {
-      // Use the 'auth' we imported
+      btn.innerText = "Creating Account...";
+      
+      // 1. Create User in Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // 2. Save Name/Email to Database
       await setDoc(doc(db, "users", user.uid), {
         fullName: name,
         email: email,
@@ -132,11 +135,22 @@
         role: "customer"
       });
 
-      alert("Account Created! You are now logged in.");
+      alert("Account Created Successfully!");
       window.location.href = "index.html"; 
 
     } catch (error) {
-      alert("Error: " + error.message);
+      console.error(error);
+      
+      // Give a friendly error message
+      if(error.code === 'auth/email-already-in-use') {
+        alert("This email is already registered. Please login.");
+      } else if(error.code === 'auth/weak-password') {
+        alert("Password should be at least 6 characters.");
+      } else {
+        alert("Error: " + error.message);
+      }
+    } finally {
+      btn.innerText = "Create Account";
     }
   });
 
@@ -145,17 +159,21 @@
     e.preventDefault();
     const email = this.querySelector('input[type="email"]').value;
     const password = this.querySelector('input[type="password"]').value;
+    const btn = this.querySelector('button');
 
     try {
+      btn.innerText = "Signing In...";
       await signInWithEmailAndPassword(auth, email, password);
       alert("Login Successful!");
       window.location.href = "index.html"; 
     } catch (error) {
-      alert("Login Failed: " + error.message);
+      console.error(error);
+      alert("Login Failed: Incorrect email or password.");
+    } finally {
+      btn.innerText = "Login";
     }
   });
 </script>
-
 
 </body>
 </html>
