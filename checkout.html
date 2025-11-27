@@ -86,113 +86,171 @@
         </form>
       </div>
 
-      <div class="summary-column">
-        <div class="box summary-box">
-          <h3>Order Summary</h3>
-          <div id="order-items">
-            </div>
-          <hr>
-          <div class="total-row">
-            <span>Total to Pay:</span>
-            <span id="final-total">LKR 0</span>
-          </div>
-        </div>
-      </div>
+     <div class="box summary-box">
+  <h3>Order Summary</h3>
+  <div id="order-items">
+    </div>
+  <hr>
+  
+  <div class="row" style="margin-bottom: 5px; font-size: 0.9rem;">
+    <span>Subtotal:</span>
+    <span id="summary-subtotal">LKR 0</span>
+  </div>
+
+  <div class="row" id="summary-discount-row" style="margin-bottom: 5px; font-size: 0.9rem; color: #007a33; display: none;">
+    <span>Discount (10%):</span>
+    <span id="summary-discount">- LKR 0</span>
+  </div>
+
+  <hr>
+  <div class="total-row">
+    <span>Total to Pay:</span>
+    <span id="final-total">LKR 0</span>
+  </div>
+</div></div></div>
 
     </div>
   </div>
 
-  <script>
-    
-    document.addEventListener('DOMContentLoaded', () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const container = document.getElementById('order-items');
-      let total = 0;
+  <script type="module">
+  // 1. Import Shared Auth & DB
+  import { auth, db } from './auth.js';
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      if(cart.length === 0) {
-        window.location.href = 'cart.html'; 
-      }
+  let hasUserDiscount = false;
+  let cartTotal = 0;
+  let finalAmount = 0;
+  let discountAmount = 0;
 
-      cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        
-        const div = document.createElement('div');
-        div.className = 'summary-item';
-        div.innerHTML = `
-          <p><strong>${item.name}</strong> x ${item.quantity}</p>
-          <p>LKR ${itemTotal}</p>
-        `;
-        container.appendChild(div);
-      });
-
-      document.getElementById('final-total').innerText = "LKR " + total;
-    });
-
-    // 2. Toggle Payment UI
-    function selectPayment(method) {
-      document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('selected'));
-      event.currentTarget.classList.add('selected');
-
-      const cardDetails = document.getElementById('card-details');
-      if (method === 'card') {
-        cardDetails.classList.remove('hidden');
-        cardDetails.querySelectorAll('input').forEach(i => i.required = true);
-      } else {
-        cardDetails.classList.add('hidden');
-        cardDetails.querySelectorAll('input').forEach(i => i.required = false);
+  // 2. Check User & Discount Status on Load
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists() && docSnap.data().hasDiscount === true) {
+          hasUserDiscount = true;
+        }
+      } catch (error) {
+        console.log("Error checking discount", error);
       }
     }
+    // Render the summary after checking user
+    renderSummary();
+  });
 
+  // 3. Render Order Summary
+  function renderSummary() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const container = document.getElementById('order-items');
+    container.innerHTML = '';
     
-    document.getElementById('checkout-form').addEventListener('submit', function(e) {
-      e.preventDefault();
+    if(cart.length === 0) {
+      window.location.href = 'cart.html';
+      return;
+    }
 
-      
-      const name = document.getElementById('order-name').value;
-      const address = document.getElementById('order-address').value;
-      const phone = document.getElementById('order-phone').value;
-      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-      
-      
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      let cartText = "";
-      let total = 0;
+    cartTotal = 0;
 
-      cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-       
-        cartText += `- ${item.name} (x${item.quantity}): LKR ${itemTotal}\n`;
-      });
-
-     
-      let message = `*New Order from Lanka-Mart!* 🛍️\n`;
-      message += `----------------------------\n`;
-      message += `*Customer Details:*\n`;
-      message += `👤 Name: ${name}\n`;
-      message += `📍 Address: ${address}\n`;
-      message += `📞 Phone: ${phone}\n`;
-      message += `💳 Payment: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Card Payment'}\n`;
-      message += `----------------------------\n`;
-      message += `*Order Items:*\n${cartText}`;
-      message += `----------------------------\n`;
-      message += `*TOTAL AMOUNT: LKR ${total}*`;
-
-      const myNumber = "94771708215"; 
-
-      const whatsappUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(message)}`;
+    cart.forEach(item => {
+      const itemTotal = item.price * item.quantity;
+      cartTotal += itemTotal;
       
-      
-      window.open(whatsappUrl, '_blank');
-
-      
-      localStorage.removeItem('cart');
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 1000);
+      const div = document.createElement('div');
+      div.className = 'summary-item';
+      div.innerHTML = `
+        <p><strong>${item.name}</strong> x ${item.quantity}</p>
+        <p>LKR ${itemTotal}</p>
+      `;
+      container.appendChild(div);
     });
-  </script>
+
+    // Calculate Discount
+    if (hasUserDiscount) {
+      discountAmount = Math.round(cartTotal * 0.10);
+      document.getElementById('summary-discount-row').style.display = 'flex';
+      document.getElementById('summary-discount').innerText = "- LKR " + discountAmount;
+    } else {
+      discountAmount = 0;
+      document.getElementById('summary-discount-row').style.display = 'none';
+    }
+
+    finalAmount = cartTotal - discountAmount;
+
+    // Update UI
+    document.getElementById('summary-subtotal').innerText = "LKR " + cartTotal;
+    document.getElementById('final-total').innerText = "LKR " + finalAmount;
+  }
+
+  // 4. Handle Payment Selection UI
+  window.selectPayment = function(method) {
+    document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    const cardDetails = document.getElementById('card-details');
+    if (method === 'card') {
+      cardDetails.classList.remove('hidden');
+      cardDetails.querySelectorAll('input').forEach(i => i.required = true);
+    } else {
+      cardDetails.classList.add('hidden');
+      cardDetails.querySelectorAll('input').forEach(i => i.required = false);
+    }
+  }
+
+  // 5. Handle Form Submit & WhatsApp Message
+  document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Gather Info
+    const name = document.getElementById('order-name').value;
+    const address = document.getElementById('order-address').value;
+    const phone = document.getElementById('order-phone').value;
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartText = "";
+
+    cart.forEach(item => {
+      const itemTotal = item.price * item.quantity;
+      cartText += `- ${item.name} (x${item.quantity}): LKR ${itemTotal}\n`;
+    });
+
+    // --- CREATE WHATSAPP MESSAGE ---
+    let message = `*New Order from Lanka-Mart!* 🛍️\n`;
+    message += `----------------------------\n`;
+    message += `*Customer Details:*\n`;
+    message += `👤 Name: ${name}\n`;
+    message += `📍 Address: ${address}\n`;
+    message += `📞 Phone: ${phone}\n`;
+    message += `💳 Payment: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Card Payment'}\n`;
+    message += `----------------------------\n`;
+    message += `*Order Items:*\n${cartText}`;
+    message += `----------------------------\n`;
+    
+    // Add Logic to show Discount in Message
+    message += `Subtotal: LKR ${cartTotal}\n`;
+    
+    if (hasUserDiscount) {
+      message += `✅ *Discount (10%): - LKR ${discountAmount}*\n`;
+    }
+    
+    message += `*NET TOTAL: LKR ${finalAmount}*\n`;
+    message += `----------------------------`;
+
+    // Send
+    const myNumber = "94771708215"; 
+    const whatsappUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(message)}`;
+    
+    window.open(whatsappUrl, '_blank');
+
+    // Clear & Redirect
+    localStorage.removeItem('cart');
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1000);
+  });
+</script>
 <script type="module" src="auth.js"></script>
 </body>
 </html>
