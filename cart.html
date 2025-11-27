@@ -50,18 +50,22 @@
         </table>
       </div>
 
-      <div class="cart-summary">
-        <div class="summary-card">
-          <h3>Cart Summary</h3>
-          <p class="subtotal-row"><span>Subtotal:</span> <span id="subtotal">LKR 0</span></p>
-          <p class="tax-row"><span>Delivery:</span> <span>Free</span></p>
-          <hr>
-          <p class="total-row"><span>Total:</span> <span id="final-total">LKR 0</span></p>
-         <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout <i class="fas fa-arrow-right"></i></button>
-          <button class="continue-btn" onclick="window.location.href='products.html'">Continue Shopping</button>
-        </div>
-      </div>
-    </div>
+      <div class="summary-card">
+  <h3>Cart Summary</h3>
+  
+  <p class="subtotal-row"><span>Subtotal:</span> <span id="subtotal">LKR 0</span></p>
+  
+  <p class="subtotal-row" id="discount-row" style="display: none; color: #007a33; font-weight: bold;">
+    <span><i class="fas fa-tags"></i> Subscriber Discount (10%):</span> 
+    <span id="discount-value">- LKR 0</span>
+  </p>
+
+  <p class="tax-row"><span>Delivery:</span> <span>Free</span></p>
+  <hr>
+  <p class="total-row"><span>Total:</span> <span id="final-total">LKR 0</span></p>
+  
+  <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout <i class="fas fa-arrow-right"></i></button>
+</div>
   </section>
 
   <footer>
@@ -70,38 +74,45 @@
     </div>
   </footer>
 
-  <script>
-    // Mobile Menu
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      const icon = hamburger.querySelector('i');
-      if (navLinks.classList.contains('active')) icon.classList.replace('fa-bars', 'fa-times');
-      else icon.classList.replace('fa-times', 'fa-bars');
-    });
+  <script type="module">
+  import { auth, db } from './auth.js';
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // Cart Logic
-    function loadCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const tbody = document.getElementById('cart-body');
-      tbody.innerHTML = '';
+  let hasUserDiscount = false; // Default: No discount
 
-      if(cart.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-cart">Your cart is empty. <a href="products.html">Go Shop!</a></td></tr>';
-        document.getElementById('subtotal').textContent = "LKR 0";
-        document.getElementById('final-total').textContent = "LKR 0";
-        return;
+  // 1. Check User & Database on Load
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // Fetch User Data from Firestore
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists() && docSnap.data().hasDiscount === true) {
+        hasUserDiscount = true;
+        console.log("Discount Applied: 10%");
       }
+    }
+    // Reload cart calculations after checking user
+    loadCart(); 
+  });
 
-      cart.forEach((item, index) => {
-        const row = document.createElement('tr');
-        
-        
-        const createCell = (html, label) => {
-          return `<td data-label="${label}">${html}</td>`;
-        };
+  // 2. Helper Functions (Available globally)
+  window.loadCart = function() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const tbody = document.getElementById('cart-body');
+    tbody.innerHTML = '';
 
+    if(cart.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-cart">Your cart is empty.</td></tr>';
+      updateSummary(0);
+      return;
+    }
+
+    cart.forEach((item, index) => {
+      const row = document.createElement('tr');
+      // (Your existing row creation logic...)
+       const createCell = (html, label) => `<td data-label="${label}">${html}</td>`;
         row.innerHTML = `
           ${createCell(`<strong>${item.name}</strong>`, "Product")}
           ${createCell(`<div class="qty-control"><button onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button><span>${item.quantity}</span><button onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button></div>`, "Quantity")}
@@ -109,36 +120,60 @@
           ${createCell(`<strong>LKR ${item.price * item.quantity}</strong>`, "Total")}
           ${createCell(`<button class="remove-btn" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button>`, "Action")}
         `;
-        tbody.appendChild(row);
-      });
+      tbody.appendChild(row);
+    });
 
-      updateSubtotal();
+    updateSummary();
+  }
+
+  // 3. The Math Logic (Subtotal - Discount = Total)
+  function updateSummary() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    
+    // Calculate Discount
+    let discountAmount = 0;
+    if (hasUserDiscount) {
+      discountAmount = Math.round(subtotal * 0.10); // 10%
     }
+    
+    const finalTotal = subtotal - discountAmount;
 
-    function updateQuantity(index, qty) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      if(qty < 1) return; 
-      cart[index].quantity = parseInt(qty);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      loadCart();
+    // Update HTML
+    document.getElementById('subtotal').innerText = "LKR " + subtotal;
+    document.getElementById('final-total').innerText = "LKR " + finalTotal;
+
+    // Handle the Discount Row UI
+    const discountRow = document.getElementById('discount-row');
+    const discountVal = document.getElementById('discount-value');
+    
+    if (hasUserDiscount && subtotal > 0) {
+      discountRow.style.display = 'flex'; // Show row
+      discountVal.innerText = "- LKR " + discountAmount;
+    } else {
+      discountRow.style.display = 'none'; // Hide row
     }
+  }
 
-    function removeItem(index) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      loadCart();
-    }
-
-    function updateSubtotal() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      document.getElementById('subtotal').textContent = "LKR " + subtotal;
-      document.getElementById('final-total').textContent = "LKR " + subtotal;
-    }
-
+  // Expose functions to window so HTML onclick works
+  window.updateQuantity = function(index, qty) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if(qty < 1) return;
+    cart[index].quantity = parseInt(qty);
+    localStorage.setItem('cart', JSON.stringify(cart));
     loadCart();
-  </script>
+  }
+
+  window.removeItem = function(index) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();
+  }
+
+  // Initial load
+  loadCart();
+</script>
 
 <a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
   <i class="fab fa-whatsapp"></i>
