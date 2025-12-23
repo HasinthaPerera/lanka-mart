@@ -292,15 +292,23 @@
         </div>
       </div>
  
-<div class="product-card" data-category="fruits" data-name="pomegranate" data-price="920">
-        <img src="Images/pomegranate.webp" alt="pomegranate">
-        <h3>Pomegranate (1kg)</h3>
-        <p>LKR 920</p>
-        <div class="button-group">
-            <button onclick="addToCart(this)">Add to Cart</button>
-            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-        </div>
-      </div>
+<div class="product-card" data-category="fruits" data-name="Pomegranate" data-price="736" data-discount="20">
+    
+    <span class="discount-badge">20% OFF</span>
+
+    <img src="Images/pomegranate.webp" alt="pomegranate">
+    <h3>Pomegranate (1kg)</h3>
+    
+    <div class="price-container">
+        <span class="old-price">LKR 920</span>
+        <span class="new-price">LKR 736</span>
+    </div>
+
+    <div class="button-group">
+        <button class="add-btn" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+    </div>
+</div>
 
 <div class="product-card" data-category="fruits" data-name="durian" data-price="460">
         <img src="Images/durian.webp" alt="durian">
@@ -326,22 +334,37 @@
       const card = button.closest('.product-card');
       
       const name = card.getAttribute('data-name');
-      const price = parseFloat(card.getAttribute('data-price'));
-
+      
+      let price = parseFloat(card.getAttribute('data-price'));
+      
+      
+      const discountPercent = card.getAttribute('data-discount') || 0;
+      
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       
-      
       const existing = cart.find(item => item.name === name);
+      
       if (existing) {
         existing.quantity += 1;
       } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({ 
+          name: name, 
+          price: price, 
+          quantity: 1,
+          discountTag: discountPercent > 0 ? discountPercent + "% OFF" : null 
+        });
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
       
       
-      alert(`${name} has been added to your cart!`);
+      const originalText = button.innerText;
+      button.innerText = "Added ✔";
+      button.style.background = "#1b4332";
+      setTimeout(() => {
+        button.innerText = originalText;
+        button.style.background = ""; 
+      }, 2000);
     }
 
 function contactSeller(button) {

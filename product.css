@@ -114,6 +114,7 @@ nav a:hover {
 
 
 .product-card {
+  position: relative;
   background: var(--card-bg);
   border-radius: 10px;
   padding: 14px;
@@ -221,6 +222,39 @@ footer {
   margin-top: 40px;
 }
 
+.discount-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #e63946; 
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+
+.price-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9em;
+}
+
+.new-price {
+  color: #e63946;
+  font-weight: bold;
+  font-size: 1.1em;
+}
 
 @media (max-width: 768px) {
   .container {

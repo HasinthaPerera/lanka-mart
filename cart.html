@@ -51,21 +51,22 @@
       </div>
 
       <div class="summary-card">
-  <h3>Cart Summary</h3>
-  
-  <p class="subtotal-row"><span>Subtotal:</span> <span id="subtotal">LKR 0</span></p>
-  
-  <p class="subtotal-row" id="discount-row" style="display: none; color: #007a33; font-weight: bold;">
-    <span><i class="fas fa-tags"></i> Subscriber Discount (10%):</span> 
-    <span id="discount-value">- LKR 0</span>
-  </p>
+        <h3>Cart Summary</h3>
+        
+        <p class="subtotal-row"><span>Subtotal:</span> <span id="subtotal">LKR 0</span></p>
+        
+        <p class="subtotal-row" id="discount-row" style="display: none; color: #007a33; font-weight: bold;">
+          <span><i class="fas fa-tags"></i> Subscriber Discount (10%):</span> 
+          <span id="discount-value">- LKR 0</span>
+        </p>
 
-  <p class="tax-row"><span>Delivery:</span> <span>Free</span></p>
-  <hr>
-  <p class="total-row"><span>Total:</span> <span id="final-total">LKR 0</span></p>
-  
-  <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout <i class="fas fa-arrow-right"></i></button>
-</div>
+        <p class="tax-row"><span>Delivery:</span> <span>Free</span></p>
+        <hr>
+        <p class="total-row"><span>Total:</span> <span id="final-total">LKR 0</span></p>
+        
+        <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
   </section>
 
   <footer>
@@ -74,111 +75,123 @@
     </div>
   </footer>
 
+  <a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip-text">Chat with us!</span>
+  </a>
+
+  <script type="module" src="auth.js"></script>
+
   <script type="module">
-  import { auth, db } from './auth.js';
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { auth, db } from './auth.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  let hasUserDiscount = false; // Default: No discount
+    let hasUserDiscount = false; // Default: No subscriber discount
 
-  // 1. Check User & Database on Load
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      // Fetch User Data from Firestore
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+    // 1. Check User & Database on Load
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Fetch User Data from Firestore to check for Subscriber Discount
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists() && docSnap.data().hasDiscount === true) {
-        hasUserDiscount = true;
-        console.log("Discount Applied: 10%");
+        if (docSnap.exists() && docSnap.data().hasDiscount === true) {
+          hasUserDiscount = true;
+          console.log("Subscriber Discount Verified: 10%");
+        }
       }
-    }
-    // Reload cart calculations after checking user
-    loadCart(); 
-  });
+      // Reload cart calculations after checking user
+      loadCart(); 
+    });
 
-  // 2. Helper Functions (Available globally)
-  window.loadCart = function() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const tbody = document.getElementById('cart-body');
-    tbody.innerHTML = '';
+    // 2. Helper Functions (Available globally)
+    window.loadCart = function() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const tbody = document.getElementById('cart-body');
+      tbody.innerHTML = '';
 
-    if(cart.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="empty-cart">Your cart is empty.</td></tr>';
-      updateSummary(0);
-      return;
-    }
+      if(cart.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-cart">Your cart is empty.</td></tr>';
+        updateSummary(0);
+        return;
+      }
 
-    cart.forEach((item, index) => {
-      const row = document.createElement('tr');
-      // (Your existing row creation logic...)
-       const createCell = (html, label) => `<td data-label="${label}">${html}</td>`;
+      cart.forEach((item, index) => {
+        const row = document.createElement('tr');
+        
+        // --- NEW STEP 3 LOGIC: Check for Product-Specific Discount Tag ---
+        let nameHTML = `<strong>${item.name}</strong>`;
+        
+        // If the item has a special discount tag (saved from products.html), add the red badge
+        if (item.discountTag) {
+          nameHTML += `<br><span style="font-size: 0.75rem; color: white; background: #e63946; padding: 2px 8px; border-radius: 10px; margin-top: 5px; display: inline-block;">${item.discountTag} Promo</span>`;
+        }
+        // ----------------------------------------------------------------
+
+        const createCell = (html, label) => `<td data-label="${label}">${html}</td>`;
+        
         row.innerHTML = `
-          ${createCell(`<strong>${item.name}</strong>`, "Product")}
+          ${createCell(nameHTML, "Product")}
           ${createCell(`<div class="qty-control"><button onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button><span>${item.quantity}</span><button onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button></div>`, "Quantity")}
           ${createCell(`LKR ${item.price}`, "Price")}
           ${createCell(`<strong>LKR ${item.price * item.quantity}</strong>`, "Total")}
           ${createCell(`<button class="remove-btn" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button>`, "Action")}
         `;
-      tbody.appendChild(row);
-    });
+        tbody.appendChild(row);
+      });
 
-    updateSummary();
-  }
-
-  // 3. The Math Logic (Subtotal - Discount = Total)
-  function updateSummary() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    
-    // Calculate Discount
-    let discountAmount = 0;
-    if (hasUserDiscount) {
-      discountAmount = Math.round(subtotal * 0.10); // 10%
+      updateSummary();
     }
-    
-    const finalTotal = subtotal - discountAmount;
 
-    // Update HTML
-    document.getElementById('subtotal').innerText = "LKR " + subtotal;
-    document.getElementById('final-total').innerText = "LKR " + finalTotal;
+    // 3. The Math Logic (Subtotal - Subscriber Discount = Total)
+    function updateSummary() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      
+      // Calculate Subscriber Discount
+      let discountAmount = 0;
+      if (hasUserDiscount) {
+        discountAmount = Math.round(subtotal * 0.10); // 10%
+      }
+      
+      const finalTotal = subtotal - discountAmount;
 
-    // Handle the Discount Row UI
-    const discountRow = document.getElementById('discount-row');
-    const discountVal = document.getElementById('discount-value');
-    
-    if (hasUserDiscount && subtotal > 0) {
-      discountRow.style.display = 'flex'; // Show row
-      discountVal.innerText = "- LKR " + discountAmount;
-    } else {
-      discountRow.style.display = 'none'; // Hide row
+      // Update HTML
+      document.getElementById('subtotal').innerText = "LKR " + subtotal;
+      document.getElementById('final-total').innerText = "LKR " + finalTotal;
+
+      // Handle the Discount Row UI
+      const discountRow = document.getElementById('discount-row');
+      const discountVal = document.getElementById('discount-value');
+      
+      if (hasUserDiscount && subtotal > 0) {
+        discountRow.style.display = 'flex'; // Show row
+        discountVal.innerText = "- LKR " + discountAmount;
+      } else {
+        discountRow.style.display = 'none'; // Hide row
+      }
     }
-  }
 
-  // Expose functions to window so HTML onclick works
-  window.updateQuantity = function(index, qty) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    if(qty < 1) return;
-    cart[index].quantity = parseInt(qty);
-    localStorage.setItem('cart', JSON.stringify(cart));
+    // Expose functions to window so HTML onclick works
+    window.updateQuantity = function(index, qty) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      if(qty < 1) return;
+      cart[index].quantity = parseInt(qty);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      loadCart();
+    }
+
+    window.removeItem = function(index) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      loadCart();
+    }
+
+    // Initial load
     loadCart();
-  }
+  </script>
 
-  window.removeItem = function(index) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.splice(index, 1);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    loadCart();
-  }
-
-  // Initial load
-  loadCart();
-</script>
-
-<a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
-  <i class="fab fa-whatsapp"></i>
-  <span class="tooltip-text">Chat with us!</span>
-</a>
-<script type="module" src="auth.js"></script>
 </body>
 </html>

@@ -119,7 +119,6 @@
 
   <script type="module">
     // 1. Import Shared Auth & DB
-    // Ensure auth.js is in the same folder
     import { auth, db } from './auth.js'; 
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -168,16 +167,23 @@
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
         
+        // --- NEW: Check for Product-Specific Discount Tag ---
+        let nameDisplay = item.name;
+        if(item.discountTag) {
+          nameDisplay += ` <span style="color:#e63946; font-size:0.8em;">(${item.discountTag} Promo)</span>`;
+        }
+        // ----------------------------------------------------
+
         const div = document.createElement('div');
         div.className = 'summary-item';
         div.innerHTML = `
-          <p><strong>${item.name}</strong> x ${item.quantity}</p>
+          <p><strong>${nameDisplay}</strong> x ${item.quantity}</p>
           <p>LKR ${itemTotal}</p>
         `;
         container.appendChild(div);
       });
 
-      // Calculate Visual Discount
+      // Calculate Visual Discount (Subscriber Discount)
       let discount = 0;
       if (isDiscountEligible) {
         discount = Math.round(subtotal * 0.10); // 10%
@@ -195,7 +201,6 @@
     }
 
     // 4. FIX: Make Select Payment Global
-    // We attach this to 'window' so the HTML onclick="selectPayment(...)" can find it.
     window.selectPayment = function(method) {
       document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('selected'));
       event.currentTarget.classList.add('selected');
@@ -230,7 +235,14 @@
       cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         msgSubtotal += itemTotal;
-        cartListText += `- ${item.name} (x${item.quantity}): LKR ${itemTotal}\n`;
+        
+        // --- NEW: Add Promo Tag to WhatsApp Message ---
+        let promoText = "";
+        if(item.discountTag) {
+             promoText = ` (${item.discountTag} Promo)`;
+        }
+        cartListText += `- ${item.name}${promoText} (x${item.quantity}): LKR ${itemTotal}\n`;
+        // ----------------------------------------------
       });
 
       // Re-Calculate Discount Logic
@@ -255,7 +267,7 @@
       
       // Add discount line only if applicable
       if (msgDiscount > 0) {
-        message += `✅ *Discount (10%): - LKR ${msgDiscount}*\n`;
+        message += `✅ *Subscriber Discount (10%): - LKR ${msgDiscount}*\n`;
       }
       
       message += `*NET TOTAL: LKR ${msgFinalTotal}*\n`;
