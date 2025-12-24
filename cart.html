@@ -60,7 +60,11 @@
           <span id="discount-value">- LKR 0</span>
         </p>
 
-        <p class="tax-row"><span>Delivery:</span> <span>Free</span></p>
+        <p class="tax-row">
+          <span>Delivery Fee:</span> 
+          <span id="delivery-val">LKR 0</span>
+        </p>
+
         <hr>
         <p class="total-row"><span>Total:</span> <span id="final-total">LKR 0</span></p>
         
@@ -120,14 +124,11 @@
       cart.forEach((item, index) => {
         const row = document.createElement('tr');
         
-        // --- NEW STEP 3 LOGIC: Check for Product-Specific Discount Tag ---
+        // Check for Product-Specific Discount Tag
         let nameHTML = `<strong>${item.name}</strong>`;
-        
-        // If the item has a special discount tag (saved from products.html), add the red badge
         if (item.discountTag) {
           nameHTML += `<br><span style="font-size: 0.75rem; color: white; background: #e63946; padding: 2px 8px; border-radius: 10px; margin-top: 5px; display: inline-block;">${item.discountTag} Promo</span>`;
         }
-        // ----------------------------------------------------------------
 
         const createCell = (html, label) => `<td data-label="${label}">${html}</td>`;
         
@@ -144,21 +145,27 @@
       updateSummary();
     }
 
-    // 3. The Math Logic (Subtotal - Subscriber Discount = Total)
+    // 3. The Math Logic (Subtotal - Subscriber Discount + Delivery = Total)
     function updateSummary() {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
       
+
+      const deliveryFee = subtotal > 0 ? 350 : 0;
+
       // Calculate Subscriber Discount
       let discountAmount = 0;
       if (hasUserDiscount) {
         discountAmount = Math.round(subtotal * 0.10); // 10%
       }
       
-      const finalTotal = subtotal - discountAmount;
+      
+      const finalTotal = subtotal - discountAmount + deliveryFee;
+      
 
       // Update HTML
       document.getElementById('subtotal').innerText = "LKR " + subtotal;
+      document.getElementById('delivery-val').innerText = "LKR " + deliveryFee; // Update Delivery Text
       document.getElementById('final-total').innerText = "LKR " + finalTotal;
 
       // Handle the Discount Row UI

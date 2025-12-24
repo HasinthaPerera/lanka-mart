@@ -104,6 +104,11 @@
             <span id="summary-discount">- LKR 0</span>
           </div>
 
+          <div class="row" style="margin-bottom: 5px; font-size: 0.95rem;">
+            <span>Delivery Fee:</span>
+            <span id="summary-delivery">LKR 350</span>
+          </div>
+
           <hr>
           <div class="total-row">
             <span>Total to Pay:</span>
@@ -140,8 +145,6 @@
         } catch (error) {
           console.error("Error fetching discount:", error);
         }
-      } else {
-        console.log("No user logged in on checkout page.");
       }
       
       // Update UI regardless of login state
@@ -167,12 +170,11 @@
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
         
-        // --- NEW: Check for Product-Specific Discount Tag ---
+        // Check for Product-Specific Discount Tag
         let nameDisplay = item.name;
         if(item.discountTag) {
           nameDisplay += ` <span style="color:#e63946; font-size:0.8em;">(${item.discountTag} Promo)</span>`;
         }
-        // ----------------------------------------------------
 
         const div = document.createElement('div');
         div.className = 'summary-item';
@@ -183,7 +185,9 @@
         container.appendChild(div);
       });
 
-      // Calculate Visual Discount (Subscriber Discount)
+      // --- CALCULATE TOTALS WITH DELIVERY ---
+      const deliveryFee = 350; // Fixed Delivery Charge
+      
       let discount = 0;
       if (isDiscountEligible) {
         discount = Math.round(subtotal * 0.10); // 10%
@@ -193,10 +197,11 @@
         document.getElementById('summary-discount-row').style.display = 'none';
       }
 
-      const finalTotal = subtotal - discount;
+      const finalTotal = subtotal - discount + deliveryFee;
 
-      // Update Totals
+      // Update Screen
       document.getElementById('summary-subtotal').innerText = "LKR " + subtotal;
+      document.getElementById('summary-delivery').innerText = "LKR " + deliveryFee; // Show Delivery
       document.getElementById('final-total').innerText = "LKR " + finalTotal;
     }
 
@@ -236,21 +241,22 @@
         const itemTotal = item.price * item.quantity;
         msgSubtotal += itemTotal;
         
-        // --- NEW: Add Promo Tag to WhatsApp Message ---
         let promoText = "";
         if(item.discountTag) {
              promoText = ` (${item.discountTag} Promo)`;
         }
         cartListText += `- ${item.name}${promoText} (x${item.quantity}): LKR ${itemTotal}\n`;
-        // ----------------------------------------------
       });
 
-      // Re-Calculate Discount Logic
+      // --- MESSAGE MATH (With Delivery) ---
+      const deliveryFee = 350;
+      
       let msgDiscount = 0;
       if (isDiscountEligible) {
         msgDiscount = Math.round(msgSubtotal * 0.10);
       }
-      const msgFinalTotal = msgSubtotal - msgDiscount;
+      
+      const msgFinalTotal = msgSubtotal - msgDiscount + deliveryFee;
 
       // Build Message String
       let message = `*New Order from Lanka-Mart!* 🛍️\n`;
@@ -265,10 +271,12 @@
       message += `----------------------------\n`;
       message += `Subtotal: LKR ${msgSubtotal}\n`;
       
-      // Add discount line only if applicable
       if (msgDiscount > 0) {
-        message += `✅ *Subscriber Discount (10%): - LKR ${msgDiscount}*\n`;
+        message += `✅ *Discount (10%): - LKR ${msgDiscount}*\n`;
       }
+
+      // Add Delivery Line to Message
+      message += `🚚 Delivery Fee: LKR ${deliveryFee}\n`;
       
       message += `*NET TOTAL: LKR ${msgFinalTotal}*\n`;
       message += `----------------------------`;
