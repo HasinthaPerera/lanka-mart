@@ -12,7 +12,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
 
-/* Reuse Header from Index */
+
 header { background: rgba(0, 122, 51, 0.95); backdrop-filter: blur(10px); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 header .container { display: flex; justify-content: space-between; align-items: center; }
@@ -60,6 +60,7 @@ footer { background: #1e272e; color: rgba(255,255,255,0.7); text-align: center; 
   }
   .nav-links.active { transform: translateY(0); }
   .nav-links a { color: var(--text-dark); }
+  
 
   /* Mobile Table Card View */
   .cart-table thead { display: none; }
@@ -70,4 +71,49 @@ footer { background: #1e272e; color: rgba(255,255,255,0.7); text-align: center; 
   .cart-table td::before { content: attr(data-label); font-weight: 600; color: var(--text-dark); font-size: 0.85rem; }
   .cart-container { box-shadow: none; background: transparent; }
   .summary-card { max-width: 100%; }
+}
+.float-whatsapp {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 30px;
+  right: 30px;
+  background-color: #25d366;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.float-whatsapp:hover {
+  background-color: #128c7e;
+  transform: scale(1.1);
+}
+
+
+.tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  right: 70px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.float-whatsapp:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
