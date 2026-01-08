@@ -82,16 +82,8 @@
   </footer>
 
   
-<script type="module">
-  // 1. Import auth AND db from the shared file
-  import { auth, db } from './auth.js'; 
-  
-  // 2. Import specific actions from the SDKs
-  import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  // --- Toggle Form Logic ---
-  window.toggleForm = function(type) {
+<script>
+  function toggleForm(type) {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const loginBtn = document.getElementById('login-btn');
@@ -109,51 +101,64 @@
       registerBtn.classList.add('active');
     }
   }
+</script>
 
-  // --- REGISTER LOGIC ---
+<script type="module">
+  import { auth, db } from './auth.js'; 
+  import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+ // --- REGISTER LOGIC (DEBUG VERSION) ---
   document.getElementById('register-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Get values from the Register Form
     const name = this.querySelector('input[type="text"]').value;
     const email = this.querySelector('input[type="email"]').value;
     const password = this.querySelector('input[type="password"]').value;
+    
+    // Safety check: Does the dropdown exist?
+    const roleElement = document.getElementById('register-role');
+    const role = roleElement ? roleElement.value : "customer"; // Default to customer if missing
+
     const btn = this.querySelector('button');
+    btn.innerText = "Creating...";
 
     try {
-      btn.innerText = "Creating Account...";
-      
-      // 1. Create User in Authentication
+      // STEP 1: Create the Login Account
+      console.log("Step 1: Creating Auth User...");
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      console.log("Success! User ID:", user.uid);
 
-      // 2. Save Name/Email to Database
+      // STEP 2: Save to Firestore Database
+      console.log("Step 2: Saving to Database...");
       await setDoc(doc(db, "users", user.uid), {
         fullName: name,
         email: email,
         joinedDate: new Date().toISOString(),
-        role: "customer"
+        role: role,
+        hasDiscount: false // explicit default
       });
+      console.log("Success! Data saved.");
 
-      alert("Account Created Successfully!");
-      window.location.href = "index.html"; 
+      alert("🎉 Account & Database Record Created! Please Login.");
+      toggleForm('login');
 
     } catch (error) {
-      console.error(error);
+      console.error("REGISTRATION ERROR:", error);
       
-      // Give a friendly error message
-      if(error.code === 'auth/email-already-in-use') {
-        alert("This email is already registered. Please login.");
-      } else if(error.code === 'auth/weak-password') {
-        alert("Password should be at least 6 characters.");
+      // Detailed Error Handling
+      if (error.code === 'auth/email-already-in-use') {
+        alert("⚠️ This email is already registered. Please Login.");
       } else {
-        alert("Error: " + error.message);
+        // Show the REAL error on screen
+        alert("❌ Error: " + error.message);
       }
     } finally {
       btn.innerText = "Create Account";
     }
   });
-
+  
   // --- LOGIN LOGIC ---
   document.getElementById('login-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -162,18 +167,39 @@
     const btn = this.querySelector('button');
 
     try {
-      btn.innerText = "Signing In...";
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Login Successful!");
-      window.location.href = "index.html"; 
+      btn.innerText = "Checking Database...";
+      
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // CHECK ROLE IN DATABASE
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        
+        // DEBUG: Tell us what the database found
+        alert("Database found your role is: " + userData.role); // <--- DEBUG ALERT
+
+        if (userData.role === 'farmer') {
+          window.location.href = "farmer.html"; 
+        } else {
+          // If role is missing or 'customer', go to index
+          window.location.href = "index.html";
+        }
+      } else {
+        alert("Error: No user data found in database. Treating as customer.");
+        window.location.href = "index.html";
+      }
+
     } catch (error) {
       console.error(error);
-      alert("Login Failed: Incorrect email or password.");
+      alert("Login Failed: " + error.message);
     } finally {
       btn.innerText = "Login";
     }
   });
 </script>
-
 </body>
 </html>

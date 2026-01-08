@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Dashboard | Lanka-Mart</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="farmer.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Lanka<span>-Mart</span></h2>
+      <p class="role-badge">Farmer Panel</p>
+    </div>
+    
+    <ul class="nav-links">
+      <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fas fa-box-open"></i> My Products</a></li>
+      <li><a href="#"><i class="fas fa-plus-circle"></i> Add New Item</a></li>
+      <li><a href="#"><i class="fas fa-clipboard-list"></i> Orders</a></li>
+      <li class="logout-item"><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    
+    <header class="top-bar">
+      <h2 id="welcome-msg">Welcome Back, Farmer!</h2>
+      <div class="user-profile">
+        <span class="user-name" id="display-name">Loading...</span>
+        <div class="avatar"><i class="fas fa-user-circle"></i></div>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="icon-box green"><i class="fas fa-dollar-sign"></i></div>
+        <div class="text-box">
+          <h3>Total Earnings</h3>
+          <p>LKR 25,400</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon-box orange"><i class="fas fa-shopping-basket"></i></div>
+        <div class="text-box">
+          <h3>Active Products</h3>
+          <p>12 Items</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon-box blue"><i class="fas fa-truck"></i></div>
+        <div class="text-box">
+          <h3>Pending Orders</h3>
+          <p>5 Orders</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="recent-products">
+      <div class="section-header">
+        <h3>Your Recent Products</h3>
+        <button class="btn-add">Add New <i class="fas fa-plus"></i></button>
+      </div>
+      
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Product Name</th>
+              <th>Price (1kg)</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="Images/carrot.webp" class="table-img"></td>
+              <td>Fresh Carrots</td>
+              <td>LKR 140</td>
+              <td>Vegetables</td>
+              <td><span class="status active">Active</span></td>
+              <td><button class="btn-edit"><i class="fas fa-edit"></i></button></td>
+            </tr>
+            <tr>
+              <td><img src="Images/banana.webp" class="table-img"></td>
+              <td>Sour Banana</td>
+              <td>LKR 100</td>
+              <td>Fruits</td>
+              <td><span class="status active">Active</span></td>
+              <td><button class="btn-edit"><i class="fas fa-edit"></i></button></td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { auth, db } from './auth.js';
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // 1. Security Check: Is user logged in & a Farmer?
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.role !== 'farmer') {
+            // If a Customer tries to access this page, kick them out
+            alert("Access Denied: Farmers Only area.");
+            window.location.href = "index.html";
+          } else {
+            // Access Granted
+            document.getElementById('display-name').innerText = data.fullName;
+            document.getElementById('welcome-msg').innerText = "Welcome, " + data.fullName.split(' ')[0];
+          }
+        }
+      } else {
+        // Not logged in
+        window.location.href = "login.html";
+      }
+    });
+
+    // 2. Logout Logic
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      if(confirm("Log out of Farmer Dashboard?")) {
+        signOut(auth).then(() => window.location.href = "index.html");
+      }
+    });
+  </script>
+
+</body>
+</html>
