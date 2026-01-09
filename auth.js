@@ -9,32 +9,36 @@ const app = initializeApp(firebaseConfig);
 
 // 2. Initialize Services
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Database here
+const db = getFirestore(app); // This is correct!
 
 // 3. Listen for Login/Logout State (Updates Navbar)
 onAuthStateChanged(auth, (user) => {
   const authLink = document.getElementById('auth-link');
-  const loginLink = document.querySelector('.login-link'); // Check for class version too just in case
+  const loginLink = document.querySelector('.login-link'); 
 
   if (user) {
     console.log("User is logged in:", user.email);
     
-    // Update ID based link
+    // Update Navbar Link to "Logout"
     if (authLink) {
       authLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
       authLink.href = "#"; 
-      authLink.addEventListener('click', (e) => {
+      
+      // Remove old listeners to prevent duplicates (optional best practice)
+      const newLink = authLink.cloneNode(true);
+      authLink.parentNode.replaceChild(newLink, authLink);
+      
+      newLink.addEventListener('click', (e) => {
         e.preventDefault();
         handleLogout();
       });
     }
-    // Update Class based link (if exists)
+    
     if (loginLink) loginLink.innerHTML = '<i class="fas fa-user-check"></i> My Account';
 
-    // Redirect if on login page
-    if (window.location.pathname.includes('login.html')) {
-      window.location.href = 'index.html';
-    }
+    // --- REMOVED THE AUTO-REDIRECT HERE ---
+    // We removed the code that forces users to index.html.
+    // This allows login.html to properly send Farmers to farmer.html.
 
   } else {
     console.log("User is logged out");
