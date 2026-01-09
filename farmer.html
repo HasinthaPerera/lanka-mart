@@ -7,7 +7,6 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
   <link rel="stylesheet" href="farmer.css">
 </head>
 <body>
@@ -21,7 +20,6 @@
     <ul class="nav-links">
       <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
       <li><a href="#"><i class="fas fa-box-open"></i> My Products</a></li>
-      <li><a href="#"><i class="fas fa-plus-circle"></i> Add New Item</a></li>
       <li><a href="#"><i class="fas fa-clipboard-list"></i> Orders</a></li>
       <li class="logout-item"><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
@@ -30,7 +28,7 @@
   <main class="main-content">
     
     <header class="top-bar">
-      <h2 id="welcome-msg">Welcome Back, Farmer!</h2>
+      <h2 id="welcome-msg">Welcome Back!</h2>
       <div class="user-profile">
         <span class="user-name" id="display-name">Loading...</span>
         <div class="avatar"><i class="fas fa-user-circle"></i></div>
@@ -42,7 +40,7 @@
         <div class="icon-box green"><i class="fas fa-dollar-sign"></i></div>
         <div class="text-box">
           <h3>Total Earnings</h3>
-          <p>LKR 25,400</p>
+          <p id="stat-earnings">LKR 0</p>
         </div>
       </div>
 
@@ -50,7 +48,7 @@
         <div class="icon-box orange"><i class="fas fa-shopping-basket"></i></div>
         <div class="text-box">
           <h3>Active Products</h3>
-          <p>12 Items</p>
+          <p id="stat-products">0 Items</p>
         </div>
       </div>
 
@@ -58,15 +56,15 @@
         <div class="icon-box blue"><i class="fas fa-truck"></i></div>
         <div class="text-box">
           <h3>Pending Orders</h3>
-          <p>5 Orders</p>
+          <p id="stat-orders">0 Orders</p>
         </div>
       </div>
     </section>
 
     <section class="recent-products">
       <div class="section-header">
-        <h3>Your Recent Products</h3>
-        <button class="btn-add">Add New <i class="fas fa-plus"></i></button>
+        <h3>Your Current Stock</h3>
+        <button class="btn-add" id="open-modal-btn">Add New <i class="fas fa-plus"></i></button>
       </div>
       
       <div class="table-responsive">
@@ -78,67 +76,178 @@
               <th>Price (1kg)</th>
               <th>Category</th>
               <th>Status</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td><img src="Images/carrot.webp" class="table-img"></td>
-              <td>Fresh Carrots</td>
-              <td>LKR 140</td>
-              <td>Vegetables</td>
-              <td><span class="status active">Active</span></td>
-              <td><button class="btn-edit"><i class="fas fa-edit"></i></button></td>
-            </tr>
-            <tr>
-              <td><img src="Images/banana.webp" class="table-img"></td>
-              <td>Sour Banana</td>
-              <td>LKR 100</td>
-              <td>Fruits</td>
-              <td><span class="status active">Active</span></td>
-              <td><button class="btn-edit"><i class="fas fa-edit"></i></button></td>
-            </tr>
-            </tbody>
+          <tbody id="products-table-body">
+            <tr><td colspan="6" style="text-align:center;">Loading products...</td></tr>
+          </tbody>
         </table>
       </div>
     </section>
 
   </main>
 
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>Add New Harvest</h3>
+      <form id="add-product-form">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="p-name" placeholder="e.g. Fresh Carrots" required>
+        </div>
+        <div class="form-group">
+          <label>Price per Kg (LKR)</label>
+          <input type="number" id="p-price" placeholder="e.g. 150" required>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="p-category">
+            <option value="Vegetables">Vegetables</option>
+            <option value="Fruits">Fruits</option>
+            <option value="Spices">Spices</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" id="p-image" placeholder="Paste image link here" required>
+        </div>
+        <button type="submit" class="btn-submit">List Product</button>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { auth, db } from './auth.js';
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { collection, query, where, getDocs, addDoc, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 1. Security Check: Is user logged in & a Farmer?
+    let currentUser = null;
+
+    // 1. Auth & Role Check
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.role !== 'farmer') {
-            // If a Customer tries to access this page, kick them out
-            alert("Access Denied: Farmers Only area.");
-            window.location.href = "index.html";
-          } else {
-            // Access Granted
-            document.getElementById('display-name').innerText = data.fullName;
-            document.getElementById('welcome-msg').innerText = "Welcome, " + data.fullName.split(' ')[0];
-          }
+        currentUser = user;
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        
+        if (userDoc.exists() && userDoc.data().role === 'farmer') {
+          // Success: Update UI
+          const userData = userDoc.data();
+          document.getElementById('display-name').innerText = userData.fullName;
+          document.getElementById('welcome-msg').innerText = `Welcome, ${userData.fullName.split(' ')[0]}!`;
+          
+          // Load Dashboard Data
+          loadDashboardData(user.uid);
+        } else {
+          alert("Access Denied: Farmers Only.");
+          window.location.href = "index.html";
         }
       } else {
-        // Not logged in
         window.location.href = "login.html";
       }
     });
 
-    // 2. Logout Logic
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      if(confirm("Log out of Farmer Dashboard?")) {
-        signOut(auth).then(() => window.location.href = "index.html");
+    // 2. Fetch & Render Data
+    async function loadDashboardData(uid) {
+      const tableBody = document.getElementById('products-table-body');
+      tableBody.innerHTML = ''; // Clear loading text
+
+      try {
+        // A. Fetch Products created by THIS farmer
+        const q = query(collection(db, "products"), where("sellerId", "==", uid));
+        const querySnapshot = await getDocs(q);
+        
+        let totalProducts = 0;
+        let productsHTML = '';
+
+        querySnapshot.forEach((docSnap) => {
+          totalProducts++;
+          const item = docSnap.data();
+          
+          productsHTML += `
+            <tr>
+              <td><img src="${item.imageUrl || 'Images/placeholder.png'}" class="table-img"></td>
+              <td>${item.name}</td>
+              <td>LKR ${item.price}</td>
+              <td>${item.category}</td>
+              <td><span class="status active">Active</span></td>
+              <td>
+                <button class="btn-delete" onclick="window.deleteProduct('${docSnap.id}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        // Update Table
+        tableBody.innerHTML = productsHTML || '<tr><td colspan="6" style="text-align:center;">No products found. Add one!</td></tr>';
+        
+        // Update Stats
+        document.getElementById('stat-products').innerText = `${totalProducts} Items`;
+        
+        
+        
+      } catch (error) {
+        console.error("Error loading data:", error);
+        tableBody.innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data</td></tr>';
       }
+    }
+
+    // 3. Add New Product Logic
+    const modal = document.getElementById('product-modal');
+    const openBtn = document.getElementById('open-modal-btn');
+    const closeBtn = document.querySelector('.close-modal');
+
+    openBtn.onclick = () => modal.style.display = "block";
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; };
+
+    document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('p-name').value;
+      const price = Number(document.getElementById('p-price').value);
+      const category = document.getElementById('p-category').value;
+      const image = document.getElementById('p-image').value;
+
+      try {
+        await addDoc(collection(db, "products"), {
+          name: name,
+          price: price,
+          category: category,
+          imageUrl: image,
+          sellerId: currentUser.uid,
+          createdAt: new Date()
+        });
+        
+        alert("Product Added Successfully!");
+        modal.style.display = "none";
+        document.getElementById('add-product-form').reset();
+        loadDashboardData(currentUser.uid); // Refresh table
+
+      } catch (error) {
+        console.error(error);
+        alert("Error adding product.");
+      }
+    });
+
+    // 4. Delete Logic (Exposed to Window)
+    window.deleteProduct = async (id) => {
+      if(confirm("Are you sure you want to remove this item?")) {
+        try {
+          await deleteDoc(doc(db, "products", id));
+          loadDashboardData(currentUser.uid); // Refresh
+        } catch(err) {
+          alert("Error deleting item");
+        }
+      }
+    };
+
+    // 5. Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      signOut(auth).then(() => window.location.href = "index.html");
     });
   </script>
 

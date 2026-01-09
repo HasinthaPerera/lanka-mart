@@ -36,10 +36,7 @@ onAuthStateChanged(auth, (user) => {
     
     if (loginLink) loginLink.innerHTML = '<i class="fas fa-user-check"></i> My Account';
 
-    // --- REMOVED THE AUTO-REDIRECT HERE ---
-    // We removed the code that forces users to index.html.
-    // This allows login.html to properly send Farmers to farmer.html.
-
+    
   } else {
     console.log("User is logged out");
     if (authLink) {
