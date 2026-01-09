@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lanka-Mart | Login</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="login.css">
@@ -32,7 +33,7 @@
 
       <form id="login-form" class="form-content active">
         <h2>Welcome Back! <i class="fas fa-leaf"></i></h2>
-        <p>Sign in to access your orders.</p>
+        <p>Sign in to access your dashboard.</p>
         
         <div class="input-group">
           <i class="fas fa-envelope"></i>
@@ -54,7 +55,7 @@
 
       <form id="register-form" class="form-content">
         <h2>Join the Family <i class="fas fa-seedling"></i></h2>
-        <p>Create an account to start shopping.</p>
+        <p>Create an account to start.</p>
         
         <div class="input-group">
           <i class="fas fa-user"></i>
@@ -71,6 +72,14 @@
           <input type="password" placeholder="Password" required>
         </div>
 
+        <div class="input-group">
+          <i class="fas fa-users-cog"></i>
+          <select id="register-role" required>
+            <option value="customer">I am a Customer</option>
+            <option value="farmer">I am a Farmer</option>
+          </select>
+        </div>
+
         <button type="submit" class="btn-submit">Create Account</button>
       </form>
 
@@ -81,125 +90,116 @@
     <p>© 2025 Lanka-Mart | Freshness & Quality</p>
   </footer>
 
-  
-<script>
-  function toggleForm(type) {
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
+  <script>
+    function toggleForm(type) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const loginBtn = document.getElementById('login-btn');
+      const registerBtn = document.getElementById('register-btn');
 
-    if (type === 'login') {
-      loginForm.classList.add('active');
-      registerForm.classList.remove('active');
-      loginBtn.classList.add('active');
-      registerBtn.classList.remove('active');
-    } else {
-      loginForm.classList.remove('active');
-      registerForm.classList.add('active');
-      loginBtn.classList.remove('active');
-      registerBtn.classList.add('active');
-    }
-  }
-</script>
-
-<script type="module">
-  import { auth, db } from './auth.js'; 
-  import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
- // --- REGISTER LOGIC (DEBUG VERSION) ---
-  document.getElementById('register-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const name = this.querySelector('input[type="text"]').value;
-    const email = this.querySelector('input[type="email"]').value;
-    const password = this.querySelector('input[type="password"]').value;
-    
-    // Safety check: Does the dropdown exist?
-    const roleElement = document.getElementById('register-role');
-    const role = roleElement ? roleElement.value : "customer"; // Default to customer if missing
-
-    const btn = this.querySelector('button');
-    btn.innerText = "Creating...";
-
-    try {
-      // STEP 1: Create the Login Account
-      console.log("Step 1: Creating Auth User...");
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log("Success! User ID:", user.uid);
-
-      // STEP 2: Save to Firestore Database
-      console.log("Step 2: Saving to Database...");
-      await setDoc(doc(db, "users", user.uid), {
-        fullName: name,
-        email: email,
-        joinedDate: new Date().toISOString(),
-        role: role,
-        hasDiscount: false // explicit default
-      });
-      console.log("Success! Data saved.");
-
-      alert("🎉 Account & Database Record Created! Please Login.");
-      toggleForm('login');
-
-    } catch (error) {
-      console.error("REGISTRATION ERROR:", error);
-      
-      // Detailed Error Handling
-      if (error.code === 'auth/email-already-in-use') {
-        alert("⚠️ This email is already registered. Please Login.");
+      if (type === 'login') {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
       } else {
-        // Show the REAL error on screen
-        alert("❌ Error: " + error.message);
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+        loginBtn.classList.remove('active');
+        registerBtn.classList.add('active');
       }
-    } finally {
-      btn.innerText = "Create Account";
     }
-  });
-  
-  // --- LOGIN LOGIC ---
-  document.getElementById('login-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const email = this.querySelector('input[type="email"]').value;
-    const password = this.querySelector('input[type="password"]').value;
-    const btn = this.querySelector('button');
+  </script>
 
-    try {
-      btn.innerText = "Checking Database...";
+  <script type="module">
+    import { auth, db } from './auth.js'; 
+    import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // --- REGISTER LOGIC ---
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
       
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const name = this.querySelectorAll('input')[0].value;
+      const email = this.querySelectorAll('input')[1].value;
+      const password = this.querySelectorAll('input')[2].value;
+      const role = document.getElementById('register-role').value;
+      const btn = this.querySelector('button');
 
-      // CHECK ROLE IN DATABASE
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
+      try {
+        btn.innerText = "Creating...";
         
-        // DEBUG: Tell us what the database found
-        alert("Database found your role is: " + userData.role); // <--- DEBUG ALERT
+        // Step 1: Create User
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-        if (userData.role === 'farmer') {
-          window.location.href = "farmer.html"; 
+        // Step 2: Save Role to Database
+        await setDoc(doc(db, "users", user.uid), {
+          fullName: name,
+          email: email,
+          joinedDate: new Date().toISOString(),
+          role: role,
+          hasDiscount: false
+        });
+
+        alert("Account Successfully Created! Please Login.");
+        toggleForm('login');
+
+      } catch (error) {
+        console.error("Register Error:", error);
+        if (error.code === 'auth/email-already-in-use') {
+          alert("This email is already registered. Please Login instead.");
+        } else if (error.code === 'auth/weak-password') {
+          alert("Password must be at least 6 characters.");
         } else {
-          // If role is missing or 'customer', go to index
+          alert("Error: " + error.message);
+        }
+      } finally {
+        btn.innerText = "Create Account";
+      }
+    });
+
+    // --- LOGIN LOGIC ---
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = this.querySelector('input[type="email"]').value;
+      const password = this.querySelector('input[type="password"]').value;
+      const btn = this.querySelector('button');
+
+      try {
+        btn.innerText = "Signing In...";
+        
+        // Step 1: Sign In
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Step 2: Check Role in Database
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          
+          if (userData.role === 'farmer') {
+            alert("Welcome Farmer " + userData.fullName);
+            window.location.href = "farmer.html"; 
+          } else {
+            alert("Welcome Customer " + userData.fullName);
+            window.location.href = "index.html"; 
+          }
+        } else {
+          // If no role found, default to home
           window.location.href = "index.html";
         }
-      } else {
-        alert("Error: No user data found in database. Treating as customer.");
-        window.location.href = "index.html";
-      }
 
-    } catch (error) {
-      console.error(error);
-      alert("Login Failed: " + error.message);
-    } finally {
-      btn.innerText = "Login";
-    }
-  });
-</script>
+      } catch (error) {
+        console.error("Login Error:", error);
+        alert("Login Failed: Incorrect email or password.");
+      } finally {
+        btn.innerText = "Login";
+      }
+    });
+  </script>
+
 </body>
 </html>

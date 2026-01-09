@@ -17,6 +17,7 @@ header { background: var(--primary-color); padding: 15px 0; }
 .logo span { color: var(--accent-color); }
 nav a { color: var(--white); text-decoration: none; font-weight: 600; margin-left: 20px; }
 
+/* Login Container */
 .login-wrapper {
   flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px;
   background: url('Images/hero-bg.jpg'); background-size: cover; background-position: center; position: relative;
@@ -30,10 +31,12 @@ nav a { color: var(--white); text-decoration: none; font-weight: 600; margin-lef
 }
 @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
+/* Toggle Buttons */
 .form-toggle { display: flex; background: #e9ecef; border-radius: 50px; padding: 5px; margin-bottom: 30px; }
 .form-toggle button { flex: 1; border: none; padding: 10px; border-radius: 50px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-dark); transition: 0.3s; }
 .form-toggle button.active { background: var(--primary-color); color: var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
+/* Forms */
 .form-content { display: none; text-align: center; }
 .form-content.active { display: block; animation: fadeIn 0.5s; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -42,9 +45,22 @@ nav a { color: var(--white); text-decoration: none; font-weight: 600; margin-lef
 .form-content p { color: #666; margin-bottom: 25px; font-size: 0.9rem; }
 
 .input-group { position: relative; margin-bottom: 20px; }
-.input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-color); }
-.input-group input { width: 100%; padding: 12px 15px 12px 45px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; transition: 0.3s; }
-.input-group input:focus { border-color: var(--accent-color); outline: none; }
+.input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-color); z-index: 10; }
+
+.input-group input, 
+.input-group select { 
+  width: 100%; 
+  padding: 12px 15px 12px 45px; 
+  border: 2px solid #eee; 
+  border-radius: 10px; 
+  font-family: inherit; 
+  transition: 0.3s; 
+  background: white; 
+  color: #333;
+}
+
+.input-group input:focus,
+.input-group select:focus { border-color: var(--accent-color); outline: none; }
 
 .actions { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 25px; color: #555; }
 .actions a { color: var(--primary-color); text-decoration: underline; }
