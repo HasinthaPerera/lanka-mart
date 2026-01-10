@@ -225,7 +225,7 @@
         alert("Product Added Successfully!");
         modal.style.display = "none";
         document.getElementById('add-product-form').reset();
-        loadDashboardData(currentUser.uid); // Refresh table
+        loadDashboardData(currentUser.uid); 
 
       } catch (error) {
         console.error(error);
@@ -238,7 +238,7 @@
       if(confirm("Are you sure you want to remove this item?")) {
         try {
           await deleteDoc(doc(db, "products", id));
-          loadDashboardData(currentUser.uid); // Refresh
+          loadDashboardData(currentUser.uid); 
         } catch(err) {
           alert("Error deleting item");
         }
