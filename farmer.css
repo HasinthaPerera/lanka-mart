@@ -1,7 +1,5 @@
-
-
 :root {
-  
+ 
   --primary-color: #007a33;
   --primary-dark: #005824;
   --primary-light: #e8f5e9;
@@ -16,7 +14,7 @@
   
   --sidebar-width: 280px;
   --header-height: 70px;
-  --radius: 16px;
+  --radius: 16px; 
   
   
   --bg-body: #f3f4f6;
@@ -24,7 +22,7 @@
   --text-main: #1f2937;
   --text-muted: #6b7280;
   
-  
+ 
   --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -127,7 +125,7 @@ body {
 .logout-item { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
 .logout-item a:hover { background: rgba(220, 38, 38, 0.2); color: #fca5a5; }
 
-
+/* --- Main Content Area --- */
 .main-content { 
   margin-left: var(--sidebar-width); 
   flex: 1; 
@@ -174,7 +172,7 @@ body {
   font-size: 1.2rem;
 }
 
-
+/* --- Stats Grid --- */
 .stats-grid { 
   display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
@@ -219,7 +217,7 @@ body {
 .text-box h3 { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; margin-bottom: 5px; }
 .text-box p { font-size: 1.6rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
 
-
+/* --- Table Section --- */
 .recent-products { 
   background: var(--bg-card); 
   padding: 30px; 
@@ -296,7 +294,6 @@ tr:hover td { background: #f8fdf9; }
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-
 .status { 
   padding: 6px 14px; 
   border-radius: 30px; 
@@ -306,7 +303,6 @@ tr:hover td { background: #f8fdf9; }
 }
 
 .status.active { background: var(--success-bg); color: var(--success-color); border: 1px solid #a7f3d0; }
-
 
 .btn-edit, .btn-delete { 
   border: none; 
@@ -326,8 +322,6 @@ tr:hover td { background: #f8fdf9; }
 
 .btn-delete { background: var(--danger-bg); color: var(--danger-color); }
 .btn-delete:hover { background: #fecaca; transform: scale(1.1); }
-
-
 
 .modal { 
   display: none; 
@@ -425,7 +419,6 @@ tr:hover td { background: #f8fdf9; }
   box-shadow: 0 5px 15px rgba(0, 122, 51, 0.25);
 }
 
-
 @media (max-width: 992px) {
   .sidebar { width: 80px; padding: 20px 10px; }
   .sidebar-header h2, .sidebar-header p, .role-badge { display: none; }
@@ -433,26 +426,14 @@ tr:hover td { background: #f8fdf9; }
   .nav-links a span { display: none; }
   .nav-links a { justify-content: center; padding: 15px; }
   .nav-links a i { font-size: 1.4rem; }
-  
   .main-content { margin-left: 80px; width: calc(100% - 80px); padding: 20px; }
 }
 
 @media (max-width: 768px) {
-  
   .stats-grid { grid-template-columns: 1fr; }
-  
-  .top-bar { 
-    flex-direction: column; 
-    align-items: flex-start; 
-    gap: 15px; 
-    padding: 20px;
-  }
-  
+  .top-bar { flex-direction: column; align-items: flex-start; gap: 15px; padding: 20px; }
   .user-profile { width: 100%; justify-content: space-between; }
-  
- 
   .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
   .btn-add { width: 100%; justify-content: center; }
-  
   .modal-content { margin: 15% auto; width: 95%; padding: 25px; }
 }
