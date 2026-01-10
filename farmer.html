@@ -31,7 +31,7 @@
       <h2 id="welcome-msg">Welcome Back!</h2>
       <div class="user-profile">
         <span class="user-name" id="display-name">Loading...</span>
-        <div class="avatar"><i class="fas fa-user-circle"></i></div>
+        <div class="avatar"><i class="fas fa-user"></i></div>
       </div>
     </header>
 
@@ -80,7 +80,7 @@
             </tr>
           </thead>
           <tbody id="products-table-body">
-            <tr><td colspan="6" style="text-align:center;">Loading products...</td></tr>
+            <tr><td colspan="6" style="text-align:center;">Connecting to database...</td></tr>
           </tbody>
         </table>
       </div>
@@ -107,6 +107,7 @@
             <option value="Vegetables">Vegetables</option>
             <option value="Fruits">Fruits</option>
             <option value="Spices">Spices</option>
+            <option value="Rice & Grains">Rice & Grains</option>
           </select>
         </div>
         <div class="form-group">
@@ -119,61 +120,68 @@
   </div>
 
   <script type="module">
+    // 1. IMPORT SHARED DATABASE CONNECTION
     import { auth, db } from './auth.js';
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { collection, query, where, getDocs, addDoc, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { collection, query, where, orderBy, addDoc, doc, getDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     let currentUser = null;
+    let productsUnsubscribe = null; 
 
-    // 1. Auth & Role Check
+    // 2. CHECK LOGIN & ROLE
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        
-        if (userDoc.exists() && userDoc.data().role === 'farmer') {
-          // Success: Update UI
-          const userData = userDoc.data();
-          document.getElementById('display-name').innerText = userData.fullName;
-          document.getElementById('welcome-msg').innerText = `Welcome, ${userData.fullName.split(' ')[0]}!`;
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
           
-          // Load Dashboard Data
-          loadDashboardData(user.uid);
-        } else {
-          alert("Access Denied: Farmers Only.");
-          window.location.href = "index.html";
+          if (userDoc.exists() && userDoc.data().role === 'farmer') {
+            const userData = userDoc.data();
+            document.getElementById('display-name').innerText = userData.fullName || "Farmer";
+            document.getElementById('welcome-msg').innerText = `Welcome, ${userData.fullName.split(' ')[0]}!`;
+            
+            // START LISTENING TO DATABASE
+            subscribeToProducts(user.uid);
+          } else {
+            alert("Access Denied: Farmers Only.");
+            window.location.href = "index.html";
+          }
+        } catch (error) {
+          console.error("Auth Error:", error);
+          subscribeToProducts(user.uid);
         }
       } else {
         window.location.href = "login.html";
       }
     });
 
-    // 2. Fetch & Render Data
-    async function loadDashboardData(uid) {
+    // 3. REAL-TIME DATABASE LISTENER (The Magic Part)
+    function subscribeToProducts(uid) {
       const tableBody = document.getElementById('products-table-body');
-      tableBody.innerHTML = ''; // Clear loading text
+      
+      // Get products for THIS seller
+      const q = query(
+        collection(db, "products"), 
+        where("sellerId", "==", uid)
+      );
 
-      try {
-        // A. Fetch Products created by THIS farmer
-        const q = query(collection(db, "products"), where("sellerId", "==", uid));
-        const querySnapshot = await getDocs(q);
-        
+      productsUnsubscribe = onSnapshot(q, (snapshot) => {
         let totalProducts = 0;
         let productsHTML = '';
 
-        querySnapshot.forEach((docSnap) => {
+        snapshot.forEach((docSnap) => {
           totalProducts++;
           const item = docSnap.data();
           
           productsHTML += `
             <tr>
-              <td><img src="${item.imageUrl || 'Images/placeholder.png'}" class="table-img"></td>
+              <td><img src="${item.imageUrl || 'Images/placeholder.png'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
               <td>${item.name}</td>
               <td>LKR ${item.price}</td>
               <td>${item.category}</td>
               <td><span class="status active">Active</span></td>
               <td>
-                <button class="btn-delete" onclick="window.deleteProduct('${docSnap.id}')">
+                <button class="btn-delete" onclick="window.deleteProduct('${docSnap.id}')" title="Delete Item">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
@@ -181,21 +189,21 @@
           `;
         });
 
-        // Update Table
-        tableBody.innerHTML = productsHTML || '<tr><td colspan="6" style="text-align:center;">No products found. Add one!</td></tr>';
+        if(totalProducts === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">No products found. Click "Add New" to start!</td></tr>';
+        } else {
+            tableBody.innerHTML = productsHTML;
+        }
         
-        // Update Stats
         document.getElementById('stat-products').innerText = `${totalProducts} Items`;
-        
-        
-        
-      } catch (error) {
-        console.error("Error loading data:", error);
-        tableBody.innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data</td></tr>';
-      }
+      
+      }, (error) => {
+        console.error("Listener Error:", error);
+        tableBody.innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data. Check console.</td></tr>';
+      });
     }
 
-    // 3. Add New Product Logic
+    // 4. ADD NEW PRODUCT TO DATABASE
     const modal = document.getElementById('product-modal');
     const openBtn = document.getElementById('open-modal-btn');
     const closeBtn = document.querySelector('.close-modal');
@@ -207,46 +215,56 @@
     document.getElementById('add-product-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      if(!currentUser) { alert("You are not logged in!"); return; }
+
+      const btn = e.target.querySelector('button');
+      btn.innerText = "Adding...";
+      btn.disabled = true;
+
       const name = document.getElementById('p-name').value;
       const price = Number(document.getElementById('p-price').value);
       const category = document.getElementById('p-category').value;
       const image = document.getElementById('p-image').value;
 
       try {
+        // SAVING TO THE SAME DATABASE
         await addDoc(collection(db, "products"), {
           name: name,
           price: price,
           category: category,
           imageUrl: image,
           sellerId: currentUser.uid,
-          createdAt: new Date()
+          createdAt: new Date() 
         });
         
         alert("Product Added Successfully!");
         modal.style.display = "none";
         document.getElementById('add-product-form').reset();
-        loadDashboardData(currentUser.uid); 
 
       } catch (error) {
         console.error(error);
-        alert("Error adding product.");
+        alert("Error adding product: " + error.message);
+      } finally {
+        btn.innerText = "List Product";
+        btn.disabled = false;
       }
     });
 
-    // 4. Delete Logic (Exposed to Window)
+    // 5. DELETE PRODUCT
     window.deleteProduct = async (id) => {
-      if(confirm("Are you sure you want to remove this item?")) {
+      if(confirm("Are you sure you want to remove this item permanently?")) {
         try {
           await deleteDoc(doc(db, "products", id));
-          loadDashboardData(currentUser.uid); 
         } catch(err) {
+          console.error("Delete error", err);
           alert("Error deleting item");
         }
       }
     };
 
-    // 5. Logout
+    // 6. LOGOUT
     document.getElementById('logout-btn').addEventListener('click', () => {
+      if (productsUnsubscribe) productsUnsubscribe(); 
       signOut(auth).then(() => window.location.href = "index.html");
     });
   </script>
