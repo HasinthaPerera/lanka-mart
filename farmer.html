@@ -11,10 +11,13 @@
 </head>
 <body>
 
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2>Lanka<span>-Mart</span></h2>
       <p class="role-badge">Farmer Panel</p>
+      <div class="close-sidebar" id="close-sidebar"><i class="fas fa-times"></i></div>
     </div>
     
     <ul class="nav-links">
@@ -28,7 +31,13 @@
   <main class="main-content">
     
     <header class="top-bar">
-      <h2 id="welcome-msg">Welcome Back!</h2>
+      <div class="top-bar-left">
+        <div class="toggle-btn" id="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+        <h2 id="welcome-msg">Welcome Back!</h2>
+      </div>
+
       <div class="user-profile">
         <span class="user-name" id="display-name">Loading...</span>
         <div class="avatar"><i class="fas fa-user"></i></div>
@@ -120,7 +129,6 @@
   </div>
 
   <script type="module">
-    // 1. IMPORT SHARED DATABASE CONNECTION
     import { auth, db } from './auth.js';
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { collection, query, where, orderBy, addDoc, doc, getDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -128,7 +136,24 @@
     let currentUser = null;
     let productsUnsubscribe = null; 
 
-    // 2. CHECK LOGIN & ROLE
+    // --- MOBILE MENU LOGIC ---
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const closeSidebarBtn = document.getElementById('close-sidebar');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('mobile-active');
+      overlay.classList.toggle('active');
+    }
+
+    if(menuToggle) {
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu); // Close when clicking outside
+        closeSidebarBtn.addEventListener('click', toggleMenu);
+    }
+
+    // --- EXISTING FIREBASE LOGIC ---
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
@@ -139,8 +164,6 @@
             const userData = userDoc.data();
             document.getElementById('display-name').innerText = userData.fullName || "Farmer";
             document.getElementById('welcome-msg').innerText = `Welcome, ${userData.fullName.split(' ')[0]}!`;
-            
-            // START LISTENING TO DATABASE
             subscribeToProducts(user.uid);
           } else {
             alert("Access Denied: Farmers Only.");
@@ -155,15 +178,9 @@
       }
     });
 
-    // 3. REAL-TIME DATABASE LISTENER (The Magic Part)
     function subscribeToProducts(uid) {
       const tableBody = document.getElementById('products-table-body');
-      
-      // Get products for THIS seller
-      const q = query(
-        collection(db, "products"), 
-        where("sellerId", "==", uid)
-      );
+      const q = query(collection(db, "products"), where("sellerId", "==", uid));
 
       productsUnsubscribe = onSnapshot(q, (snapshot) => {
         let totalProducts = 0;
@@ -172,7 +189,6 @@
         snapshot.forEach((docSnap) => {
           totalProducts++;
           const item = docSnap.data();
-          
           productsHTML += `
             <tr>
               <td><img src="${item.imageUrl || 'Images/placeholder.png'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
@@ -181,93 +197,55 @@
               <td>${item.category}</td>
               <td><span class="status active">Active</span></td>
               <td>
-                <button class="btn-delete" onclick="window.deleteProduct('${docSnap.id}')" title="Delete Item">
-                  <i class="fas fa-trash"></i>
-                </button>
+                <button class="btn-delete" onclick="window.deleteProduct('${docSnap.id}')"><i class="fas fa-trash"></i></button>
               </td>
-            </tr>
-          `;
+            </tr>`;
         });
 
-        if(totalProducts === 0) {
-            tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">No products found. Click "Add New" to start!</td></tr>';
-        } else {
-            tableBody.innerHTML = productsHTML;
-        }
+        if(totalProducts === 0) tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">No products found. Click "Add New" to start!</td></tr>';
+        else tableBody.innerHTML = productsHTML;
         
         document.getElementById('stat-products').innerText = `${totalProducts} Items`;
-      
-      }, (error) => {
-        console.error("Listener Error:", error);
-        tableBody.innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data. Check console.</td></tr>';
       });
     }
 
-    // 4. ADD NEW PRODUCT TO DATABASE
+    // Modal & Forms
     const modal = document.getElementById('product-modal');
-    const openBtn = document.getElementById('open-modal-btn');
-    const closeBtn = document.querySelector('.close-modal');
-
-    openBtn.onclick = () => modal.style.display = "block";
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; };
-
+    document.getElementById('open-modal-btn').onclick = () => modal.style.display = "block";
+    document.querySelector('.close-modal').onclick = () => modal.style.display = "none";
+    
     document.getElementById('add-product-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       if(!currentUser) { alert("You are not logged in!"); return; }
-
       const btn = e.target.querySelector('button');
-      btn.innerText = "Adding...";
-      btn.disabled = true;
-
-      const name = document.getElementById('p-name').value;
-      const price = Number(document.getElementById('p-price').value);
-      const category = document.getElementById('p-category').value;
-      const image = document.getElementById('p-image').value;
+      btn.innerText = "Adding..."; btn.disabled = true;
 
       try {
-        // SAVING TO THE SAME DATABASE
         await addDoc(collection(db, "products"), {
-          name: name,
-          price: price,
-          category: category,
-          imageUrl: image,
+          name: document.getElementById('p-name').value,
+          price: Number(document.getElementById('p-price').value),
+          category: document.getElementById('p-category').value,
+          imageUrl: document.getElementById('p-image').value,
           sellerId: currentUser.uid,
-          createdAt: new Date() 
+          createdAt: new Date()
         });
-        
-        alert("Product Added Successfully!");
+        alert("Product Added!");
         modal.style.display = "none";
         document.getElementById('add-product-form').reset();
-
-      } catch (error) {
-        console.error(error);
-        alert("Error adding product: " + error.message);
-      } finally {
-        btn.innerText = "List Product";
-        btn.disabled = false;
-      }
+      } catch (error) { alert("Error: " + error.message); } 
+      finally { btn.innerText = "List Product"; btn.disabled = false; }
     });
 
-    // 5. DELETE PRODUCT
     window.deleteProduct = async (id) => {
-      if(confirm("Are you sure you want to remove this item permanently?")) {
-        try {
-          await deleteDoc(doc(db, "products", id));
-        } catch(err) {
-          console.error("Delete error", err);
-          alert("Error deleting item");
-        }
+      if(confirm("Delete this item?")) {
+        try { await deleteDoc(doc(db, "products", id)); } catch(err) { alert("Error deleting item"); }
       }
     };
 
-    // 6. LOGOUT
     document.getElementById('logout-btn').addEventListener('click', () => {
-      if (productsUnsubscribe) productsUnsubscribe(); 
+      if (productsUnsubscribe) productsUnsubscribe();
       signOut(auth).then(() => window.location.href = "index.html");
     });
   </script>
-
 </body>
 </html>
