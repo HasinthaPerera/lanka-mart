@@ -6,9 +6,7 @@
   <title>Lanka-Mart - Fresh Market Online</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
@@ -48,20 +46,20 @@
     </section>
 
     <section class="about-story">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-image">
-        <img src="Images/farmer.webp" alt="Our Farmer">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image">
+            <img src="Images/farmer.webp" alt="Our Farmer" onerror="this.src='https://via.placeholder.com/400x300'">
+          </div>
+          <div class="about-text">
+            <h4>Our Story</h4>
+            <h2>Empowering Local Farmers</h2>
+            <p>Lanka-Mart started with a simple mission: to connect the hardworking farmers of Sri Lanka directly with your kitchen. By cutting out the middlemen, we ensure you get the freshest produce at fair prices, while our farmers earn what they deserve.</p>
+            <a href="products.html" class="btn btn-primary">Support Local</a>
+          </div>
+        </div>
       </div>
-      <div class="about-text">
-        <h4>Our Story</h4>
-        <h2>Empowering Local Farmers</h2>
-        <p>Lanka-Mart started with a simple mission: to connect the hardworking farmers of Sri Lanka directly with your kitchen. By cutting out the middlemen, we ensure you get the freshest produce at fair prices, while our farmers earn what they deserve.</p>
-        <a href="products.html" class="btn btn-primary">Support Local</a>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
     <section class="categories">
       <div class="container">
@@ -84,88 +82,6 @@
             <h3>Rice & Grains</h3>
           </a>
         </div>
-      </div>
-    </section>
-
-    <section class="featured">
-      <div class="container">
-        <h2 class="section-title">Featured Products</h2>
-        
-        <div class="product-carousel">
-          <ul class="product-list active-slide">
-            <li class="product-item">
-              <article>
-                <div class="img-wrapper">
-                  <img src="Images/banana.webp" alt="Banana">
-                 
-                </div>
-                <div class="product-info">
-                  <h3>Bananas (1kg)</h3>
-                  <p class="price">LKR 100</p>
-                  <a href="products.html" class="btn-cart">View Product</a>
-                </div>
-              </article>
-            </li>
-            <li class="product-item">
-              <article>
-                <div class="img-wrapper">
-                  <img src="Images/apple.webp" alt="Apple">
-                </div>
-                <div class="product-info">
-                  <h3>Apple (1kg)</h3>
-                  <p class="price">LKR 300</p>
-                  <a href="products.html" class="btn-cart">View Product</a>
-                </div>
-              </article>
-            </li>
-            <li class="product-item">
-              <article>
-                <div class="img-wrapper">
-                  <img src="Images/pineapple.webp" alt="Pineapple">
-                 
-                </div>
-                <div class="product-info">
-                  <h3>Pineapple (1kg)</h3>
-                  <p class="price">LKR 260</p>
-                  <a href="products.html" class="btn-cart">View Product</a>
-                </div>
-              </article>
-            </li>
-          </ul>
-
-          <ul class="product-list">
-            <li class="product-item">
-              <article>
-                <div class="img-wrapper"><img src="Images/white Rice.webp" alt="White Rice"></div>
-                <div class="product-info">
-                  <h3>White Rice (1kg)</h3>
-                  <p class="price">LKR 185</p>
-                  <a href="products.html" class="btn-cart">View Product</a>
-                </div>
-              </article>
-            </li>
-            <li class="product-item">
-              <article>
-                <div class="img-wrapper"><img src="Images/Red rice.webp" alt="Red Rice"></div>
-                <div class="product-info">
-                  <h3>Red Rice (1kg)</h3>
-                  <p class="price">LKR 180</p>
-                  <a href="products.html" class="btn-cart">View Product</a>
-                </div>
-              </article>
-            </li>
-            <li class="product-item">
-              <article>
-                <div class="img-wrapper"><img src="Images/tea powder.webp" alt="Tea"></div>
-                <div class="product-info">
-                  <h3>Tea Powder (1kg)</h3>
-                  <p class="price">LKR 900</p>
-                  <a href="products.html" class="btn-cart">View Product</a>
-                </div>
-              </article>
-            </li>
-          </ul>
-        </div> 
       </div>
     </section>
 
@@ -197,46 +113,45 @@
       </div>
     </section>
 
+    <section class="faq-section">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-container">
+          <div class="faq-item">
+            <button class="faq-question">
+              Where do you deliver? <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>We can deliver to any place in Sri Lanka. Orders placed before 9 AM are delivered the same day.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              Is the produce organic? <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Yes! We source directly from certified organic farmers in Nuwara Eliya and Bandarawela.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              What payment methods do you accept? <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>We accept Cash on Delivery (COD) and Bank Transfers. Card payments are coming soon!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <section class="faq-section">
-  <div class="container">
-    <h2 class="section-title">Frequently Asked Questions</h2>
-    
-    <div class="faq-container">
-      <div class="faq-item">
-        <button class="faq-question">
-          Where do you deliver? <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>We currently deliver to Colombo, Gampaha, and Kalutara districts. Orders placed before 10 AM are delivered the same day.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          Is the produce organic? <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>Yes! We source directly from certified organic farmers in Nuwara Eliya and Bandarawela.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          What payment methods do you accept? <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="faq-answer">
-          <p>We accept Cash on Delivery (COD) and Bank Transfers. Card payments are coming soon!</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
+  <footer>
     <div class="container">
-      
       <div class="newsletter-wrapper">
         <div class="newsletter-text">
           <h3>Subscribe & Get 10% Off</h3>
@@ -261,114 +176,102 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+  <a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip-text">Chat with us!</span>
+  </a>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { firebaseConfig } from './config.js';
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    // Auth Listener
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        const loginLink = document.querySelector('.login-link'); 
+      } 
+    });
+
+    // Newsletter Logic
+    document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      alert("Welcome to the family! Your 10% discount code is: FRESH10");
-      this.reset();
-    });
-  </script>  
-
-<script type="module">
-  
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  import { firebaseConfig } from './config.js';
-  
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  
-  let currentUser = null;
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      currentUser = user;
-      console.log("User is logged in:", user.email);
-      
-      
-      const loginLink = document.querySelector('.login-link');
-      if(loginLink) loginLink.innerHTML = '<i class="fas fa-user-check"></i> My Account';
-    } else {
-      currentUser = null;
-    }
-  });
-
-  
-  document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const emailInput = this.querySelector('input').value;
-
-    if (currentUser) {
-      
-      try {
-        const userRef = doc(db, "users", currentUser.uid);
-        
-        await updateDoc(userRef, {
-          newsletterSubscribed: true,
-          hasDiscount: true,
-          discountCode: "FRESH10"
-        });
-
-        alert(`Thanks ${currentUser.email}! The 10% discount (FRESH10) has been saved to your account.`);
-        this.reset();
-
-      } catch (error) {
-        console.error("Error saving discount:", error);
-        alert("Error saving discount. Are you sure you have an account?");
-      }
-    } else {
-      
-      alert("Please LOGIN first to save this 10% discount to your account!");
-      window.location.href = "login.html";
-    }
-  });
-
- 
-  
-  // Mobile Menu
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  if(hamburger) {
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
-  }
-
-  // Carousel
-  const slides = document.querySelectorAll('.product-carousel .product-list');
-  if(slides.length > 0) {
-    let currentSlide = 0;
-    function nextSlide() {
-      slides[currentSlide].classList.remove('active-slide');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active-slide');
-    }
-    setInterval(nextSlide, 5000);
-  }
-
-  // FAQ Accordion
-  const faqs = document.querySelectorAll(".faq-question");
-  faqs.forEach(faq => {
-    faq.addEventListener("click", () => {
-      faq.classList.toggle("active");
-      const answer = faq.nextElementSibling;
-      if (faq.classList.contains("active")) {
-        answer.style.maxHeight = answer.scrollHeight + "px";
+      if (currentUser) {
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          await updateDoc(userRef, {
+            newsletterSubscribed: true,
+            hasDiscount: true,
+            discountCode: "FRESH10"
+          });
+          alert(`Thanks ${currentUser.email}! The 10% discount (FRESH10) has been saved to your account.`);
+          this.reset();
+        } catch (error) {
+          console.error("Error saving discount:", error);
+          alert("Error saving discount.");
+        }
       } else {
-        answer.style.maxHeight = null;
+        alert("Please LOGIN first to save this 10% discount to your account!");
+        window.location.href = "login.html";
       }
     });
-  });
 
-</script>
- 
-<a href="https://wa.me/94771708215" class="float-whatsapp" target="_blank">
-  <i class="fab fa-whatsapp"></i>
-  <span class="tooltip-text">Chat with us!</span>
-</a>
-<script type="module" src="auth.js"></script>
+    // --- MOBILE MENU LOGIC ---
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const navLinksItems = document.querySelectorAll('.nav-links a');
+
+    if(hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        // Toggle Active Class
+        navLinks.classList.toggle('active');
+        
+        // Toggle Icon (Bars <-> X)
+        const icon = hamburger.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+
+      // Close menu when clicking a link
+      navLinksItems.forEach(link => {
+        link.addEventListener('click', () => {
+           navLinks.classList.remove('active');
+           const icon = hamburger.querySelector('i');
+           icon.classList.remove('fa-times');
+           icon.classList.add('fa-bars');
+        });
+      });
+    }
+
+    // FAQ Accordion
+    const faqs = document.querySelectorAll(".faq-question");
+    faqs.forEach(faq => {
+      faq.addEventListener("click", () => {
+        faq.classList.toggle("active");
+        const answer = faq.nextElementSibling;
+        if (faq.classList.contains("active")) {
+          answer.style.maxHeight = answer.scrollHeight + "px";
+        } else {
+          answer.style.maxHeight = null;
+        }
+      });
+    });
+  </script>
+
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
