@@ -149,11 +149,11 @@
 
     if(menuToggle) {
         menuToggle.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu); // Close when clicking outside
+        overlay.addEventListener('click', toggleMenu);
         closeSidebarBtn.addEventListener('click', toggleMenu);
     }
 
-    // --- EXISTING FIREBASE LOGIC ---
+    // --- AUTH LOGIC ---
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
@@ -178,6 +178,7 @@
       }
     });
 
+    // --- REAL-TIME LISTENER ---
     function subscribeToProducts(uid) {
       const tableBody = document.getElementById('products-table-body');
       const q = query(collection(db, "products"), where("sellerId", "==", uid));
@@ -189,13 +190,19 @@
         snapshot.forEach((docSnap) => {
           totalProducts++;
           const item = docSnap.data();
+          
+          // Determine status color
+          const statusClass = item.status === 'active' ? 'active' : 'pending';
+          const statusText = item.status === 'active' ? 'Active' : 'Pending Review';
+          const statusStyle = item.status === 'active' ? '' : 'background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5;';
+
           productsHTML += `
             <tr>
               <td><img src="${item.imageUrl || 'Images/placeholder.png'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
               <td>${item.name}</td>
               <td>LKR ${item.price}</td>
               <td>${item.category}</td>
-              <td><span class="status active">Active</span></td>
+              <td><span class="status ${statusClass}" style="${statusStyle}">${statusText}</span></td>
               <td>
                 <button class="btn-delete" onclick="window.deleteProduct('${docSnap.id}')"><i class="fas fa-trash"></i></button>
               </td>
@@ -209,7 +216,7 @@
       });
     }
 
-    // Modal & Forms
+    // --- ADD PRODUCT (UPDATED STATUS) ---
     const modal = document.getElementById('product-modal');
     document.getElementById('open-modal-btn').onclick = () => modal.style.display = "block";
     document.querySelector('.close-modal').onclick = () => modal.style.display = "none";
@@ -227,9 +234,10 @@
           category: document.getElementById('p-category').value,
           imageUrl: document.getElementById('p-image').value,
           sellerId: currentUser.uid,
-          createdAt: new Date()
+          createdAt: new Date(),
+          status: "pending" 
         });
-        alert("Product Added!");
+        alert("Product sent for approval!");
         modal.style.display = "none";
         document.getElementById('add-product-form').reset();
       } catch (error) { alert("Error: " + error.message); } 
