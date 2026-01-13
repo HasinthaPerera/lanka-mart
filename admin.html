@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lanka Mart - Admin Panel</title>
-    
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -25,9 +24,30 @@
         </div>
 
         <div class="card">
-            <h2 style="margin-top:0;">Add New Product</h2>
+            <h2>📢 Pending Farmer Requests</h2>
+            <p style="color: #666; font-size: 0.9em;">Approve these items to add them to the shop.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Details</th>
+                        <th>Price (LKR)</th>
+                        <th>Farmer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="offers-table-body">
+                    </tbody>
+            </table>
+            <p id="no-offers-msg" style="text-align: center; color: gray; display: none; margin-top: 20px;">
+                No pending requests.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>➕ Add Product Manually</h2>
             <form id="add-product-form">
-                
                 <div class="form-group">
                     <label>Product Name</label>
                     <input type="text" id="product-name" placeholder="e.g. Red Apple" required>
@@ -52,84 +72,176 @@
                     <input type="url" id="product-image" placeholder="https://..." required>
                 </div>
 
-                <button type="submit" class="submit-btn">Upload Product</button>
+                <button type="submit" class="submit-btn">Upload to Shop</button>
             </form>
         </div>
     </div>
 
     <script type="module">
-        // Import Firebase SDKs
+        // --- IMPORTS ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // Import Secrets from your local file
+        import { 
+            getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        
+        // Import your secrets
         import { firebaseConfig, ADMIN_EMAIL } from './config.js';
 
-        // Initialize Firebase
+        // --- INITIALIZE ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- SECURITY CHECKER ---
+        // --- AUTH & SECURITY CHECK ---
         onAuthStateChanged(auth, (user) => {
-            const loadingScreen = document.getElementById('loading-screen');
+            const loading = document.getElementById('loading-screen');
             const dashboard = document.getElementById('dashboard-content');
 
-            // 1. Check if user is logged in AND email matches config.js
             if (user && user.email === ADMIN_EMAIL) {
-                // ALLOW ACCESS
-                console.log("Welcome, Admin.");
+                // Success: Show Dashboard
+                console.log("Admin Logged In");
+                loading.style.display = 'none';
+                dashboard.style.display = 'block';
                 document.getElementById('admin-email-display').textContent = user.email;
                 
-                // Hide loader, Show Dashboard
-                loadingScreen.style.display = 'none';
-                dashboard.style.display = 'block';
+                // Load Data
+                loadFarmerOffers();
             } else {
-                // DENY ACCESS
-                console.warn("Access Denied.");
-                alert("You are not authorized to view this page.");
-                window.location.href = "index.html"; // Kick to home
+                // Fail: Redirect
+                alert("Access Denied: You are not the admin.");
+                window.location.href = "index.html"; 
             }
         });
 
-        // --- LOGOUT FUNCTION ---
+        // Logout Logic
         document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            });
+            signOut(auth).then(() => window.location.href = "index.html");
         });
 
-        // --- ADD PRODUCT FUNCTION ---
-        const productForm = document.getElementById('add-product-form');
-        
-        productForm.addEventListener('submit', async (e) => {
+        async function loadFarmerOffers() {
+            const tableBody = document.getElementById('offers-table-body');
+            const noMsg = document.getElementById('no-offers-msg');
+            
+            tableBody.innerHTML = ""; 
+
+            try {
+                // Get data from "farmerRequests" collection
+                const snapshot = await getDocs(collection(db, "farmerRequests"));
+
+                if (snapshot.empty) {
+                    noMsg.style.display = "block";
+                    return;
+                } else {
+                    noMsg.style.display = "none";
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><img src="${data.imageUrl}" class="table-img" alt="item"></td>
+                        <td>
+                            <strong>${data.name}</strong><br>
+                            <small>${data.category}</small>
+                        </td>
+                        <td>LKR ${data.price}</td>
+                        <td>
+                            ${data.farmerName || 'Unknown'}<br>
+                            <small>${data.contact || ''}</small>
+                        </td>
+                        <td>
+                            <button class="btn-approve" data-id="${id}">✓ Approve</button>
+                            <button class="btn-reject" data-id="${id}">✕ Reject</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Attach Event Listeners to the new buttons
+                document.querySelectorAll('.btn-approve').forEach(btn => {
+                    btn.addEventListener('click', (e) => approveOffer(e.target.dataset.id));
+                });
+                document.querySelectorAll('.btn-reject').forEach(btn => {
+                    btn.addEventListener('click', (e) => rejectOffer(e.target.dataset.id));
+                });
+
+            } catch (error) {
+                console.error("Error loading offers:", error);
+            }
+        }
+
+        // --- APPROVE FUNCTION ---
+        async function approveOffer(docId) {
+            if(!confirm("Approve this item? It will appear in the shop.")) return;
+
+            try {
+                // 1. Get original data
+                const ref = doc(db, "farmerRequests", docId);
+                const snap = await getDoc(ref);
+                if (!snap.exists()) return;
+                const data = snap.data();
+
+                // 2. Add to "products" (The Shop)
+                await addDoc(collection(db, "products"), {
+                    name: data.name,
+                    price: Number(data.price),
+                    category: data.category,
+                    imageUrl: data.imageUrl,
+                    farmerId: data.farmerId || 'unknown',
+                    createdAt: new Date()
+                });
+
+                // 3. Delete from requests
+                await deleteDoc(ref);
+                
+                alert("Approved! Moved to shop.");
+                loadFarmerOffers();
+
+            } catch (err) {
+                console.error(err);
+                alert("Error approving item.");
+            }
+        }
+
+        // --- REJECT FUNCTION ---
+        async function rejectOffer(docId) {
+            if(!confirm("Delete this request?")) return;
+            try {
+                await deleteDoc(doc(db, "farmerRequests", docId));
+                alert("Request deleted.");
+                loadFarmerOffers();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Get values from inputs
             const name = document.getElementById('product-name').value;
-            const price = Number(document.getElementById('product-price').value);
+            const price = document.getElementById('product-price').value;
             const category = document.getElementById('product-category').value;
             const image = document.getElementById('product-image').value;
 
             try {
-                // Add to Firestore Database
                 await addDoc(collection(db, "products"), {
                     name: name,
-                    price: price,
+                    price: Number(price),
                     category: category,
                     imageUrl: image,
-                    createdAt: new Date()
+                    createdAt: new Date(),
+                    farmerId: 'admin'
                 });
-                
                 alert("Product Added Successfully!");
-                productForm.reset(); // Clear the form
+                e.target.reset();
             } catch (error) {
                 console.error("Error adding product: ", error);
-                alert("Error adding product. Check console for details.");
+                alert("Failed to add product.");
             }
         });
     </script>
-
 </body>
 </html>
