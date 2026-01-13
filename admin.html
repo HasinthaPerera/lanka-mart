@@ -10,7 +10,27 @@
 
     <div id="loading-screen">
         <div class="spinner"></div>
-        <p>Verifying Admin Access...</p>
+        <p>Checking Security...</p>
+    </div>
+
+    <div id="admin-login-container">
+        <div class="login-box">
+            <h2>🔒 Admin Access</h2>
+            <p style="color:gray; margin-bottom:20px;">Please login to continue</p>
+            
+            <p id="login-error" class="login-error"></p>
+
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <input type="email" id="admin-email" placeholder="Admin Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="admin-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="submit-btn" style="background:#2c3e50;">Secure Login</button>
+            </form>
+            <p style="margin-top:15px; font-size:12px;"><a href="index.html" style="color:#666;">← Back to Website</a></p>
+        </div>
     </div>
 
     <div id="dashboard-content">
@@ -25,8 +45,6 @@
 
         <div class="card">
             <h2>📢 Pending Farmer Requests</h2>
-            <p style="color: #666; font-size: 0.9em;">Approve these items to add them to the shop.</p>
-            
             <table>
                 <thead>
                     <tr>
@@ -37,8 +55,7 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="offers-table-body">
-                    </tbody>
+                <tbody id="offers-table-body"></tbody>
             </table>
             <p id="no-offers-msg" style="text-align: center; color: gray; display: none; margin-top: 20px;">
                 No pending requests.
@@ -52,12 +69,10 @@
                     <label>Product Name</label>
                     <input type="text" id="product-name" placeholder="e.g. Red Apple" required>
                 </div>
-
                 <div class="form-group">
                     <label>Price (LKR)</label>
                     <input type="number" id="product-price" placeholder="e.g. 150" required>
                 </div>
-
                 <div class="form-group">
                     <label>Category</label>
                     <select id="product-category">
@@ -66,69 +81,96 @@
                         <option value="dairy">Dairy</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>Image URL</label>
                     <input type="url" id="product-image" placeholder="https://..." required>
                 </div>
-
                 <button type="submit" class="submit-btn">Upload to Shop</button>
             </form>
         </div>
     </div>
 
     <script type="module">
-        // --- IMPORTS ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { 
-            getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc 
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
-        // Import your secrets
+        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        
         import { firebaseConfig, ADMIN_EMAIL } from './config.js';
 
-        // --- INITIALIZE ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- AUTH & SECURITY CHECK ---
+        // --- UI ELEMENTS ---
+        const loadingScreen = document.getElementById('loading-screen');
+        const loginContainer = document.getElementById('admin-login-container');
+        const dashboard = document.getElementById('dashboard-content');
+        const loginError = document.getElementById('login-error');
+
+        // --- 1. AUTH STATE LISTENER ---
         onAuthStateChanged(auth, (user) => {
-            const loading = document.getElementById('loading-screen');
-            const dashboard = document.getElementById('dashboard-content');
+            loadingScreen.style.display = 'none'; 
 
             if (user && user.email === ADMIN_EMAIL) {
-                // Success: Show Dashboard
-                console.log("Admin Logged In");
-                loading.style.display = 'none';
+                
+                console.log("Admin verified.");
+                loginContainer.style.display = 'none';
                 dashboard.style.display = 'block';
                 document.getElementById('admin-email-display').textContent = user.email;
-                
-                // Load Data
                 loadFarmerOffers();
-            } else {
-                // Fail: Redirect
-                alert("Access Denied: You are not the admin.");
-                window.location.href = "index.html"; 
+            } 
+            else {
+                                if (user && user.email !== ADMIN_EMAIL) {
+                    signOut(auth); 
+                    alert("You are not authorized. Please login as Admin.");
+                }
+
+                dashboard.style.display = 'none';
+                loginContainer.style.display = 'flex'; 
             }
         });
 
-        // Logout Logic
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth).then(() => window.location.href = "index.html");
+        // --- 2. HANDLE LOGIN DIRECTLY HERE ---
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            loginError.style.display = 'none';
+
+            try {
+                // Check if the typed email is actually the admin email
+                if (email !== ADMIN_EMAIL) {
+                    throw new Error("This email is not authorized for Admin access.");
+                }
+
+                await signInWithEmailAndPassword(auth, email, password);
+                // If success, onAuthStateChanged will automatically run and show the dashboard
+
+            } catch (error) {
+                console.error(error);
+                loginError.textContent = "Access Denied: " + error.message;
+                loginError.style.display = 'block';
+            }
         });
 
+        // --- 3. LOGOUT ---
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                // onAuthStateChanged will run and show the login form again
+                window.location.reload(); 
+            });
+        });
+
+        // --- 4. ADMIN FUNCTIONS ---
         async function loadFarmerOffers() {
             const tableBody = document.getElementById('offers-table-body');
             const noMsg = document.getElementById('no-offers-msg');
-            
-            tableBody.innerHTML = ""; 
+            tableBody.innerHTML = "";
 
             try {
-                // Get data from "farmerRequests" collection
                 const snapshot = await getDocs(collection(db, "farmerRequests"));
-
                 if (snapshot.empty) {
                     noMsg.style.display = "block";
                     return;
@@ -139,19 +181,12 @@
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     const id = docSnap.id;
-
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td><img src="${data.imageUrl}" class="table-img" alt="item"></td>
-                        <td>
-                            <strong>${data.name}</strong><br>
-                            <small>${data.category}</small>
-                        </td>
+                        <td><strong>${data.name}</strong><br><small>${data.category}</small></td>
                         <td>LKR ${data.price}</td>
-                        <td>
-                            ${data.farmerName || 'Unknown'}<br>
-                            <small>${data.contact || ''}</small>
-                        </td>
+                        <td>${data.farmerName || 'Unknown'}<br><small>${data.contact || ''}</small></td>
                         <td>
                             <button class="btn-approve" data-id="${id}">✓ Approve</button>
                             <button class="btn-reject" data-id="${id}">✕ Reject</button>
@@ -160,87 +195,52 @@
                     tableBody.appendChild(row);
                 });
 
-                // Attach Event Listeners to the new buttons
-                document.querySelectorAll('.btn-approve').forEach(btn => {
-                    btn.addEventListener('click', (e) => approveOffer(e.target.dataset.id));
-                });
-                document.querySelectorAll('.btn-reject').forEach(btn => {
-                    btn.addEventListener('click', (e) => rejectOffer(e.target.dataset.id));
-                });
-
+                document.querySelectorAll('.btn-approve').forEach(btn => btn.addEventListener('click', (e) => approveOffer(e.target.dataset.id)));
+                document.querySelectorAll('.btn-reject').forEach(btn => btn.addEventListener('click', (e) => rejectOffer(e.target.dataset.id)));
             } catch (error) {
                 console.error("Error loading offers:", error);
             }
         }
 
-        // --- APPROVE FUNCTION ---
         async function approveOffer(docId) {
-            if(!confirm("Approve this item? It will appear in the shop.")) return;
-
+            if(!confirm("Approve this item?")) return;
             try {
-                // 1. Get original data
                 const ref = doc(db, "farmerRequests", docId);
                 const snap = await getDoc(ref);
                 if (!snap.exists()) return;
                 const data = snap.data();
 
-                // 2. Add to "products" (The Shop)
                 await addDoc(collection(db, "products"), {
-                    name: data.name,
-                    price: Number(data.price),
-                    category: data.category,
-                    imageUrl: data.imageUrl,
-                    farmerId: data.farmerId || 'unknown',
-                    createdAt: new Date()
+                    name: data.name, price: Number(data.price), category: data.category,
+                    imageUrl: data.imageUrl, farmerId: data.farmerId || 'unknown', createdAt: new Date()
                 });
 
-                // 3. Delete from requests
                 await deleteDoc(ref);
-                
-                alert("Approved! Moved to shop.");
+                alert("Approved!");
                 loadFarmerOffers();
-
-            } catch (err) {
-                console.error(err);
-                alert("Error approving item.");
-            }
+            } catch (err) { console.error(err); alert("Error approving."); }
         }
 
-        // --- REJECT FUNCTION ---
         async function rejectOffer(docId) {
-            if(!confirm("Delete this request?")) return;
-            try {
-                await deleteDoc(doc(db, "farmerRequests", docId));
-                alert("Request deleted.");
-                loadFarmerOffers();
-            } catch (err) {
-                console.error(err);
-            }
+            if(!confirm("Reject this request?")) return;
+            try { await deleteDoc(doc(db, "farmerRequests", docId)); alert("Rejected."); loadFarmerOffers(); } 
+            catch (err) { console.error(err); }
         }
 
+        // Manual Add Product
         document.getElementById('add-product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const name = document.getElementById('product-name').value;
             const price = document.getElementById('product-price').value;
             const category = document.getElementById('product-category').value;
             const image = document.getElementById('product-image').value;
-
             try {
                 await addDoc(collection(db, "products"), {
-                    name: name,
-                    price: Number(price),
-                    category: category,
-                    imageUrl: image,
-                    createdAt: new Date(),
-                    farmerId: 'admin'
+                    name, price: Number(price), category, imageUrl: image,
+                    createdAt: new Date(), farmerId: 'admin'
                 });
-                alert("Product Added Successfully!");
-                e.target.reset();
-            } catch (error) {
-                console.error("Error adding product: ", error);
-                alert("Failed to add product.");
-            }
+                alert("Product Added!"); e.target.reset();
+            } catch (error) { alert("Failed to add."); }
         });
     </script>
 </body>
