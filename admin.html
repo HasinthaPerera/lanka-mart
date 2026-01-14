@@ -3,96 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lanka Mart - Admin Panel</title>
+    <title>Lanka Mart - Admin Console</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
     <div id="loading-screen">
         <div class="spinner"></div>
-        <p>Checking Security...</p>
+        <p style="margin-top: 15px; color: #64748b;">Securing Admin Connection...</p>
     </div>
 
     <div id="admin-login-container">
-        <div class="login-box">
-            <h2>🔒 Admin Access</h2>
-            <p style="color:gray; margin-bottom:20px;">Please login to continue</p>
+        <div class="login-card">
+            <div style="font-size: 3rem; color: #4f46e5; margin-bottom: 10px;">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2>Admin Access</h2>
+            <p>Enter your credentials to manage the platform.</p>
             
-            <p id="login-error" class="login-error"></p>
+            <p id="login-error" style="color: #ef4444; font-size: 0.85rem; display: none;"></p>
 
             <form id="admin-login-form">
-                <div class="form-group">
-                    <input type="email" id="admin-email" placeholder="Admin Email" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="admin-password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="submit-btn" style="background:#2c3e50;">Secure Login</button>
+                <input type="email" id="admin-email" class="login-input" placeholder="admin@lankamart.com" required>
+                <input type="password" id="admin-password" class="login-input" placeholder="Password" required>
+                <button type="submit" class="login-btn">Secure Login</button>
             </form>
-            <p style="margin-top:15px; font-size:12px;"><a href="index.html" style="color:#666;">← Back to Website</a></p>
+            <div style="margin-top: 20px;">
+                <a href="index.html" style="color: #94a3b8; text-decoration: none; font-size: 0.85rem;">
+                    <i class="fas fa-arrow-left"></i> Back to Website
+                </a>
+            </div>
         </div>
     </div>
 
     <div id="dashboard-content">
-        
-        <div class="header">
-            <div>
-                <h1 style="margin:0;">Admin Dashboard</h1>
-                <small style="color: gray;">Logged in as: <span id="admin-email-display"></span></small>
-            </div>
-            <button id="logout-btn" class="logout-btn">Log Out</button>
-        </div>
+        <div class="dashboard-wrapper">
+            
+            <aside class="sidebar">
+                <div class="brand">
+                    <i class="fas fa-leaf" style="color: #10b981;"></i> Lanka<span>Mart</span>
+                </div>
+                
+                <nav>
+                    <a href="#" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    <a href="#" class="menu-item"><i class="fas fa-box"></i> Inventory</a>
+                    <a href="#" class="menu-item"><i class="fas fa-users"></i> Farmers</a>
+                    <a href="#" class="menu-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+            </aside>
 
-        <div class="card">
-            <h2>📢 Pending Farmer Requests</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Details</th>
-                        <th>Price (LKR)</th>
-                        <th>Farmer</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="offers-table-body"></tbody>
-            </table>
-            <p id="no-offers-msg" style="text-align: center; color: gray; display: none; margin-top: 20px;">
-                No pending requests.
-            </p>
-        </div>
+            <main class="main-area">
+                
+                <div class="top-bar">
+                    <h1 style="font-size: 1.5rem; font-weight: 600;">Overview</h1>
+                    <div class="user-badge">
+                        <div class="user-dot"></div>
+                        <span id="admin-email-display">Loading...</span>
+                    </div>
+                </div>
 
-        <div class="card">
-            <h2>➕ Add Product Manually</h2>
-            <form id="add-product-form">
-                <div class="form-group">
-                    <label>Product Name</label>
-                    <input type="text" id="product-name" placeholder="e.g. Red Apple" required>
+                <div class="grid-container">
+                    
+                    <div class="card">
+                        <h3><i class="fas fa-bell" style="color: #f59e0b;"></i> Pending Approvals</h3>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Farmer</th>
+                                    <th style="text-align: right;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="offers-table-body">
+                                </tbody>
+                        </table>
+                        
+                        <div id="no-offers-msg" style="text-align: center; padding: 30px; color: #94a3b8; display: none;">
+                            <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            All caught up! No pending requests.
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-plus-circle" style="color: #4f46e5;"></i> Quick Upload</h3>
+                        <form id="add-product-form">
+                            <div class="form-group">
+                                <label>Product Name</label>
+                                <input type="text" id="product-name" class="form-control" placeholder="e.g. Red Apple" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Price (LKR)</label>
+                                <input type="number" id="product-price" class="form-control" placeholder="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="product-category" class="form-control">
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="dairy">Dairy</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="product-image" class="form-control" placeholder="https://..." required>
+                            </div>
+                            <button type="submit" class="btn-submit">Add to Shop</button>
+                        </form>
+                    </div>
+
                 </div>
-                <div class="form-group">
-                    <label>Price (LKR)</label>
-                    <input type="number" id="product-price" placeholder="e.g. 150" required>
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="product-category">
-                        <option value="vegetables">Vegetables</option>
-                        <option value="fruits">Fruits</option>
-                        <option value="dairy">Dairy</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="url" id="product-image" placeholder="https://..." required>
-                </div>
-                <button type="submit" class="submit-btn">Upload to Shop</button>
-            </form>
+            </main>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        
         import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
@@ -102,146 +130,130 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- UI ELEMENTS ---
+        // UI References
         const loadingScreen = document.getElementById('loading-screen');
         const loginContainer = document.getElementById('admin-login-container');
         const dashboard = document.getElementById('dashboard-content');
         const loginError = document.getElementById('login-error');
 
-        // --- 1. AUTH STATE LISTENER ---
+        // --- AUTH CHECKER ---
         onAuthStateChanged(auth, (user) => {
-            loadingScreen.style.display = 'none'; 
+            loadingScreen.style.display = 'none';
 
             if (user && user.email === ADMIN_EMAIL) {
-                
-                console.log("Admin verified.");
+                // LOGGED IN
                 loginContainer.style.display = 'none';
                 dashboard.style.display = 'block';
                 document.getElementById('admin-email-display').textContent = user.email;
                 loadFarmerOffers();
-            } 
-            else {
-                                if (user && user.email !== ADMIN_EMAIL) {
-                    signOut(auth); 
-                    alert("You are not authorized. Please login as Admin.");
-                }
-
+            } else {
+                // NOT LOGGED IN
                 dashboard.style.display = 'none';
-                loginContainer.style.display = 'flex'; 
-            }
+                loginContainer.style.display = 'flex';
+                if (user) signOut(auth); 
+                        }
         });
 
-        // --- 2. HANDLE LOGIN DIRECTLY HERE ---
+        // --- LOGIN HANDLER ---
         document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
-            
             loginError.style.display = 'none';
 
             try {
-                // Check if the typed email is actually the admin email
-                if (email !== ADMIN_EMAIL) {
-                    throw new Error("This email is not authorized for Admin access.");
-                }
-
+                if (email !== ADMIN_EMAIL) throw new Error("Unauthorized Email.");
                 await signInWithEmailAndPassword(auth, email, password);
-                // If success, onAuthStateChanged will automatically run and show the dashboard
-
             } catch (error) {
-                console.error(error);
-                loginError.textContent = "Access Denied: " + error.message;
+                loginError.textContent = error.message;
                 loginError.style.display = 'block';
             }
         });
 
-        // --- 3. LOGOUT ---
+        // --- LOGOUT HANDLER ---
         document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                // onAuthStateChanged will run and show the login form again
-                window.location.reload(); 
-            });
+            signOut(auth).then(() => window.location.reload());
         });
 
-        // --- 4. ADMIN FUNCTIONS ---
+        // --- LOAD OFFERS ---
         async function loadFarmerOffers() {
             const tableBody = document.getElementById('offers-table-body');
             const noMsg = document.getElementById('no-offers-msg');
             tableBody.innerHTML = "";
 
-            try {
-                const snapshot = await getDocs(collection(db, "farmerRequests"));
-                if (snapshot.empty) {
-                    noMsg.style.display = "block";
-                    return;
-                } else {
-                    noMsg.style.display = "none";
-                }
-
+            const snapshot = await getDocs(collection(db, "farmerRequests"));
+            
+            if (snapshot.empty) {
+                noMsg.style.display = "block";
+            } else {
+                noMsg.style.display = "none";
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    const id = docSnap.id;
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><img src="${data.imageUrl}" class="table-img" alt="item"></td>
-                        <td><strong>${data.name}</strong><br><small>${data.category}</small></td>
-                        <td>LKR ${data.price}</td>
-                        <td>${data.farmerName || 'Unknown'}<br><small>${data.contact || ''}</small></td>
+                        <td style="display:flex; align-items:center; gap:10px;">
+                            <img src="${data.imageUrl}" class="product-thumb">
+                            <div>
+                                <div style="font-weight:600;">${data.name}</div>
+                                <div class="meta">${data.category}</div>
+                            </div>
+                        </td>
+                        <td><strong>LKR ${data.price}</strong></td>
                         <td>
-                            <button class="btn-approve" data-id="${id}">✓ Approve</button>
-                            <button class="btn-reject" data-id="${id}">✕ Reject</button>
+                            <div>${data.farmerName || 'Unknown'}</div>
+                            <div class="meta" style="font-size:0.75rem;">ID: ${data.farmerId ? data.farmerId.slice(0,5) : '...'}</div>
+                        </td>
+                        <td style="text-align: right;">
+                            <button class="btn-icon btn-approve" onclick="window.approveOffer('${docSnap.id}')" title="Approve">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn-icon btn-reject" onclick="window.rejectOffer('${docSnap.id}')" title="Reject">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </td>
                     `;
                     tableBody.appendChild(row);
                 });
-
-                document.querySelectorAll('.btn-approve').forEach(btn => btn.addEventListener('click', (e) => approveOffer(e.target.dataset.id)));
-                document.querySelectorAll('.btn-reject').forEach(btn => btn.addEventListener('click', (e) => rejectOffer(e.target.dataset.id)));
-            } catch (error) {
-                console.error("Error loading offers:", error);
             }
         }
 
-        async function approveOffer(docId) {
-            if(!confirm("Approve this item?")) return;
-            try {
-                const ref = doc(db, "farmerRequests", docId);
-                const snap = await getDoc(ref);
-                if (!snap.exists()) return;
-                const data = snap.data();
-
-                await addDoc(collection(db, "products"), {
-                    name: data.name, price: Number(data.price), category: data.category,
-                    imageUrl: data.imageUrl, farmerId: data.farmerId || 'unknown', createdAt: new Date()
-                });
-
+        // --- GLOBAL ACTIONS ---
+        window.approveOffer = async (id) => {
+            if(!confirm("Publish this item to the shop?")) return;
+            const ref = doc(db, "farmerRequests", id);
+            const snap = await getDoc(ref);
+            if(snap.exists()) {
+                const d = snap.data();
+                await addDoc(collection(db, "products"), { ...d, createdAt: new Date() }); // Copy all data
                 await deleteDoc(ref);
-                alert("Approved!");
                 loadFarmerOffers();
-            } catch (err) { console.error(err); alert("Error approving."); }
-        }
+            }
+        };
 
-        async function rejectOffer(docId) {
-            if(!confirm("Reject this request?")) return;
-            try { await deleteDoc(doc(db, "farmerRequests", docId)); alert("Rejected."); loadFarmerOffers(); } 
-            catch (err) { console.error(err); }
-        }
+        window.rejectOffer = async (id) => {
+            if(confirm("Delete this request?")) {
+                await deleteDoc(doc(db, "farmerRequests", id));
+                loadFarmerOffers();
+            }
+        };
 
-        // Manual Add Product
+        // --- MANUAL UPLOAD ---
         document.getElementById('add-product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('product-name').value;
-            const price = document.getElementById('product-price').value;
-            const category = document.getElementById('product-category').value;
-            const image = document.getElementById('product-image').value;
             try {
                 await addDoc(collection(db, "products"), {
-                    name, price: Number(price), category, imageUrl: image,
-                    createdAt: new Date(), farmerId: 'admin'
+                    name: document.getElementById('product-name').value,
+                    price: Number(document.getElementById('product-price').value),
+                    category: document.getElementById('product-category').value,
+                    imageUrl: document.getElementById('product-image').value,
+                    createdAt: new Date(),
+                    farmerId: 'admin'
                 });
-                alert("Product Added!"); e.target.reset();
-            } catch (error) { alert("Failed to add."); }
+                alert("Product Added!");
+                e.target.reset();
+            } catch (err) { alert("Error adding product"); }
         });
     </script>
+
 </body>
 </html>
