@@ -8,7 +8,6 @@
     --danger: #ef4444;       
     --dark: #1e293b;         
     --light: #f1f5f9;        
-    
     --white: #ffffff;
     --gray: #94a3b8;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -22,14 +21,14 @@ body {
     color: var(--dark);
     height: 100vh;
     display: flex;
-    overflow: hidden;
+    overflow: hidden; 
 }
 
-/* --- 1. THE GATEKEEPER (Login Screen) --- */
+/* --- 1. THE LOGIN SCREEN (This fixes your screenshot) --- */
 #admin-login-container {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* The Purple Gradient */
     z-index: 9999;
     display: none; 
     justify-content: center;
@@ -124,7 +123,7 @@ body {
 /* Main Area */
 .main-area {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto; 
     padding: 30px;
 }
 
@@ -154,14 +153,12 @@ body {
 }
 .card h3 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
 
-/* Table Styling */
 table { width: 100%; border-collapse: collapse; }
 th { text-align: left; color: var(--gray); font-size: 0.8rem; text-transform: uppercase; padding: 10px; border-bottom: 1px solid #e2e8f0; }
 td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
 .product-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
 .meta { font-size: 0.85rem; color: var(--gray); }
 
-/* Action Buttons */
 .btn-icon {
     border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: transform 0.1s;
 }
@@ -169,7 +166,6 @@ td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middl
 .btn-approve { background: var(--secondary); color: white; margin-right: 5px; }
 .btn-reject { background: var(--danger); color: white; }
 
-/* Form Styling */
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 5px; color: var(--dark); }
 .form-control {
@@ -183,7 +179,6 @@ td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middl
 }
 .btn-submit:hover { background: #334155; }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .grid-container { grid-template-columns: 1fr; } 
 }
