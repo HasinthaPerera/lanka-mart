@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Farmer Dashboard | Lanka-Mart</title>
-  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="farmer.css">
@@ -12,7 +11,6 @@
 <body>
 
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
-
   <div id="toast-container"></div>
 
   <aside class="sidebar" id="sidebar">
@@ -22,9 +20,12 @@
     </div>
     
     <ul class="nav-links">
-      <li class="active"><a href="#"><i class="fas fa-th-large"></i> Dashboard</a></li>
-      <li><a href="#"><i class="fas fa-carrot"></i> My Products</a></li>
-      <li><a href="#"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+      <li class="active" onclick="switchTab('dashboard')">
+        <a href="#"><i class="fas fa-th-large"></i> Dashboard</a>
+      </li>
+      <li onclick="switchTab('orders')">
+        <a href="#"><i class="fas fa-shopping-bag"></i> Orders <span id="nav-order-count" style="background:red; color:white; padding:2px 6px; border-radius:10px; font-size:10px; display:none;">0</span></a>
+      </li>
       <li class="logout-item"><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
   </aside>
@@ -34,275 +35,283 @@
     <header class="top-bar">
       <div style="display: flex; align-items: center; gap: 15px;">
         <i class="fas fa-bars toggle-btn" id="menu-toggle"></i>
-        <h2 id="welcome-msg">Dashboard</h2>
+        <h2 id="page-title">Dashboard</h2>
       </div>
-
       <div class="user-profile">
         <span id="display-name">Farmer</span>
         <div class="avatar"><i class="fas fa-user"></i></div>
       </div>
     </header>
 
-    <section class="stats-grid">
-      <div class="stat-card">
-        <div class="icon-box green"><i class="fas fa-wallet"></i></div>
-        <div>
-          <h3>Total Earnings</h3>
-          <p id="stat-earnings">LKR 0</p>
-        </div>
-      </div>
+    <div id="view-dashboard" class="view-section active-view">
+        
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="icon-box green"><i class="fas fa-wallet"></i></div>
+                <div><h3>Total Earnings</h3><p id="stat-earnings">LKR 0</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="icon-box orange"><i class="fas fa-box"></i></div>
+                <div><h3>Active Products</h3><p id="stat-active">0</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="icon-box blue"><i class="fas fa-truck"></i></div>
+                <div><h3>New Orders</h3><p id="stat-orders">0</p></div>
+            </div>
+        </section>
 
-      <div class="stat-card">
-        <div class="icon-box orange"><i class="fas fa-box"></i></div>
-        <div>
-          <h3>Active Products</h3>
-          <p id="stat-active">0</p>
-        </div>
-      </div>
+        <section class="recent-products">
+            <div class="section-header">
+                <h3>Your Harvest Stock</h3>
+                <button class="btn-add" id="open-modal-btn"><i class="fas fa-plus"></i> Add New</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th><th>Product</th><th>Price</th><th>Status</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 
-      <div class="stat-card">
-        <div class="icon-box blue"><i class="fas fa-clock"></i></div>
-        <div>
-          <h3>Pending Approval</h3>
-          <p id="stat-pending">0</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="recent-products">
-      <div class="section-header">
-        <h3>Your Harvest Stock</h3>
-        <button class="btn-add" id="open-modal-btn"><i class="fas fa-plus"></i> Add New</button>
-      </div>
-      
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Product Name</th>
-              <th>Price (1kg)</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="products-table-body">
-            <tr><td colspan="6" style="text-align:center; padding: 20px;">Loading your data...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <div id="view-orders" class="view-section">
+        <section class="recent-products">
+            <div class="section-header">
+                <h3>Incoming Orders</h3>
+                <button class="btn-add" onclick="loadOrders()" style="background:#64748b;"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Item Details</th>
+                            <th>Qty</th>
+                            <th>Customer Info</th>
+                            <th>Earnings</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr><td colspan="6" style="text-align:center; padding:20px;">Checking for orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 
   </main>
 
   <div id="product-modal" class="modal">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
-      <h3 style="margin-bottom: 20px;">Add New Harvest</h3>
+      <h3>Add New Harvest</h3>
       <form id="add-product-form">
+        <div class="form-group"><label>Product Name</label><input type="text" id="p-name" required></div>
+        <div class="form-group"><label>Price (LKR)</label><input type="number" id="p-price" required></div>
         <div class="form-group">
-          <label>Product Name</label>
-          <input type="text" id="p-name" placeholder="e.g. Fresh Carrots" required>
+            <label>Category</label>
+            <select id="p-category">
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+            </select>
         </div>
-        <div class="form-group">
-          <label>Price per Kg (LKR)</label>
-          <input type="number" id="p-price" placeholder="e.g. 150" min="1" required>
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select id="p-category">
-            <option value="Vegetables">Vegetables</option>
-            <option value="Fruits">Fruits</option>
-            <option value="Spices">Spices</option>
-            <option value="Rice & Grains">Rice & Grains</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Image URL</label>
-          <input type="url" id="p-image" placeholder="https://example.com/image.jpg" required>
-        </div>
-        <button type="submit" class="btn-submit">Submit for Approval</button>
+        <div class="form-group"><label>Image URL</label><input type="url" id="p-image" required></div>
+        <button type="submit" class="btn-submit">Submit</button>
       </form>
     </div>
   </div>
 
   <script type="module">
-    // 1. IMPORTS
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, query, where, addDoc, deleteDoc, doc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    
-    // Import Config (Ensure this file exists!)
+    import { getFirestore, collection, query, where, addDoc, deleteDoc, doc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { firebaseConfig } from './config.js';
 
-    // 2. INITIALIZE
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
     let currentUser = null;
-    let unsubActive = null;
-    let unsubPending = null;
 
-    // --- UI HELPERS ---
-    const showToast = (msg, type = 'success') => {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.innerHTML = type === 'success' ? `<i class="fas fa-check-circle"></i> ${msg}` : `<i class="fas fa-exclamation-circle"></i> ${msg}`;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
+    // --- TAB SWITCHING LOGIC ---
+    window.switchTab = (tabName) => {
+        // 1. Hide all views
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+        document.querySelectorAll('.nav-links li').forEach(el => el.classList.remove('active'));
+
+        // 2. Show selected view
+        if(tabName === 'dashboard') {
+            document.getElementById('view-dashboard').classList.add('active-view');
+            document.querySelector('.nav-links li:first-child').classList.add('active');
+            document.getElementById('page-title').innerText = "Dashboard";
+        } else if (tabName === 'orders') {
+            document.getElementById('view-orders').classList.add('active-view');
+            document.querySelector('.nav-links li:nth-child(2)').classList.add('active');
+            document.getElementById('page-title').innerText = "Order Management";
+            loadOrders();
+        }
+        
+        // Mobile Sidebar Close
+        if(window.innerWidth < 768) document.getElementById('sidebar').classList.remove('active');
     };
 
-    const toggleSidebar = () => {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.getElementById('sidebar-overlay').classList.toggle('active');
+    // --- AUTH & LOAD DATA ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            document.getElementById('display-name').textContent = user.email.split('@')[0];
+            loadProducts(user.uid);
+            loadOrders(); 
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // --- 1. LOAD PRODUCTS (Dashboard View) ---
+    function loadProducts(uid) {
+        // Listener for Active Shop Items
+        onSnapshot(query(collection(db, "products"), where("farmerId", "==", uid)), (snap) => {
+            const activeCount = snap.size;
+            document.getElementById('stat-active').innerText = activeCount;
+            renderProductTable(snap.docs, [], uid);
+        });
+    }
+
+    function renderProductTable(activeDocs, pendingDocs, uid) {
+        // Simplified render logic for brevity
+        const tbody = document.getElementById('products-table-body');
+        if(activeDocs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">No active products.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = activeDocs.map(doc => {
+            const d = doc.data();
+            return `
+            <tr>
+                <td><img src="${d.imageUrl}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;"></td>
+                <td>${d.name}</td>
+                <td>LKR ${d.price}</td>
+                <td><span class="badge-order badge-shipped">Active</span></td>
+                <td><button onclick="deleteItem('${doc.id}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
+            </tr>`;
+        }).join('');
+    }
+
+    // --- 2. LOAD ORDERS  ---
+    window.loadOrders = async () => {
+        if(!currentUser) return;
+        const tbody = document.getElementById('orders-table-body');
+        
+        try {
+            // Fetch ALL orders 
+            const querySnapshot = await getDocs(collection(db, "orders"));
+            
+            let mySales = [];
+            let totalEarnings = 0;
+
+            querySnapshot.forEach((doc) => {
+                const order = doc.data();
+                
+                // Check items inside the order
+                if(order.cartItems && Array.isArray(order.cartItems)) {
+                    order.cartItems.forEach(item => {
+                        
+                        if(item.farmerId === currentUser.uid) {
+                            mySales.push({
+                                orderId: doc.id,
+                                customerName: order.customerDetails?.name || "Guest",
+                                customerAddress: order.customerDetails?.address || "N/A",
+                                itemName: item.name,
+                                qty: item.quantity,
+                                price: item.price,
+                                total: item.price * item.quantity,
+                                status: "Pending" 
+                            });
+                            totalEarnings += (item.price * item.quantity);
+                        }
+                    });
+                }
+            });
+
+            // Update Stats
+            document.getElementById('stat-earnings').innerText = "LKR " + totalEarnings;
+            document.getElementById('stat-orders').innerText = mySales.length;
+            
+            // Show Badge on Sidebar if orders exist
+            if(mySales.length > 0) {
+                const badge = document.getElementById('nav-order-count');
+                badge.style.display = 'inline-block';
+                badge.innerText = mySales.length;
+            }
+
+            // Render Table
+            if(mySales.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">No orders yet.</td></tr>';
+            } else {
+                tbody.innerHTML = mySales.map(sale => `
+                    <tr>
+                        <td style="font-family:monospace; color:#666;">#${sale.orderId.slice(0,6)}</td>
+                        <td><strong>${sale.itemName}</strong></td>
+                        <td>x${sale.qty}</td>
+                        <td class="customer-info">
+                            <strong>${sale.customerName}</strong>
+                            <small>${sale.customerAddress}</small>
+                        </td>
+                        <td style="color:green; font-weight:bold;">LKR ${sale.total}</td>
+                        <td><span class="badge-order badge-pending">Pending</span></td>
+                    </tr>
+                `).join('');
+            }
+
+        } catch (error) {
+            console.error("Error loading orders:", error);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Error loading orders.</td></tr>';
+        }
     };
 
-    // Event Listeners for UI
-    document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
-    document.getElementById('sidebar-overlay').addEventListener('click', toggleSidebar);
-    
+    // --- ADD PRODUCT LOGIC  ---
     const modal = document.getElementById('product-modal');
     document.getElementById('open-modal-btn').onclick = () => modal.style.display = "block";
     document.querySelector('.close-modal').onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if(e.target == modal) modal.style.display = "none"; }
-
-    // --- AUTH LOGIC ---
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUser = user;
-        try {
-          // Check if user is actually a farmer
-          
-          const userRef = doc(db, "users", user.uid);
-          const userSnap = await getDoc(userRef);
-          
-          let name = user.email.split('@')[0];
-          if (userSnap.exists()) name = userSnap.data().fullName || name;
-          
-          document.getElementById('display-name').textContent = name;
-          document.getElementById('welcome-msg').textContent = `Hello, ${name}!`;
-
-          // START LISTENING TO DATA
-          loadDashboardData(user.uid, name);
-
-        } catch (error) {
-          console.error("Auth Error:", error);
-        }
-      } else {
-        window.location.href = "login.html";
-      }
-    });
-
-    // --- DASHBOARD DATA LOGIC (The Smart Part) ---
-    function loadDashboardData(uid, farmerName) {
-      const tableBody = document.getElementById('products-table-body');
-      let activeProducts = [];
-      let pendingProducts = [];
-
-      // Function to render the combined list
-      const renderTable = () => {
-        const allItems = [...pendingProducts, ...activeProducts];
-        
-        // Update Stats
-        document.getElementById('stat-active').textContent = activeProducts.length;
-        document.getElementById('stat-pending').textContent = pendingProducts.length;
-
-        if (allItems.length === 0) {
-          tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#888;">No items found. Click "Add New" to start!</td></tr>`;
-          return;
-        }
-
-        tableBody.innerHTML = allItems.map(item => `
-          <tr>
-            <td><img src="${item.imageUrl}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
-            <td><strong>${item.name}</strong></td>
-            <td>LKR ${item.price}</td>
-            <td>${item.category}</td>
-            <td>
-              <span class="status ${item.statusClass}">
-                ${item.statusLabel}
-              </span>
-            </td>
-            <td>
-              <button class="btn-delete" onclick="window.deleteItem('${item.id}', '${item.collection}')" title="Delete">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
-      };
-
-      // Listener 1: Get 'Active' Products (from shop)
-      const qActive = query(collection(db, "products"), where("farmerId", "==", uid)); // Or use sellerId if that's what you used
-      unsubActive = onSnapshot(qActive, (snapshot) => {
-        activeProducts = snapshot.docs.map(d => ({
-          id: d.id, ...d.data(), statusClass: 'active', statusLabel: 'Active', collection: 'products'
-        }));
-        renderTable();
-      });
-
-      const qPending = query(collection(db, "farmerRequests"), where("farmerId", "==", uid)); 
-      unsubPending = onSnapshot(qPending, (snapshot) => {
-        pendingProducts = snapshot.docs.map(d => ({
-          id: d.id, ...d.data(), statusClass: 'pending', statusLabel: 'Pending Review', collection: 'farmerRequests'
-        }));
-        renderTable();
-      });
-    }
-
-    // --- ADD PRODUCT FUNCTION ---
-    document.getElementById('add-product-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = e.target.querySelector('button');
-      const originalText = btn.textContent;
-      btn.textContent = "Sending..."; btn.disabled = true;
-
-      try {
-        // IMPORTANT: Save to 'farmerRequests' so Admin can approve it
-        await addDoc(collection(db, "farmerRequests"), {
-          name: document.getElementById('p-name').value,
-          price: Number(document.getElementById('p-price').value),
-          category: document.getElementById('p-category').value,
-          imageUrl: document.getElementById('p-image').value,
-          farmerId: currentUser.uid,
-          farmerName: document.getElementById('display-name').textContent, 
-          status: "pending",
-          createdAt: new Date()
-        });
-
-        showToast("Harvest sent to Admin for approval!", "success");
-        modal.style.display = "none";
-        e.target.reset();
-
-      } catch (error) {
-        console.error(error);
-        showToast("Error adding product: " + error.message, "error");
-      } finally {
-        btn.textContent = originalText; btn.disabled = false;
-      }
-    });
-
-    // --- DELETE FUNCTION ---
     
-    window.deleteItem = async (id, colName) => {
-      if(!confirm("Are you sure you want to remove this item?")) return;
-      try {
-        await deleteDoc(doc(db, colName, id));
-        showToast("Item removed successfully", "success");
-      } catch (err) {
-        showToast("Error deleting item", "error");
-      }
-    };
-
-    // --- LOGOUT ---
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      if(unsubActive) unsubActive();
-      if(unsubPending) unsubPending();
-      signOut(auth).then(() => window.location.href = "index.html");
+    document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await addDoc(collection(db, "farmerRequests"), {
+                name: document.getElementById('p-name').value,
+                price: Number(document.getElementById('p-price').value),
+                category: document.getElementById('p-category').value,
+                imageUrl: document.getElementById('p-image').value,
+                farmerId: currentUser.uid,
+                status: "pending",
+                createdAt: new Date()
+            });
+            alert("Sent to Admin!"); modal.style.display = "none"; e.target.reset();
+        } catch (err) { alert("Error: " + err.message); }
     });
+
+    window.deleteItem = async (id) => {
+        if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id));
+    }
+    
+    // Mobile Menu
+    document.getElementById('menu-toggle').onclick = () => {
+        document.getElementById('sidebar').classList.add('active');
+        document.getElementById('sidebar-overlay').classList.add('active');
+    };
+    document.getElementById('sidebar-overlay').onclick = () => {
+        document.getElementById('sidebar').classList.remove('active');
+        document.getElementById('sidebar-overlay').classList.remove('active');
+    };
+    
+    // Logout
+    document.getElementById('logout-btn').onclick = () => signOut(auth).then(()=> window.location.href="index.html");
 
   </script>
 </body>
