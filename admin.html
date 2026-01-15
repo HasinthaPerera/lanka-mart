@@ -9,31 +9,19 @@
 </head>
 <body>
 
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <p style="margin-top: 15px; color: #64748b;">Securing Admin Connection...</p>
-    </div>
+    <div id="loading-screen"><div class="spinner"></div><p style="margin-top:15px; color:#64748b;">Securing Connection...</p></div>
 
     <div id="admin-login-container">
         <div class="login-card">
-            <div style="font-size: 3rem; color: #4f46e5; margin-bottom: 10px;">
-                <i class="fas fa-shield-alt"></i>
-            </div>
+            <div style="font-size:3rem; color:#4f46e5; margin-bottom:10px;"><i class="fas fa-shield-alt"></i></div>
             <h2>Admin Access</h2>
-            <p>Enter your credentials to manage the platform.</p>
-            
-            <p id="login-error" style="color: #ef4444; font-size: 0.85rem; display: none;"></p>
-
+            <p id="login-error" style="color:red; display:none;"></p>
             <form id="admin-login-form">
-                <input type="email" id="admin-email" class="login-input" placeholder="admin@lankamart.com" required>
+                <input type="email" id="admin-email" class="login-input" placeholder="Email" required>
                 <input type="password" id="admin-password" class="login-input" placeholder="Password" required>
                 <button type="submit" class="login-btn">Secure Login</button>
             </form>
-            <div style="margin-top: 20px;">
-                <a href="index.html" style="color: #94a3b8; text-decoration: none; font-size: 0.85rem;">
-                    <i class="fas fa-arrow-left"></i> Back to Website
-                </a>
-            </div>
+            <div style="margin-top:20px;"><a href="index.html" style="color:#94a3b8; text-decoration:none;">Back to Website</a></div>
         </div>
     </div>
 
@@ -41,80 +29,75 @@
         <div class="dashboard-wrapper">
             
             <aside class="sidebar">
-                <div class="brand">
-                    <i class="fas fa-leaf" style="color: #10b981;"></i> Lanka<span>Mart</span>
-                </div>
-                
+                <div class="brand"><i class="fas fa-leaf" style="color:#10b981;"></i> Lanka<span>Mart</span></div>
                 <nav>
-                    <a href="#" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                    <a href="#" class="menu-item"><i class="fas fa-box"></i> Inventory</a>
-                    <a href="#" class="menu-item"><i class="fas fa-users"></i> Farmers</a>
+                    <a href="#" class="menu-item active" onclick="switchTab('overview', this)">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    
+                    <a href="#" class="menu-item" onclick="switchTab('farmers', this)">
+                        <i class="fas fa-users"></i> Farmers
+                    </a>
+
                     <a href="#" class="menu-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </nav>
             </aside>
 
             <main class="main-area">
-                
                 <div class="top-bar">
-                    <h1 style="font-size: 1.5rem; font-weight: 600;">Overview</h1>
-                    <div class="user-badge">
-                        <div class="user-dot"></div>
-                        <span id="admin-email-display">Loading...</span>
+                    <h1 id="page-title" style="font-size:1.5rem; font-weight:600;">Overview</h1>
+                    <div class="user-badge"><div class="user-dot"></div><span id="admin-email-display">Admin</span></div>
+                </div>
+
+                <div id="view-overview" class="view-section active-view">
+                    <div class="grid-container">
+                        <div class="card">
+                            <h3><i class="fas fa-bell" style="color:#f59e0b;"></i> Pending Approvals</h3>
+                            <table>
+                                <thead><tr><th>Product</th><th>Price</th><th>Farmer</th><th style="text-align:right;">Action</th></tr></thead>
+                                <tbody id="offers-table-body"></tbody>
+                            </table>
+                            <div id="no-offers-msg" style="text-align:center; padding:30px; color:#94a3b8; display:none;">No pending requests.</div>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fas fa-plus-circle" style="color:#4f46e5;"></i> Quick Upload</h3>
+                            <form id="add-product-form">
+                                <div class="form-group"><label>Name</label><input type="text" id="product-name" class="form-control" required></div>
+                                <div class="form-group"><label>Price</label><input type="number" id="product-price" class="form-control" required></div>
+                                <div class="form-group"><label>Category</label>
+                                    <select id="product-category" class="form-control">
+                                        <option value="vegetables">Vegetables</option><option value="fruits">Fruits</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>Image URL</label><input type="url" id="product-image" class="form-control" required></div>
+                                <button type="submit" class="btn-submit">Add to Shop</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid-container">
-                    
+                <div id="view-farmers" class="view-section">
                     <div class="card">
-                        <h3><i class="fas fa-bell" style="color: #f59e0b;"></i> Pending Approvals</h3>
+                        <h3><i class="fas fa-tractor" style="color:#10b981;"></i> Registered Farmers</h3>
+                        <p style="color:#64748b; margin-bottom:20px;">List of all users registered as farmers on Lanka Mart.</p>
                         
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Farmer</th>
-                                    <th style="text-align: right;">Action</th>
+                                    <th>Name</th>
+                                    <th>Email Address</th>
+                                    <th>Role</th>
+                                    <th>User ID (UID)</th>
                                 </tr>
                             </thead>
-                            <tbody id="offers-table-body">
-                                </tbody>
+                            <tbody id="farmers-table-body">
+                                <tr><td colspan="4" style="text-align:center;">Loading farmers...</td></tr>
+                            </tbody>
                         </table>
-                        
-                        <div id="no-offers-msg" style="text-align: center; padding: 30px; color: #94a3b8; display: none;">
-                            <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
-                            All caught up! No pending requests.
-                        </div>
                     </div>
-
-                    <div class="card">
-                        <h3><i class="fas fa-plus-circle" style="color: #4f46e5;"></i> Quick Upload</h3>
-                        <form id="add-product-form">
-                            <div class="form-group">
-                                <label>Product Name</label>
-                                <input type="text" id="product-name" class="form-control" placeholder="e.g. Red Apple" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Price (LKR)</label>
-                                <input type="number" id="product-price" class="form-control" placeholder="150" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select id="product-category" class="form-control">
-                                    <option value="vegetables">Vegetables</option>
-                                    <option value="fruits">Fruits</option>
-                                    <option value="dairy">Dairy</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Image URL</label>
-                                <input type="url" id="product-image" class="form-control" placeholder="https://..." required>
-                            </div>
-                            <button type="submit" class="btn-submit">Add to Shop</button>
-                        </form>
-                    </div>
-
                 </div>
+
             </main>
         </div>
     </div>
@@ -122,138 +105,141 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { firebaseConfig, ADMIN_EMAIL } from './config.js';
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // UI References
-        const loadingScreen = document.getElementById('loading-screen');
-        const loginContainer = document.getElementById('admin-login-container');
-        const dashboard = document.getElementById('dashboard-content');
-        const loginError = document.getElementById('login-error');
+        // --- TAB SWITCHING ---
+        window.switchTab = (viewName, btnElement) => {
+            // 1. Update Menu Active State
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
 
-        // --- AUTH CHECKER ---
+            // 2. Hide all views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+
+            // 3. Show selected view
+            document.getElementById(`view-${viewName}`).classList.add('active-view');
+            
+            // 4. Update Header
+            const titles = { 'overview': 'Overview', 'farmers': 'Farmer Management' };
+            document.getElementById('page-title').innerText = titles[viewName];
+
+            // 5. Load Data if needed
+            if(viewName === 'farmers') loadFarmersList();
+        }
+
+        // --- AUTH LOGIC ---
         onAuthStateChanged(auth, (user) => {
-            loadingScreen.style.display = 'none';
-
+            document.getElementById('loading-screen').style.display = 'none';
             if (user && user.email === ADMIN_EMAIL) {
-                // LOGGED IN
-                loginContainer.style.display = 'none';
-                dashboard.style.display = 'block';
+                document.getElementById('admin-login-container').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
                 document.getElementById('admin-email-display').textContent = user.email;
-                loadFarmerOffers();
+                loadFarmerOffers(); 
             } else {
-                // NOT LOGGED IN
-                dashboard.style.display = 'none';
-                loginContainer.style.display = 'flex';
-                if (user) signOut(auth); 
-                        }
-        });
-
-        // --- LOGIN HANDLER ---
-        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            loginError.style.display = 'none';
-
-            try {
-                if (email !== ADMIN_EMAIL) throw new Error("Unauthorized Email.");
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                loginError.textContent = error.message;
-                loginError.style.display = 'block';
+                document.getElementById('dashboard-content').style.display = 'none';
+                document.getElementById('admin-login-container').style.display = 'flex';
+                if(user) signOut(auth);
             }
         });
 
-        // --- LOGOUT HANDLER ---
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth).then(() => window.location.reload());
-        });
+        // ---  LOAD FARMERS LIST ---
+        async function loadFarmersList() {
+            const tbody = document.getElementById('farmers-table-body');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Scanning database...</td></tr>';
 
-        // --- LOAD OFFERS ---
+            try {
+                // Query: Get all users where role == 'farmer'
+                const q = query(collection(db, "users"), where("role", "==", "farmer"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No registered farmers found.</td></tr>';
+                    return;
+                }
+
+                let rows = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    rows += `
+                        <tr class="user-row">
+                            <td style="font-weight:600;">${data.fullName || "Unknown Name"}</td>
+                            <td>${data.email}</td>
+                            <td><span class="role-badge">Farmer</span></td>
+                            <td style="font-family:monospace; color:#64748b; font-size:0.85rem;">${doc.id}</td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = rows;
+
+            } catch (error) {
+                console.error("Error loading farmers:", error);
+                tbody.innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">Error: ${error.message}</td></tr>`;
+            }
+        }
+
+    
         async function loadFarmerOffers() {
             const tableBody = document.getElementById('offers-table-body');
             const noMsg = document.getElementById('no-offers-msg');
             tableBody.innerHTML = "";
 
             const snapshot = await getDocs(collection(db, "farmerRequests"));
-            
-            if (snapshot.empty) {
-                noMsg.style.display = "block";
-            } else {
-                noMsg.style.display = "none";
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td style="display:flex; align-items:center; gap:10px;">
-                            <img src="${data.imageUrl}" class="product-thumb">
-                            <div>
-                                <div style="font-weight:600;">${data.name}</div>
-                                <div class="meta">${data.category}</div>
-                            </div>
-                        </td>
-                        <td><strong>LKR ${data.price}</strong></td>
-                        <td>
-                            <div>${data.farmerName || 'Unknown'}</div>
-                            <div class="meta" style="font-size:0.75rem;">ID: ${data.farmerId ? data.farmerId.slice(0,5) : '...'}</div>
-                        </td>
-                        <td style="text-align: right;">
-                            <button class="btn-icon btn-approve" onclick="window.approveOffer('${docSnap.id}')" title="Approve">
-                                <i class="fas fa-check"></i>
-                            </button>
-                            <button class="btn-icon btn-reject" onclick="window.rejectOffer('${docSnap.id}')" title="Reject">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
+            if (snapshot.empty) { noMsg.style.display = "block"; return; }
+            else { noMsg.style.display = "none"; }
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="display:flex; align-items:center; gap:10px;">
+                        <img src="${data.imageUrl}" class="product-thumb">
+                        <div><strong>${data.name}</strong><br><span class="meta">${data.category}</span></div>
+                    </td>
+                    <td>LKR ${data.price}</td>
+                    <td>${data.farmerName || 'Unknown'}</td>
+                    <td style="text-align:right;">
+                        <button class="btn-icon btn-approve" onclick="window.approveOffer('${docSnap.id}')">✓</button>
+                        <button class="btn-icon btn-reject" onclick="window.rejectOffer('${docSnap.id}')">✕</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
         }
 
-        // --- GLOBAL ACTIONS ---
+        // Global Actions
         window.approveOffer = async (id) => {
-            if(!confirm("Publish this item to the shop?")) return;
+            if(!confirm("Approve?")) return;
             const ref = doc(db, "farmerRequests", id);
             const snap = await getDoc(ref);
             if(snap.exists()) {
-                const d = snap.data();
-                await addDoc(collection(db, "products"), { ...d, createdAt: new Date() }); // Copy all data
+                await addDoc(collection(db, "products"), { ...snap.data(), createdAt: new Date() });
                 await deleteDoc(ref);
                 loadFarmerOffers();
             }
         };
-
         window.rejectOffer = async (id) => {
-            if(confirm("Delete this request?")) {
-                await deleteDoc(doc(db, "farmerRequests", id));
-                loadFarmerOffers();
-            }
+            if(confirm("Reject?")) { await deleteDoc(doc(db, "farmerRequests", id)); loadFarmerOffers(); }
         };
 
-        // --- MANUAL UPLOAD ---
-        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+        // Login Handler
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-password').value;
             try {
-                await addDoc(collection(db, "products"), {
-                    name: document.getElementById('product-name').value,
-                    price: Number(document.getElementById('product-price').value),
-                    category: document.getElementById('product-category').value,
-                    imageUrl: document.getElementById('product-image').value,
-                    createdAt: new Date(),
-                    farmerId: 'admin'
-                });
-                alert("Product Added!");
-                e.target.reset();
-            } catch (err) { alert("Error adding product"); }
+                if(email !== ADMIN_EMAIL) throw new Error("Unauthorized.");
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch(err) { alert(err.message); }
         });
-    </script>
 
+        // Logout
+        document.getElementById('logout-btn').onclick = () => signOut(auth).then(()=>window.location.reload());
+
+    </script>
 </body>
 </html>

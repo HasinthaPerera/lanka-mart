@@ -182,3 +182,23 @@ td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middl
 @media (max-width: 1024px) {
     .grid-container { grid-template-columns: 1fr; } 
 }
+/* --- TAB SWITCHING ANIMATION --- */
+.view-section {
+    display: none; 
+    animation: fadeIn 0.3s ease-in-out;
+}
+.view-section.active-view {
+    display: block; 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* User List Table Specifics */
+.user-row td { padding: 15px; }
+.role-badge { 
+    background: #dbeafe; color: #1e40af; 
+    padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; 
+}
