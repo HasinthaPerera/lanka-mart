@@ -177,3 +177,33 @@ td { padding: 15px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
   .user-profile span { display: none; }
   .top-bar h2 { font-size: 1.2rem; }
 }
+/* --- TAB SWITCHING LOGIC --- */
+.view-section {
+    display: none; 
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.view-section.active-view {
+    display: block; 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ORDERS TABLE STYLES --- */
+.badge-order {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.badge-pending { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
+.badge-shipped { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+
+.customer-info small {
+    display: block;
+    color: var(--text-muted);
+    line-height: 1.4;
+}

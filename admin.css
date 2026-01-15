@@ -24,11 +24,11 @@ body {
     overflow: hidden; 
 }
 
-/* --- 1. THE LOGIN SCREEN (This fixes your screenshot) --- */
+/* --- 1. THE LOGIN SCREEN --- */
 #admin-login-container {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* The Purple Gradient */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
     z-index: 9999;
     display: none; 
     justify-content: center;
