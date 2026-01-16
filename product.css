@@ -107,32 +107,69 @@ nav a.active::after {
   font-weight: 700;
 }
 
-/* --- 4. Search Bar --- */
-.search-bar {
-  text-align: center;
-  margin-bottom: 30px;
-  padding: 0 10px;
+/* --- SEARCH & FILTER BAR --- */
+.search-container {
+    max-width: 800px;
+    margin: 30px auto;
+    display: flex;
+    gap: 15px;
+    padding: 0 20px;
 }
 
-.search-bar input {
-  width: 100%;
-  max-width: 500px;
-  padding: 12px 20px;
-  border: 2px solid #e0e0e0;
-  border-radius: 50px;
-  font-size: 16px;
-  outline: none;
-  transition: var(--transition);
-  background: #fff;
-  font-family: inherit;
-  box-shadow: var(--shadow-sm);
+.search-box {
+    flex: 1;
+    position: relative;
 }
 
-.search-bar input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(0, 122, 51, 0.15);
+.search-box input {
+    width: 100%;
+    padding: 15px 20px;
+    padding-left: 45px; 
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s;
 }
 
+.search-box input:focus {
+    border-color: #10b981; 
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.search-box i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.filter-dropdown {
+    padding: 0 25px;
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    background: white;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    color: #475569;
+}
+
+.filter-dropdown:focus {
+    border-color: #10b981;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+    }
+    .filter-dropdown {
+        padding: 15px;
+        width: 100%;
+    }
+}
 /* --- 5. Category Filters --- */
 .category-container {
   display: flex;
@@ -402,4 +439,63 @@ footer {
   .new-price {
     font-size: 1.2rem;
   }
+}
+
+/* --- REVIEW MODAL STYLES --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; z-index: 1000; left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6); /* Black background with opacity */
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%; max-width: 500px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    max-height: 80vh; overflow-y: auto; 
+}
+
+.close-modal {
+    position: absolute; right: 20px; top: 15px;
+    font-size: 28px; font-weight: bold; cursor: pointer; color: #aaa;
+}
+.close-modal:hover { color: #000; }
+
+/* Star Rating System */
+.star-rating {
+    display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px;
+}
+.star-rating input { display: none; }
+.star-rating label {
+    font-size: 30px; color: #ddd; cursor: pointer; transition: color 0.2s;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f59e0b; 
+}
+
+/* Review List */
+.review-item {
+    border-bottom: 1px solid #eee; padding: 15px 0;
+}
+.review-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.review-user { font-weight: bold; color: #333; }
+.review-stars { color: #f59e0b; }
+.review-text { color: #666; font-size: 0.9rem; line-height: 1.4; }
+
+/* Form Elements */
+.review-form textarea {
+    width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;
+    margin-top: 10px; resize: vertical; min-height: 80px;
+}
+.btn-submit-review {
+    background: #16a34a; color: white; border: none; padding: 10px 20px;
+    border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold;
 }

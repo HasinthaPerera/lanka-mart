@@ -356,6 +356,35 @@
     <p>© 2026 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
 
+
+  <div id="review-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeReviewModal()">&times;</span>
+    <h2 id="modal-product-name" style="margin-bottom: 20px;">Product Reviews</h2>
+    
+    <div class="review-form" style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+        <h4 style="margin-top:0;">Write a Review</h4>
+        
+        <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+            <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+            <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+            <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+            <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+        </div>
+        
+        <input type="text" id="review-name" placeholder="Your Name" style="width:100%; padding:8px; margin-bottom:5px; border:1px solid #ddd; border-radius:5px;">
+        <textarea id="review-text" placeholder="Share your experience with this product..."></textarea>
+        <button class="btn-submit-review" onclick="submitReview()">Submit Review</button>
+    </div>
+
+    <h4 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">Customer Feedback</h4>
+    <div id="reviews-list">
+        <p style="color:gray; text-align:center;">Loading reviews...</p>
+    </div>
+  </div>
+</div>
+
   <script>
     
     function addToCart(button) {
