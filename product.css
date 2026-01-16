@@ -107,69 +107,32 @@ nav a.active::after {
   font-weight: 700;
 }
 
-/* --- SEARCH & FILTER BAR --- */
-.search-container {
-    max-width: 800px;
-    margin: 30px auto;
-    display: flex;
-    gap: 15px;
-    padding: 0 20px;
+/* --- 4. Search Bar --- */
+.search-bar {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 0 10px;
 }
 
-.search-box {
-    flex: 1;
-    position: relative;
+.search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  font-size: 16px;
+  outline: none;
+  transition: var(--transition);
+  background: #fff;
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
 }
 
-.search-box input {
-    width: 100%;
-    padding: 15px 20px;
-    padding-left: 45px; 
-    border: 2px solid #e2e8f0;
-    border-radius: 50px;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s;
+.search-bar input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 122, 51, 0.15);
 }
 
-.search-box input:focus {
-    border-color: #10b981; 
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
-}
-
-.search-box i {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-}
-
-.filter-dropdown {
-    padding: 0 25px;
-    border: 2px solid #e2e8f0;
-    border-radius: 50px;
-    background: white;
-    font-size: 1rem;
-    cursor: pointer;
-    outline: none;
-    color: #475569;
-}
-
-.filter-dropdown:focus {
-    border-color: #10b981;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .search-container {
-        flex-direction: column;
-    }
-    .filter-dropdown {
-        padding: 15px;
-        width: 100%;
-    }
-}
 /* --- 5. Category Filters --- */
 .category-container {
   display: flex;
@@ -191,7 +154,7 @@ nav a.active::after {
   transition: var(--transition);
   font-family: inherit;
   box-shadow: var(--shadow-sm);
-  white-space: nowrap; /* Keeps button text on one line */
+  white-space: nowrap;
 }
 
 .cat-btn:hover {
@@ -281,7 +244,7 @@ nav a.active::after {
 .price-container {
   display: flex;
   align-items: center;
-  flex-wrap: wrap; /* Allows wrapping on very small screens */
+  flex-wrap: wrap;
   gap: 8px;
   margin: 8px 0 15px;
 }
@@ -440,7 +403,6 @@ footer {
     font-size: 1.2rem;
   }
 }
-
 /* --- REVIEW MODAL STYLES --- */
 .modal {
     display: none; /* Hidden by default */
@@ -478,7 +440,7 @@ footer {
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color: #f59e0b; 
+    color: #f59e0b; /* Gold Color */
 }
 
 /* Review List */
