@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lanka-Mart | Products</title>
   <link rel="stylesheet" href="product.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
@@ -16,7 +17,7 @@
         <a href="products.html" class="active">Products</a>
         <a href="cart.html">Cart</a>
         <a href="contact.html">Contact</a>
-        <li><a href="login.html" id="auth-link"><i class="fas fa-user"></i> Login</a></li>
+        <a href="login.html" id="auth-link"><i class="fas fa-user"></i> Login</a>
       </nav>
     </div>
   </header>
@@ -29,12 +30,12 @@
     </div>
 
     <div class="category-container">
-      <button class="cat-btn active" onclick="filterSelection('all')">All</button>
-      <button class="cat-btn" onclick="filterSelection('vegetables')">Vegetables</button>
-      <button class="cat-btn" onclick="filterSelection('fruits')">Fruits</button>
-      <button class="cat-btn" onclick="filterSelection('spices')">Spices</button>
-      <button class="cat-btn" onclick="filterSelection('rice')">Rice & Grains</button>
-      <button class="cat-btn" onclick="filterSelection('textiles')">Textiles</button>
+      <button class="cat-btn active" onclick="filterSelection('all', this)">All</button>
+      <button class="cat-btn" onclick="filterSelection('vegetables', this)">Vegetables</button>
+      <button class="cat-btn" onclick="filterSelection('fruits', this)">Fruits</button>
+      <button class="cat-btn" onclick="filterSelection('spices', this)">Spices</button>
+      <button class="cat-btn" onclick="filterSelection('rice', this)">Rice & Grains</button>
+      <button class="cat-btn" onclick="filterSelection('textiles', this)">Textiles</button>
     </div>
 
     <div class="product-grid" id="product-list">
@@ -44,30 +45,28 @@
         <img src="Images/cotton saree.webp" alt="Textile">
         <h3>Cotton Saree</h3>
         <div class="price-container">
-        <span class="old-price">LKR 1500</span>
-        <span class="new-price">LKR 1350</span>
-    </div>
+          <span class="old-price">LKR 1500</span>
+          <span class="new-price">LKR 1350</span>
+        </div>
         <div class="button-group">
             <button onclick="addToCart(this)">Add to Cart</button>
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div> 
 
-
-     <div class="product-card" data-category="textiles" data-name="Cotton Shirt" data-price="937.5" data-discount="25">
+      <div class="product-card" data-category="textiles" data-name="Cotton Shirt" data-price="937.5" data-discount="25">
         <span class="discount-badge">25% OFF</span>
         <img src="Images/cotton shirt.webp" alt="Textile">
         <h3>Cotton Shirt</h3>
          <div class="price-container">
-        <span class="old-price">LKR 1250</span>
-        <span class="new-price">LKR 937.50</span>
-    </div>
+          <span class="old-price">LKR 1250</span>
+          <span class="new-price">LKR 937.50</span>
+        </div>
         <div class="button-group">
             <button onclick="addToCart(this)">Add to Cart</button>
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
-
 
       <div class="product-card" data-category="rice" data-name="White Rice" data-price="185">
         <img src="Images/white Rice.webp" alt="Rice">
@@ -89,23 +88,19 @@
         </div>
       </div>
 
-      
-       
-
- <div class="product-card" data-category="spices" data-name="Tea Powder" data-price="720" data-discount="20">
+      <div class="product-card" data-category="spices" data-name="Tea Powder" data-price="720" data-discount="20">
         <span class="discount-badge">20% OFF</span>
         <img src="Images/tea powder.webp" alt="Tea Pack">
         <h3>Tea Powder (1kg)</h3>
          <div class="price-container">
-        <span class="old-price">LKR 900</span>
-        <span class="new-price">LKR 720</span>
-    </div>
- <div class="button-group">
+          <span class="old-price">LKR 900</span>
+          <span class="new-price">LKR 720</span>
+        </div>
+        <div class="button-group">
             <button onclick="addToCart(this)">Add to Cart</button>
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
-
 
       <div class="product-card" data-category="spices" data-name="chilli powder (250g)" data-price="240">
         <img src="Images/chilli powder.webp" alt="chilli powder">
@@ -165,7 +160,6 @@
             <span class="old-price">LKR 180</span>
             <span class="new-price">LKR 162</span>
         </div>
-
         <div class="button-group">
             <button onclick="addToCart(this)">Add to Cart</button>
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
@@ -231,6 +225,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+      
       <div class="product-card" data-category="fruits" data-name="pineapple" data-price="260" data-phone="94719488311">
         <img src="Images/pineapple.webp" alt="pineapple">
         <h3>Pineapple (1kg)</h3>
@@ -240,6 +235,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+
       <div class="product-card" data-category="fruits" data-name="mango" data-price="130" data-phone="94713158065">
         <img src="Images/mango.webp" alt="mango">
         <h3>Mango (1kg)</h3>
@@ -249,6 +245,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+
       <div class="product-card" data-category="fruits" data-name="dragonfruit" data-price="200" data-phone="94713158065">
         <img src="Images/dragonfruit.webp" alt="dragonfruit">
         <h3>Dragonfruit (1kg)</h3>
@@ -258,6 +255,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+
       <div class="product-card" data-category="fruits" data-name="avacardo" data-price="120">
         <img src="Images/avacardo.webp" alt="avacardo">
         <h3>Avocado (1kg)</h3>
@@ -267,6 +265,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+
       <div class="product-card" data-category="fruits" data-name="anona" data-price="230">
         <img src="Images/anona.webp" alt="anona">
         <h3>Anona (1kg)</h3>
@@ -276,6 +275,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+
       <div class="product-card" data-category="fruits" data-name="grapes" data-price="350">
         <img src="Images/grapes.webp" alt="grapes">
         <h3>Grapes (1kg)</h3>
@@ -285,6 +285,7 @@
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
+
       <div class="product-card" data-category="fruits" data-name="orange" data-price="130">
         <img src="Images/orange.webp" alt="orange">
         <h3>Orange (1kg)</h3>
@@ -297,7 +298,7 @@
 
       <div class="product-card" data-category="fruits" data-name="strawberry" data-price="580">
         <img src="Images/strawberry.webp" alt="strawberry">
-        <h3>strawberry (1kg)</h3>
+        <h3>Strawberry (1kg)</h3>
         <p>LKR 580</p>
         <div class="button-group">
             <button onclick="addToCart(this)">Add to Cart</button>
@@ -305,36 +306,34 @@
         </div>
       </div>
     
-<div class="product-card" data-category="fruits" data-name="watermelon" data-price="125">
+      <div class="product-card" data-category="fruits" data-name="watermelon" data-price="125">
         <img src="Images/watermelon.webp" alt="watermelon">
-        <h3>watermelon (1kg)</h3>
-        <p>LKR 130</p>
+        <h3>Watermelon (1kg)</h3>
+        <p>LKR 125</p>
         <div class="button-group">
             <button onclick="addToCart(this)">Add to Cart</button>
             <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
         </div>
       </div>
  
-<div class="product-card" data-category="fruits" data-name="Pomegranate" data-price="736" data-discount="20">
-    
-    <span class="discount-badge">20% OFF</span>
+      <div class="product-card" data-category="fruits" data-name="Pomegranate" data-price="736" data-discount="20">
+        <span class="discount-badge">20% OFF</span>
+        <img src="Images/pomegranate.webp" alt="pomegranate">
+        <h3>Pomegranate (1kg)</h3>
+        
+        <div class="price-container">
+            <span class="old-price">LKR 920</span>
+            <span class="new-price">LKR 736</span>
+        </div>
 
-    <img src="Images/pomegranate.webp" alt="pomegranate">
-    <h3>Pomegranate (1kg)</h3>
-    
-    <div class="price-container">
-        <span class="old-price">LKR 920</span>
-        <span class="new-price">LKR 736</span>
-    </div>
+        <div class="button-group">
+            <button class="add-btn" onclick="addToCart(this)">Add to Cart</button>
+            <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+        </div>
+      </div>
 
-    <div class="button-group">
-        <button class="add-btn" onclick="addToCart(this)">Add to Cart</button>
-        <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
-    </div>
-</div>
-
-<div class="product-card" data-category="fruits" data-name="durian" data-price="459" data-discount="15">
-  <span class="discount-badge">15% OFF</span>
+      <div class="product-card" data-category="fruits" data-name="durian" data-price="459" data-discount="15">
+        <span class="discount-badge">15% OFF</span>
         <img src="Images/durian.webp" alt="durian">
         <h3>Durian (1kg)</h3>
 
@@ -351,24 +350,18 @@
     </div>
   </section>
 
-
   <footer>
     <p>© 2026 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
-<script>
 
+  <script>
     function addToCart(button) {
       const card = button.closest('.product-card');
-
       const name = card.getAttribute('data-name');
-
       let price = parseFloat(card.getAttribute('data-price'));
-
-
       const discountPercent = card.getAttribute('data-discount') || 0;
 
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
       const existing = cart.find(item => item.name === name);
 
       if (existing) {
@@ -384,7 +377,6 @@
 
       localStorage.setItem('cart', JSON.stringify(cart));
 
-
       const originalText = button.innerText;
       button.innerText = "Added ✔";
       button.style.background = "#1b4332";
@@ -394,46 +386,34 @@
       }, 2000);
     }
 
-function contactSeller(button) {
-      // 1. Get the product details
+    function contactSeller(button) {
       const card = button.closest('.product-card'); 
       const name = card.getAttribute('data-name');
       const price = card.getAttribute('data-price');
-
-      // 2. Get the phone number (Specific seller or default)
 
       const specificNumber = card.getAttribute('data-phone');
       const defaultNumber = "+94771708215"; 
       const phoneNumber = specificNumber ? specificNumber : defaultNumber;
 
-      // 3. Create the message text
       const message = `Hello, I am interested in buying: ${name} (LKR ${price}). Is it available?`;
 
-      // 4. Check if the user is on an iPhone (iOS requires '&' for the body, Android uses '?')
       const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       const separator = isIos ? '&' : '?';
 
-      // 5. Create the SMS link
-            const smsUrl = `sms:${phoneNumber}${separator}body=${encodeURIComponent(message)}`;
-
-      // 6. Open the SMS app
+      const smsUrl = `sms:${phoneNumber}${separator}body=${encodeURIComponent(message)}`;
       window.location.href = smsUrl;
     }
 
-
-    function filterSelection(category) {
+    
+    function filterSelection(category, btnElement) {
       const cards = document.querySelectorAll('.product-card');
       const buttons = document.querySelectorAll('.cat-btn');
       const searchInput = document.getElementById('searchInput');
 
-
       searchInput.value = '';
 
-
       cards.forEach(card => {
-
         const cardCategory = card.getAttribute('data-category');
-
         if (category === 'all') {
           card.style.display = 'flex'; 
         } else {
@@ -448,11 +428,11 @@ function contactSeller(button) {
       buttons.forEach(btn => {
         btn.classList.remove('active');
       });
-            const clickedBtn = event.target;
-      clickedBtn.classList.add('active');
+      // Set the clicked button to active
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
     }
-
-
 
     const searchInput = document.getElementById('searchInput');
     const productGrid = document.getElementById('product-list');
@@ -469,7 +449,6 @@ function contactSeller(button) {
         if (isVisible) anyVisible = true;
       });
 
-
       if (filter && anyVisible) {
         productGrid.classList.add('compact-view');
       } else {
@@ -478,7 +457,7 @@ function contactSeller(button) {
     });
   </script>
 
-<script type="module" src="auth.js"></script>
+  <script type="module" src="auth.js"></script>
 
 </body>
 </html>
