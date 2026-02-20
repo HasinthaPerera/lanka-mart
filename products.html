@@ -92,7 +92,7 @@
       
        
 
- <div class="product-card" data-category="textiles" data-name="Cotton Shirt" data-price="720" data-discount="20">
+ <div class="product-card" data-category="spices" data-name="Tea Powder" data-price="720" data-discount="20">
         <span class="discount-badge">20% OFF</span>
         <img src="Images/tea powder.webp" alt="Tea Pack">
         <h3>Tea Powder (1kg)</h3>
@@ -355,184 +355,130 @@
   <footer>
     <p>© 2026 Lanka-Mart | Freshness & Quality at Your Doorstep</p>
   </footer>
+<script>
+
+    function addToCart(button) {
+      const card = button.closest('.product-card');
+
+      const name = card.getAttribute('data-name');
+
+      let price = parseFloat(card.getAttribute('data-price'));
 
 
-  <div id="review-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeReviewModal()">&times;</span>
-    <h2 id="modal-product-name" style="margin-bottom: 20px;">Product Reviews</h2>
-    
-    <div class="review-form" style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-        <h4 style="margin-top:0;">Write a Review</h4>
-        
-        <div class="star-rating">
-            <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-            <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-            <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-            <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-        </div>
-        
-        <input type="text" id="review-name" placeholder="Your Name" style="width:100%; padding:8px; margin-bottom:5px; border:1px solid #ddd; border-radius:5px;">
-        <textarea id="review-text" placeholder="Share your experience with this product..."></textarea>
-        <button class="btn-submit-review" onclick="submitReview()">Submit Review</button>
-    </div>
+      const discountPercent = card.getAttribute('data-discount') || 0;
 
-    <h4 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">Customer Feedback</h4>
-    <div id="reviews-list">
-        <p style="color:gray; text-align:center;">Loading reviews...</p>
-    </div>
-  </div>
-</div>
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    // 1. ADDED imports for reviews: addDoc, query, where
-    import { getFirestore, collection, getDocs, addDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { firebaseConfig } from './config.js'; 
+      const existing = cart.find(item => item.name === name);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let allProducts = [];
-    let currentProductId = null; // To track which product we are reviewing
-    const grid = document.getElementById('product-list');
-
-    // --- LOAD PRODUCTS ---
-    async function loadProducts() {
-        try {
-            const snapshot = await getDocs(collection(db, "products"));
-            allProducts = [];
-            snapshot.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
-            renderProducts(allProducts);
-        } catch (error) { console.error(error); }
-    }
-
-    // --- RENDER PRODUCTS ---
-    function renderProducts(items) {
-        grid.innerHTML = "";
-        if(items.length === 0) { grid.innerHTML = '<p>No products found.</p>'; return; }
-
-        items.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            
-            card.innerHTML = `
-                <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='Images/placeholder.png'">
-                <h3>${product.name}</h3>
-                <div class="price-container"><span class="new-price">LKR ${product.price}</span></div>
-                
-                <div class="button-group">
-                    <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
-                    <button class="btn-contact" onclick="contactSeller('${product.name}', ${product.price})">Contact</button>
-                </div>
-                <button onclick="window.openReviews('${product.id}', '${product.name}')" style="background:none; border:none; color:#f59e0b; cursor:pointer; margin-top:10px; font-size:0.9rem; width:100%;">
-                    <i class="fas fa-star"></i> See Reviews
-                </button>
-            `;
-            grid.appendChild(card);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ 
+          name: name, 
+          price: price, 
+          quantity: 1,
+          discountTag: discountPercent > 0 ? discountPercent + "% OFF" : null 
         });
-    }
-=
-    // 1. OPEN MODAL
-    window.openReviews = (id, name) => {
-        currentProductId = id;
-        document.getElementById('modal-product-name').innerText = `Reviews: ${name}`;
-        document.getElementById('review-modal').style.display = "block";
-        loadReviews(id); // Load existing comments
-    };
+      }
 
-    // 2. CLOSE MODAL
-    window.closeReviewModal = () => {
-        document.getElementById('review-modal').style.display = "none";
-    };
+      localStorage.setItem('cart', JSON.stringify(cart));
 
-    // 3. SUBMIT A REVIEW
-    window.submitReview = async () => {
-        const name = document.getElementById('review-name').value;
-        const text = document.getElementById('review-text').value;
-        // Get selected star rating
-        const ratingEl = document.querySelector('input[name="rating"]:checked');
-        const rating = ratingEl ? ratingEl.value : 0;
 
-        if(!name || !text || rating === 0) {
-            alert("Please fill in your name, a rating, and a comment.");
-            return;
-        }
-
-        try {
-            // Save to "reviews" collection
-            await addDoc(collection(db, "reviews"), {
-                productId: currentProductId,
-                user: name,
-                rating: parseInt(rating),
-                comment: text,
-                date: new Date()
-            });
-
-            alert("Review Submitted!");
-            // Clear form
-            document.getElementById('review-text').value = "";
-            // Reload list
-            loadReviews(currentProductId);
-        } catch (err) {
-            console.error(err);
-            alert("Error submitting review.");
-        }
-    };
-
-    // 4. LOAD REVIEWS FROM DB
-    async function loadReviews(prodId) {
-        const list = document.getElementById('reviews-list');
-        list.innerHTML = "Loading...";
-
-        try {
-            // Get reviews ONLY for this product
-            const q = query(collection(db, "reviews"), where("productId", "==", prodId));
-            const snapshot = await getDocs(q);
-
-            if (snapshot.empty) {
-                list.innerHTML = "<p>No reviews yet. Be the first!</p>";
-                return;
-            }
-
-            let html = "";
-            snapshot.forEach(doc => {
-                const r = doc.data();
-                // Create star string (e.g., "★★★★★")
-                const stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
-                
-                html += `
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="review-user">${r.user}</span>
-                            <span class="review-stars">${stars}</span>
-                        </div>
-                        <div class="review-text">${r.comment}</div>
-                    </div>
-                `;
-            });
-            list.innerHTML = html;
-
-        } catch (err) {
-            console.error(err);
-            list.innerHTML = "<p>Error loading reviews.</p>";
-        }
+      const originalText = button.innerText;
+      button.innerText = "Added ✔";
+      button.style.background = "#1b4332";
+      setTimeout(() => {
+        button.innerText = originalText;
+        button.style.background = ""; 
+      }, 2000);
     }
 
-    // Close modal when clicking outside
-    window.onclick = (event) => {
-        const modal = document.getElementById('review-modal');
-        if (event.target == modal) modal.style.display = "none";
+function contactSeller(button) {
+      // 1. Get the product details
+      const card = button.closest('.product-card'); 
+      const name = card.getAttribute('data-name');
+      const price = card.getAttribute('data-price');
+
+      // 2. Get the phone number (Specific seller or default)
+
+      const specificNumber = card.getAttribute('data-phone');
+      const defaultNumber = "+94771708215"; 
+      const phoneNumber = specificNumber ? specificNumber : defaultNumber;
+
+      // 3. Create the message text
+      const message = `Hello, I am interested in buying: ${name} (LKR ${price}). Is it available?`;
+
+      // 4. Check if the user is on an iPhone (iOS requires '&' for the body, Android uses '?')
+      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const separator = isIos ? '&' : '?';
+
+      // 5. Create the SMS link
+            const smsUrl = `sms:${phoneNumber}${separator}body=${encodeURIComponent(message)}`;
+
+      // 6. Open the SMS app
+      window.location.href = smsUrl;
     }
 
-    // Existing functions (Search, Cart, Contact) remain unchanged...
-    window.filterSelection = (cat) => { /* ... keep your existing code ... */ };
-    window.addToCart = (n, p) => { /* ... keep your existing code ... */ };
-    window.contactSeller = (n, p) => { /* ... keep your existing code ... */ };
 
-    // Start
-    loadProducts();
-</script>
+    function filterSelection(category) {
+      const cards = document.querySelectorAll('.product-card');
+      const buttons = document.querySelectorAll('.cat-btn');
+      const searchInput = document.getElementById('searchInput');
+
+
+      searchInput.value = '';
+
+
+      cards.forEach(card => {
+
+        const cardCategory = card.getAttribute('data-category');
+
+        if (category === 'all') {
+          card.style.display = 'flex'; 
+        } else {
+          if (cardCategory === category) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none'; 
+          }
+        }
+      });
+
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+            const clickedBtn = event.target;
+      clickedBtn.classList.add('active');
+    }
+
+
+
+    const searchInput = document.getElementById('searchInput');
+    const productGrid = document.getElementById('product-list');
+
+    searchInput.addEventListener('keyup', function() {
+      const filter = searchInput.value.toLowerCase();
+      const products = document.querySelectorAll('.product-card');
+
+      let anyVisible = false;
+      products.forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        const isVisible = name.includes(filter);
+        card.style.display = isVisible ? 'block' : 'none';
+        if (isVisible) anyVisible = true;
+      });
+
+
+      if (filter && anyVisible) {
+        productGrid.classList.add('compact-view');
+      } else {
+        productGrid.classList.remove('compact-view');
+      }
+    });
+  </script>
+
+<script type="module" src="auth.js"></script>
+
 </body>
 </html>
