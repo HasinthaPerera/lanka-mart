@@ -458,6 +458,71 @@
   </script>
 
   <script type="module" src="auth.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { firebaseConfig } from './config.js';
 
+    // 1. Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 2. Fetch and Append Approved Products
+    async function loadApprovedProducts() {
+      const productGrid = document.getElementById('product-list');
+      
+      try {
+        const snapshot = await getDocs(collection(db, "products"));
+        
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          
+          // Format data to match your hardcoded cards
+          const name = data.name || 'Unnamed Product';
+          const price = data.price || 0;
+          const category = data.category ? data.category.toLowerCase() : 'other';
+          const image = data.imageUrl || 'https://via.placeholder.com/200';
+          const phone = data.phone || '';
+          const discount = data.discount || 0;
+
+          // Handle the price & discount styling
+          let discountBadge = '';
+          let priceHTML = `<p>LKR ${price}</p>`;
+
+          if (discount > 0) {
+            discountBadge = `<span class="discount-badge">${discount}% OFF</span>`;
+            const oldPrice = Math.round(price / (1 - (discount/100)));
+            priceHTML = `<div class="price-container">
+                            <span class="old-price">LKR ${oldPrice}</span>
+                            <span class="new-price">LKR ${price}</span>
+                         </div>`;
+          }
+
+          // Build the exact same HTML card structure you already use
+          const newCardHTML = `
+            <div class="product-card" data-category="${category}" data-name="${name}" data-price="${price}" data-phone="${phone}" data-discount="${discount}">
+              ${discountBadge}
+              <img src="${image}" alt="${name}" onerror="this.src='https://via.placeholder.com/200'">
+              <h3>${name}</h3>
+              ${priceHTML}
+              <div class="button-group">
+                  <button onclick="addToCart(this)">Add to Cart</button>
+                  <button class="btn-contact" onclick="contactSeller(this)">Contact Seller</button>
+              </div>
+            </div>
+          `;
+          
+          // Append the new card to the end of the existing hardcoded list
+          productGrid.insertAdjacentHTML('beforeend', newCardHTML);
+        });
+
+      } catch (error) {
+        console.error("Error loading new products from database: ", error);
+      }
+    }
+
+    // Start fetching
+    loadApprovedProducts();
+  </script>
 </body>
 </html>
